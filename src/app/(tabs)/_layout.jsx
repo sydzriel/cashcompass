@@ -8,7 +8,6 @@ function CustomTabBar({ state, descriptors, navigation }) {
     <View style={styles.tabBarContainer}>
       <View style={styles.floatingBar}>
         {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
           const isFocused = state.index === index;
 
           const onPress = () => {
@@ -53,12 +52,12 @@ function CustomTabBar({ state, descriptors, navigation }) {
               <Ionicons
                 name={iconName}
                 size={22}
-                color={isFocused ? '#EC4899' : '#64748B'}
+                color={isFocused ? '#fd5ca3' : '#64748B'}
               />
               <Text
                 style={[
                   styles.tabLabel,
-                  { color: isFocused ? '#EC4899' : '#64748B' },
+                  { color: isFocused ? '#fd5ca3' : '#64748B' },
                   isFocused && styles.activeTabLabel,
                 ]}
               >
@@ -92,8 +91,9 @@ const styles = StyleSheet.create({
   tabBarContainer: {
     position: 'absolute',
     bottom: Platform.OS === 'ios' ? 16 : 10,
-    left: 20,
-    right: 20,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
     alignItems: 'center',
     zIndex: 100,
   },
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 6,
     width: '100%',
+    maxWidth: 390,
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
