@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 115, // Dilaras supaya kandungan bawah tidak terlindung
+    paddingBottom: 115,
   },
   headerRow: {
     flexDirection: 'row',
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    bottom: 95, // Dinaikkan supaya sama kedudukan seperti di skrin transactions
+    bottom: 95,
     right: 20,
     width: 60,
     height: 60,
@@ -380,6 +380,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
-    zIndex: 101, // Pastikan sentiasa di atas navigation bar
+    zIndex: 101,
   },
 });

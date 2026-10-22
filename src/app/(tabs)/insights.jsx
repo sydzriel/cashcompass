@@ -1,17 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 export default function InsightsScreen() {
-  const [timeTab, setTimeTab] = useState<'month' | 'year' | 'all'>('month');
-  const [categoryTab, setCategoryTab] = useState<'expenses' | 'income'>('expenses');
+  const [timeTab, setTimeTab] = useState('month');
+  const [categoryTab, setCategoryTab] = useState('expenses');
 
   return (
     <SafeAreaView style={styles.container}>

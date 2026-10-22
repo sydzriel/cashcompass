@@ -3,11 +3,11 @@ import { Tabs } from 'expo-router';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Custom Floating Pill Tab Bar (Universal & Rendah Sikit)
-function CustomTabBar({ state, descriptors, navigation }: any) {
+function CustomTabBar({ state, descriptors, navigation }) {
   return (
     <View style={styles.tabBarContainer}>
       <View style={styles.floatingBar}>
-        {state.routes.map((route: any, index: number) => {
+        {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
 
@@ -23,7 +23,7 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
             }
           };
 
-          let iconName: keyof typeof Ionicons.glyphMap = 'home';
+          let iconName = 'home';
           let label = 'Home';
 
           if (route.name === 'index') {
@@ -91,7 +91,7 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   tabBarContainer: {
     position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 16 : 10, // Direndahkan ke bawah secara universal untuk semua jenis peranti
+    bottom: Platform.OS === 'ios' ? 16 : 10,
     left: 20,
     right: 20,
     alignItems: 'center',
