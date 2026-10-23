@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
-  ImageBackground,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AppBackground from '../components/AppBackground';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -23,130 +24,153 @@ export default function LoginScreen() {
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/images/login-bg.png')}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
-      {/* Tiada overlay putih tebal supaya wallpaper asli nampak jelas terang */}
-      <View style={styles.overlay}>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.content}>
-            
-            {/* Header Logo & Title */}
-            <View style={styles.headerContainer}>
-              <Text style={styles.logoText}>
-                <Text style={styles.logoC}>C</Text>ash <Text style={styles.logoC}>C</Text>ompass
-              </Text>
-              
-              <Text style={styles.greetingHello}>Hello!</Text>
-              <Text style={styles.greetingWelcome}>
-                Welcome to <Text style={styles.brandInline}>CashCompass</Text>
-              </Text>
+    <AppBackground opacity={1} style={styles.gradientContainer}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          {/* Header Logo & Title */}
+          <View style={styles.headerContainer}>
+            <View style={styles.logoBadge}>
+              <Text style={styles.logoBadgeText}>🧭</Text>
             </View>
+            <Text style={styles.logoText}>
+              <Text style={styles.logoC}>C</Text>ash <Text style={styles.logoC}>C</Text>ompass
+            </Text>
 
-            {/* Form Inputs */}
-            <View style={styles.form}>
-              {/* Name Input */}
-              <View style={styles.inputContainer}>
-                <Ionicons name="person-outline" size={20} color="#94A3B8" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Name"
-                  placeholderTextColor="#94A3B8"
-                  value={name}
-                  onChangeText={setName}
-                />
-              </View>
-
-              {/* Email Input */}
-              <View style={styles.inputContainer}>
-                <Ionicons name="mail-outline" size={20} color="#94A3B8" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  placeholderTextColor="#94A3B8"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
-              </View>
-
-              {/* Password Input */}
-              <View style={styles.inputContainer}>
-                <Ionicons name="lock-closed-outline" size={20} color="#94A3B8" style={styles.inputIcon} />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password"
-                  placeholderTextColor="#94A3B8"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                  <Ionicons
-                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                    size={20}
-                    color="#94A3B8"
-                  />
-                </TouchableOpacity>
-              </View>
-
-              {/* Sign Up / Submit Button */}
-              <TouchableOpacity
-                style={styles.blackButton}
-                onPress={handleNavigateHome}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.blackButtonText}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Divider: Or Continue With */}
-            <View style={styles.dividerRow}>
-              <View style={styles.line} />
-              <Text style={styles.dividerText}>Or Continue With</Text>
-              <View style={styles.line} />
-            </View>
-
-            {/* Social Buttons */}
-            <View style={styles.socialContainer}>
-              <TouchableOpacity
-                style={styles.socialButton}
-                onPress={handleNavigateHome}
-                activeOpacity={0.8}
-              >
-                <Ionicons name="logo-google" size={20} color="#EA4335" style={styles.socialIcon} />
-                <Text style={styles.socialButtonText}>Sign Up with Google</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.socialButton}
-                onPress={handleNavigateHome}
-                activeOpacity={0.8}
-              >
-                <Ionicons name="logo-apple" size={22} color="#000000" style={styles.socialIcon} />
-                <Text style={styles.socialButtonText}>Sign Up with Apple</Text>
-              </TouchableOpacity>
-            </View>
-
+            <Text style={styles.greetingHello}>Hello!</Text>
+            <Text style={styles.greetingWelcome}>
+              Welcome to <Text style={styles.brandInline}>CashCompass</Text>
+            </Text>
+            <Text style={styles.subtitleTag}>
+              Smart Student Finance • Hybrid Flat Edition
+            </Text>
           </View>
-        </SafeAreaView>
-      </View>
-    </ImageBackground>
+
+          {/* Form Inputs (Flat White Cards per design.md) */}
+          <View style={styles.form}>
+            {/* Name Input */}
+            <View style={styles.inputContainer}>
+              <Ionicons
+                name="person-outline"
+                size={20}
+                color="#666666"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                placeholderTextColor="#94A3B8"
+                value={name}
+                onChangeText={setName}
+              />
+            </View>
+
+            {/* Email Input */}
+            <View style={styles.inputContainer}>
+              <Ionicons
+                name="mail-outline"
+                size={20}
+                color="#666666"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor="#94A3B8"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+
+            {/* Password Input */}
+            <View style={styles.inputContainer}>
+              <Ionicons
+                name="lock-closed-outline"
+                size={20}
+                color="#666666"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor="#94A3B8"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Ionicons
+                  name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={20}
+                  color="#666666"
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Sign Up / Submit Button (Accent #E91E63 & 27px rounded) */}
+            <TouchableOpacity
+              style={styles.primaryButton}
+              onPress={handleNavigateHome}
+              activeOpacity={0.85}
+            >
+              <LinearGradient
+                colors={['#E91E63', '#fd5ca3']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.primaryGradient}
+              >
+                <Text style={styles.primaryButtonText}>Get Started</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+
+          {/* Divider: Or Continue With */}
+          <View style={styles.dividerRow}>
+            <View style={styles.line} />
+            <Text style={styles.dividerText}>Or Continue With</Text>
+            <View style={styles.line} />
+          </View>
+
+          {/* Social Buttons (Flat White per design.md) */}
+          <View style={styles.socialContainer}>
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={handleNavigateHome}
+              activeOpacity={0.8}
+            >
+              <Ionicons
+                name="logo-google"
+                size={20}
+                color="#EA4335"
+                style={styles.socialIcon}
+              />
+              <Text style={styles.socialButtonText}>Sign In with Google</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={handleNavigateHome}
+              activeOpacity={0.8}
+            >
+              <Ionicons
+                name="logo-apple"
+                size={22}
+                color="#0D0E15"
+                style={styles.socialIcon}
+              />
+              <Text style={styles.socialButtonText}>Sign In with Apple</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  backgroundImage: {
+  gradientContainer: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)', // Dibuat nipis supaya wallpaper nampak terang dan cantik
   },
   container: {
     flex: 1,
@@ -158,31 +182,50 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     alignItems: 'center',
-    marginBottom: 28,
+    marginBottom: 26,
+  },
+  logoBadge: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.04)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  logoBadgeText: {
+    fontSize: 28,
   },
   logoText: {
     fontSize: 26,
     fontWeight: '900',
-    color: '#0F172A',
-    marginBottom: 16,
+    color: '#0D0E15',
+    marginBottom: 8,
   },
   logoC: {
-    fontSize: 30,
+    color: '#E91E63',
   },
   greetingHello: {
     fontSize: 24,
-    fontWeight: '700',
-    color: '#0F172A',
-    marginBottom: 4,
+    fontWeight: '800',
+    color: '#0D0E15',
+    marginBottom: 2,
   },
   greetingWelcome: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#0D0E15',
   },
   brandInline: {
     fontWeight: '900',
-    color: '#0F172A',
+    color: '#E91E63',
+  },
+  subtitleTag: {
+    fontSize: 12,
+    color: '#666666',
+    marginTop: 6,
   },
   form: {
     width: '100%',
@@ -192,40 +235,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     borderRadius: 24,
     paddingHorizontal: 18,
-    height: 56,
-    marginBottom: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    height: 54,
+    marginBottom: 12,
   },
   inputIcon: {
     marginRight: 12,
   },
   input: {
     flex: 1,
-    fontSize: 16,
-    color: '#0F172A',
+    fontSize: 15,
+    color: '#0D0E15',
   },
-  blackButton: {
-    backgroundColor: '#000000',
-    height: 56,
-    borderRadius: 28,
+  primaryButton: {
+    height: 54,
+    borderRadius: 27, // 27px bulat penuh
+    overflow: 'hidden',
+    marginTop: 6,
+    marginBottom: 18,
+  },
+  primaryGradient: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 6,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
   },
-  blackButtonText: {
+  primaryButtonText: {
     fontSize: 16,
     fontWeight: '700',
     color: '#FFFFFF',
@@ -233,16 +269,16 @@ const styles = StyleSheet.create({
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 18,
   },
   line: {
     flex: 1,
     height: 1,
-    backgroundColor: '#CBD5E1',
+    backgroundColor: 'rgba(0, 0, 0, 0.06)',
   },
   dividerText: {
-    fontSize: 13,
-    color: '#475569',
+    fontSize: 12,
+    color: '#666666',
     marginHorizontal: 12,
     fontWeight: '500',
   },
@@ -254,23 +290,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
-    height: 56,
-    borderRadius: 28,
-    marginBottom: 12,
+    height: 52,
+    borderRadius: 26,
+    marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   socialIcon: {
     marginRight: 10,
   },
   socialButtonText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#0F172A',
+    color: '#0D0E15',
   },
 });

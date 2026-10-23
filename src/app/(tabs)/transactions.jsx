@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import AppBackground from '../../components/AppBackground';
 import {
   Alert,
-  ImageBackground,
   Modal,
   Platform,
   SafeAreaView,
@@ -14,128 +14,45 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
-let idCounter = 200;
-function generateId(prefix) {
-  idCounter += 1;
-  return `${prefix}-${idCounter}`;
-}
-
-// Category lists matching app standard
-const defaultExpenseCategories = [
-  { id: 'coffee', name: 'Coffee', emoji: '☕' },
-  { id: 'transport', name: 'Transport', emoji: '🚗' },
-  { id: 'rent', name: 'Rent', emoji: '🏠' },
-  { id: 'subscriptions', name: 'Subscriptions', emoji: '📱' },
-  { id: 'utilities', name: 'Utilities', emoji: '💡' },
-  { id: 'groceries', name: 'Groceries', emoji: '🛒' },
-];
-
-const moreExpenseCategories = [
-  { id: 'food', name: 'Food & Dining', emoji: '🍔' },
-  { id: 'shopping', name: 'Shopping', emoji: '🛍️' },
-  { id: 'health', name: 'Healthcare', emoji: '💊' },
-  { id: 'entertainment', name: 'Entertainment', emoji: '🎬' },
-];
-
-const defaultIncomeCategories = [
-  { id: 'salary', name: 'Salary', emoji: '💰' },
-  { id: 'allowance', name: 'Allowance', emoji: '💵' },
-  { id: 'freelance', name: 'Freelance', emoji: '💼' },
-  { id: 'investment', name: 'Investment', emoji: '📈' },
-  { id: 'bonus', name: 'Bonus', emoji: '🎁' },
-  { id: 'other', name: 'Other', emoji: '🪙' },
-];
-
-const initialTransactions = [
-  {
-    id: 'tx-1',
-    title: 'Coffee',
-    subtitle: 'Food & Dining',
-    amount: 12,
-    emoji: '☕',
-    type: 'expense',
-    category: 'Coffee',
-    date: '15/10/26',
-    day: 15,
-    time: '8:10 PM',
-  },
-  {
-    id: 'tx-2',
-    title: 'Monthly Allowance',
-    subtitle: 'Salary',
-    amount: 800,
-    emoji: '💰',
-    type: 'income',
-    category: 'Salary',
-    date: '15/10/26',
-    day: 15,
-    time: '8:10 PM',
-  },
-  {
-    id: 'tx-3',
-    title: 'Rent',
-    subtitle: 'Rent & Mortgage',
-    amount: 150,
-    emoji: '🏠',
-    type: 'expense',
-    category: 'Rent',
-    isRecurring: true,
-    date: '15/10/26',
-    day: 15,
-    time: '8:10 PM',
-  },
-  {
-    id: 'tx-4',
-    title: 'iCloud+',
-    subtitle: 'Subscriptions',
-    amount: 9,
-    emoji: '📱',
-    type: 'expense',
-    category: 'Subscriptions',
-    isRecurring: true,
-    date: '15/10/26',
-    day: 15,
-    time: '8:10 PM',
-  },
-  {
-    id: 'tx-5',
-    title: 'Mobile Data',
-    subtitle: 'Utilities & Bills',
-    amount: 30,
-    emoji: '💡',
-    type: 'expense',
-    category: 'Utilities',
-    isRecurring: true,
-    date: '15/10/26',
-    day: 15,
-    time: '8:10 PM',
-  },
-  {
-    id: 'tx-6',
-    title: 'Transport',
-    subtitle: 'Transport',
-    amount: 100,
-    emoji: '🚗',
-    type: 'expense',
-    category: 'Transport',
-    date: '15/10/26',
-    day: 15,
-    time: '8:10 PM',
-  },
-];
+import AIReceiptScannerModal from '../../components/AIReceiptScannerModal';
+import ImpulseCalculatorModal from '../../components/ImpulseCalculatorModal';
+import {
+  defaultExpenseCategories,
+  defaultIncomeCategories,
+  generateUniqueId,
+  moreExpenseCategories,
+  useApp,
+} from '../../context/AppContext';
 
 export default function TransactionsScreen() {
-  const [activeTab, setActiveTab] = useState('list'); // 'list' | 'calendar'
-  const [accountType, setAccountType] = useState('Personal');
-  const [transactions, setTransactions] = useState(initialTransactions);
+  const {
+    accountType,
+    setAccountType,
+    allTransactions,
+    setExpenses,
+    totalIncome,
+    totalExpenses,
+    // Wow 3: Impulse items
+    impulseItems,
+    addImpulseItem,
+    markImpulseResisted,
+    convertImpulseToExpense,
+    totalResistedSavings,
+  } = useApp();
 
-  // Calendar State (October 2026 by default)
+  const [activeTab, setActiveTab] = useState('list'); // 'list' | 'calendar' | 'chill'
   const [selectedDay, setSelectedDay] = useState(15);
   const [calendarMonth, setCalendarMonth] = useState('October 2026');
 
-  // Modal State for Adding Transactions
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Modals visibility
+  const [isFabMenuOpen, setIsFabMenuOpen] = useState(false);
+  const [isLogModalOpen, setIsLogModalOpen] = useState(false);
+  const [isReceiptScannerOpen, setIsReceiptScannerOpen] = useState(false);
+  const [isImpulseModalOpen, setIsImpulseModalOpen] = useState(false);
+  // Track if scanner was opened from inside Log Modal (so we reopen it after)
+  const [scanFromLogModal, setScanFromLogModal] = useState(false);
+
+  // Manual Log Form State
   const [transactionType, setTransactionType] = useState('expense');
   const [amount, setAmount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(defaultExpenseCategories[0]);
@@ -145,49 +62,32 @@ export default function TransactionsScreen() {
   const [isCustomCategory, setIsCustomCategory] = useState(false);
   const [customCategoryName, setCustomCategoryName] = useState('');
 
-  // Dynamically calculate income and expense totals
-  const totalIncome = useMemo(
-    () =>
-      transactions
-        .filter((t) => t.type === 'income')
-        .reduce((sum, item) => sum + item.amount, 0),
-    [transactions]
-  );
-
-  const totalExpenses = useMemo(
-    () =>
-      transactions
-        .filter((t) => t.type === 'expense')
-        .reduce((sum, item) => sum + item.amount, 0),
-    [transactions]
-  );
-
   // Group transactions for List View
   const groupedTransactions = useMemo(() => {
     const map = {};
-    transactions.forEach((tx) => {
-      const dateKey = tx.date === '15/10/26' ? 'Today' : tx.date;
+    allTransactions.forEach((tx) => {
+      const dateKey = tx.date === '15/10/26' ? 'Today' : tx.date || 'Earlier';
       if (!map[dateKey]) {
         map[dateKey] = [];
       }
       map[dateKey].push(tx);
     });
     return map;
-  }, [transactions]);
+  }, [allTransactions]);
 
-  // Days with transactions in current month
+  // Days with transactions
   const daysWithTransactions = useMemo(() => {
     const set = new Set();
-    transactions.forEach((tx) => {
+    allTransactions.forEach((tx) => {
       if (tx.day) set.add(tx.day);
     });
     return set;
-  }, [transactions]);
+  }, [allTransactions]);
 
-  // Transactions for selected calendar day
+  // Selected Day Transactions
   const selectedDayTransactions = useMemo(() => {
-    return transactions.filter((tx) => tx.day === selectedDay);
-  }, [transactions, selectedDay]);
+    return allTransactions.filter((tx) => tx.day === selectedDay);
+  }, [allTransactions, selectedDay]);
 
   const selectedDayIncome = useMemo(
     () =>
@@ -205,26 +105,6 @@ export default function TransactionsScreen() {
     [selectedDayTransactions]
   );
 
-  // Open Log Modal (optionally preset day)
-  const handleOpenModal = (presetDay = null) => {
-    if (presetDay) {
-      setSelectedDay(presetDay);
-    }
-    setTransactionType('expense');
-    setAmount('');
-    setSelectedCategory(defaultExpenseCategories[0]);
-    setTransactionName('');
-    setIsRecurring(false);
-    setShowMore(false);
-    setIsCustomCategory(false);
-    setCustomCategoryName('');
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   const alertMessage = (title, message) => {
     if (Platform.OS === 'web') {
       window.alert(`${title}: ${message}`);
@@ -233,7 +113,60 @@ export default function TransactionsScreen() {
     }
   };
 
-  // Add Transaction
+  // Open Log Modal
+  const handleOpenManualLog = (presetDay = null) => {
+    const wasMenuOpen = isFabMenuOpen;
+    setIsFabMenuOpen(false);
+    if (presetDay) setSelectedDay(presetDay);
+    setTransactionType('expense');
+    setAmount('');
+    setSelectedCategory(defaultExpenseCategories[0]);
+    setTransactionName('');
+    setIsRecurring(false);
+    setShowMore(false);
+    setIsCustomCategory(false);
+    setCustomCategoryName('');
+    if (wasMenuOpen) {
+      setTimeout(() => setIsLogModalOpen(true), 250);
+    } else {
+      setIsLogModalOpen(true);
+    }
+  };
+
+  // Save Scanned Receipt -> Auto-fills Log form & reopens it
+  const handleSaveScannedReceipt = (receiptData) => {
+    setAmount(String(receiptData.amount));
+    setTransactionName(receiptData.title);
+    const allCats = [...defaultExpenseCategories, ...moreExpenseCategories];
+    const matched =
+      allCats.find(
+        (c) => c.name.toLowerCase() === receiptData.category.toLowerCase()
+      ) || defaultExpenseCategories[0];
+    setSelectedCategory(matched);
+    setIsReceiptScannerOpen(false);
+    setScanFromLogModal(false);
+    // Reopen Log Modal after scanner fully dismisses
+    setTimeout(() => setIsLogModalOpen(true), 350);
+  };
+
+  // Open scanner from inside Log Transaction modal (close Log first to avoid iOS nested-modal bug)
+  const handleScanFromInsideLog = () => {
+    setIsLogModalOpen(false);
+    setScanFromLogModal(true);
+    setTimeout(() => setIsReceiptScannerOpen(true), 350);
+  };
+
+  // Save Impulse Item
+  const handleStartImpulseLock = (impulseData) => {
+    addImpulseItem(impulseData);
+    setActiveTab('chill');
+    alertMessage(
+      '48-Hour Chill Lock Activated! ⏳',
+      `"${impulseData.title}" (RM${impulseData.price}) is now chilling for 48 hours.`
+    );
+  };
+
+  // Save Manual Transaction
   const handleSaveTransaction = () => {
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
@@ -254,7 +187,7 @@ export default function TransactionsScreen() {
     const formattedDate = `${String(targetDay).padStart(2, '0')}/10/26`;
 
     const newTx = {
-      id: generateId('tx'),
+      id: generateUniqueId('tx'),
       title: finalTitle,
       subtitle: finalCategory,
       amount: parsedAmount,
@@ -267,14 +200,14 @@ export default function TransactionsScreen() {
       time: '8:10 PM',
     };
 
-    setTransactions((prev) => [newTx, ...prev]);
-    setIsModalOpen(false);
+    setExpenses((prev) => [newTx, ...prev]);
+    setIsLogModalOpen(false);
   };
 
   // Delete Transaction
   const confirmDeleteTx = (id, title, txAmount) => {
     const doDelete = () => {
-      setTransactions((prev) => prev.filter((item) => item.id !== id));
+      setExpenses((prev) => prev.filter((item) => item.id !== id));
     };
 
     if (Platform.OS === 'web') {
@@ -293,576 +226,872 @@ export default function TransactionsScreen() {
     }
   };
 
-  // Category list based on type
   const activeCategoryList =
     transactionType === 'income'
       ? defaultIncomeCategories
       : showMore
-      ? [...defaultExpenseCategories, ...moreExpenseCategories]
-      : defaultExpenseCategories;
+        ? [...defaultExpenseCategories, ...moreExpenseCategories]
+        : defaultExpenseCategories;
 
-  // Calendar calculations (October 2026 starts on Thursday -> 4 empty padding days)
-  const paddingDays = [null, null, null, null]; // Sun, Mon, Tue, Wed empty
+  const paddingDays = [null, null, null, null];
   const daysInOctober = Array.from({ length: 31 }, (_, i) => i + 1);
 
+  // Active chilling items count
+  const activeChillCount = impulseItems.filter((it) => it.status === 'active').length;
+
   return (
-    <ImageBackground
-      source={require('../../../assets/images/login-bg.png')}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
-      <View style={styles.overlay}>
-        <SafeAreaView style={styles.container}>
-          <ScrollView
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Top Header Controls (Borderless) */}
-            <View style={styles.headerRow}>
-              <TouchableOpacity
-                style={styles.pillButton}
-                activeOpacity={0.8}
-                onPress={() =>
-                  setAccountType((prev) => (prev === 'Personal' ? 'Business' : 'Personal'))
-                }
-              >
-                <Text style={styles.pillButtonText}>{accountType}</Text>
-              </TouchableOpacity>
+    <AppBackground opacity={0.35} style={styles.gradientContainer}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Top Header Controls */}
+          <View style={styles.headerRow}>
+            <TouchableOpacity
+              style={styles.pillButton}
+              activeOpacity={0.8}
+              onPress={() =>
+                setAccountType((prev) => (prev === 'Personal' ? 'Business' : 'Personal'))
+              }
+            >
+              <Text style={styles.pillButtonText}>{accountType}</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity style={styles.dateFilterButton} activeOpacity={0.8}>
-                <Text style={styles.dateFilterText}>Oct 2026</Text>
-                <Ionicons
-                  name="options-outline"
-                  size={18}
-                  color="#1E293B"
-                  style={{ marginLeft: 6 }}
-                />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.dateFilterButton} activeOpacity={0.8}>
+              <Text style={styles.dateFilterText}>Oct 2026</Text>
+              <Ionicons
+                name="options-outline"
+                size={16}
+                color="#0D0E15"
+                style={{ marginLeft: 6 }}
+              />
+            </TouchableOpacity>
+          </View>
 
-            {/* List / Calendar Segmented Switcher */}
-            <View style={styles.segmentedContainer}>
-              <TouchableOpacity
+          {/* Segmented Switcher: List | Calendar | Chill Lock ⏳ */}
+          <View style={styles.segmentedContainer}>
+            <TouchableOpacity
+              style={[
+                styles.segmentButton,
+                activeTab === 'list' && styles.activeSegment,
+              ]}
+              onPress={() => setActiveTab('list')}
+              activeOpacity={0.8}
+            >
+              <Text
                 style={[
-                  styles.segmentButton,
-                  activeTab === 'list' && styles.activeSegment,
+                  styles.segmentText,
+                  activeTab === 'list' && styles.activeSegmentText,
                 ]}
-                onPress={() => setActiveTab('list')}
-                activeOpacity={0.8}
               >
+                List
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.segmentButton,
+                activeTab === 'calendar' && styles.activeSegment,
+              ]}
+              onPress={() => setActiveTab('calendar')}
+              activeOpacity={0.8}
+            >
+              <Text
+                style={[
+                  styles.segmentText,
+                  activeTab === 'calendar' && styles.activeSegmentText,
+                ]}
+              >
+                Calendar
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.segmentButton,
+                activeTab === 'chill' && styles.activeSegment,
+              ]}
+              onPress={() => setActiveTab('chill')}
+              activeOpacity={0.8}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text
                   style={[
                     styles.segmentText,
-                    activeTab === 'list' && styles.activeSegmentText,
+                    activeTab === 'chill' && styles.activeSegmentText,
                   ]}
                 >
-                  List
+                  Chill Lock ⏳
                 </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.segmentButton,
-                  activeTab === 'calendar' && styles.activeSegment,
-                ]}
-                onPress={() => setActiveTab('calendar')}
-                activeOpacity={0.8}
-              >
-                <Text
-                  style={[
-                    styles.segmentText,
-                    activeTab === 'calendar' && styles.activeSegmentText,
-                  ]}
-                >
-                  Calendar
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Income & Expenses Summary (Borderless Cards with Soft Shadow) */}
-            <View style={styles.summaryRow}>
-              <View style={styles.summaryBox}>
-                <Text style={styles.summaryLabel}>My Income</Text>
-                <Text style={styles.incomeAmount}>RM{totalIncome.toFixed(2)}</Text>
-              </View>
-              <View style={styles.summaryBox}>
-                <Text style={styles.summaryLabel}>My Expenses</Text>
-                <Text style={styles.expenseAmount}>-RM{totalExpenses.toFixed(2)}</Text>
-              </View>
-            </View>
-
-            {/* ----------------- TAB CONTENT ----------------- */}
-            {activeTab === 'list' ? (
-              /* ================== LIST VIEW ================== */
-              <View>
-                {Object.keys(groupedTransactions).length === 0 ? (
-                  <View style={styles.emptyCard}>
-                    <Text style={styles.emptyCardText}>No transactions recorded yet.</Text>
-                    <TouchableOpacity
-                      style={styles.addEmptyBtn}
-                      onPress={() => handleOpenModal()}
-                    >
-                      <Text style={styles.addEmptyBtnText}>+ Add Transaction</Text>
-                    </TouchableOpacity>
+                {activeChillCount > 0 && (
+                  <View style={styles.tabBadge}>
+                    <Text style={styles.tabBadgeText}>{activeChillCount}</Text>
                   </View>
-                ) : (
-                  Object.keys(groupedTransactions).map((dateKey) => (
-                    <View key={dateKey}>
-                      <Text style={styles.sectionTitle}>{dateKey}</Text>
-
-                      {groupedTransactions[dateKey].map((tx) => {
-                        const isIncome = tx.type === 'income';
-
-                        return (
-                          <TouchableOpacity
-                            key={tx.id}
-                            style={styles.card}
-                            activeOpacity={0.7}
-                            onPress={() => confirmDeleteTx(tx.id, tx.title, tx.amount)}
-                          >
-                            <View style={styles.itemLeft}>
-                              <Text style={styles.emojiIcon}>{tx.emoji}</Text>
-                              <View>
-                                <Text style={styles.itemTitle}>{tx.title}</Text>
-                                <Text style={styles.itemSubtitle}>
-                                  {tx.subtitle ? `${tx.subtitle}   ` : ''}
-                                  {tx.time}
-                                </Text>
-                              </View>
-                            </View>
-                            <Text
-                              style={
-                                isIncome ? styles.positiveAmount : styles.negativeAmount
-                              }
-                            >
-                              {isIncome
-                                ? `RM${tx.amount.toFixed(2)}`
-                                : `-RM${tx.amount.toFixed(2)}`}
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  ))
                 )}
               </View>
-            ) : (
-              /* ================== CALENDAR VIEW ================== */
-              <View>
-                {/* Interactive Month Calendar Card (Borderless) */}
-                <View style={styles.calendarCard}>
-                  {/* Calendar Header with Navigation */}
-                  <View style={styles.calendarHeader}>
-                    <TouchableOpacity
-                      onPress={() => setCalendarMonth('September 2026')}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="chevron-back" size={20} color="#0F172A" />
-                    </TouchableOpacity>
-                    <Text style={styles.calendarTitle}>{calendarMonth}</Text>
-                    <TouchableOpacity
-                      onPress={() => setCalendarMonth('November 2026')}
-                      activeOpacity={0.7}
-                    >
-                      <Ionicons name="chevron-forward" size={20} color="#0F172A" />
-                    </TouchableOpacity>
-                  </View>
+            </TouchableOpacity>
+          </View>
 
-                  {/* Weekday Names Row */}
-                  <View style={styles.weekdaysRow}>
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, idx) => (
-                      <Text key={idx} style={styles.weekdayText}>
-                        {day}
-                      </Text>
-                    ))}
-                  </View>
+          {/* Income & Expenses Summary Cards (Flat White per design.md) */}
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryBox}>
+              <Text style={styles.summaryLabel}>My Income</Text>
+              <Text style={styles.incomeAmount}>RM{totalIncome.toFixed(2)}</Text>
+            </View>
+            <View style={styles.summaryBox}>
+              <Text style={styles.summaryLabel}>My Expenses</Text>
+              <Text style={styles.expenseAmount}>-RM{totalExpenses.toFixed(2)}</Text>
+            </View>
+          </View>
 
-                  {/* Days Grid for October 2026 */}
-                  <View style={styles.daysGrid}>
-                    {/* Empty cells before 1st of month */}
-                    {paddingDays.map((_, i) => (
-                      <View key={`pad-${i}`} style={styles.dayCell} />
-                    ))}
+          {/* ----------------- TAB 1: LIST VIEW ----------------- */}
+          {activeTab === 'list' && (
+            <View>
+              {Object.keys(groupedTransactions).length === 0 ? (
+                <View style={styles.emptyCard}>
+                  <Text style={styles.emptyCardText}>No transactions recorded yet.</Text>
+                  <TouchableOpacity
+                    style={styles.addEmptyBtn}
+                    onPress={() => handleOpenManualLog()}
+                  >
+                    <Text style={styles.addEmptyBtnText}>+ Add Transaction</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                Object.keys(groupedTransactions).map((dateKey) => (
+                  <View key={dateKey}>
+                    <Text style={styles.sectionTitle}>{dateKey}</Text>
 
-                    {/* Day numbers */}
-                    {daysInOctober.map((day) => {
-                      const isSelected = day === selectedDay;
-                      const hasTx = daysWithTransactions.has(day);
+                    {groupedTransactions[dateKey].map((tx) => {
+                      const isIncome = tx.type === 'income';
 
                       return (
                         <TouchableOpacity
-                          key={`day-${day}`}
-                          style={styles.dayCell}
-                          onPress={() => setSelectedDay(day)}
+                          key={tx.id}
+                          style={styles.card}
                           activeOpacity={0.7}
+                          onPress={() => confirmDeleteTx(tx.id, tx.title, tx.amount)}
                         >
-                          <View
-                            style={[
-                              styles.dayPill,
-                              isSelected && styles.dayPillSelected,
-                            ]}
-                          >
-                            <Text
-                              style={[
-                                styles.dayText,
-                                isSelected && styles.dayTextSelected,
-                              ]}
-                            >
-                              {day}
-                            </Text>
+                          <View style={styles.itemLeft}>
+                            <Text style={styles.emojiIcon}>{tx.emoji}</Text>
+                            <View>
+                              <Text style={styles.itemTitle}>{tx.title}</Text>
+                              <Text style={styles.itemSubtitle}>
+                                {tx.subtitle ? `${tx.subtitle}   ` : ''}
+                                {tx.time || '8:10 PM'}
+                                {tx.isAutoLogged ? ' • ⚡ Auto' : ''}
+                              </Text>
+                            </View>
                           </View>
-                          {/* Dot indicator if day has transactions */}
-                          {hasTx && (
-                            <View
-                              style={[
-                                styles.txDot,
-                                isSelected && { backgroundColor: '#FFFFFF' },
-                              ]}
-                            />
-                          )}
+                          <Text
+                            style={
+                              isIncome ? styles.positiveAmount : styles.negativeAmount
+                            }
+                          >
+                            {isIncome
+                              ? `+RM${tx.amount.toFixed(2)}`
+                              : `-RM${tx.amount.toFixed(2)}`}
+                          </Text>
                         </TouchableOpacity>
                       );
                     })}
                   </View>
+                ))
+              )}
+            </View>
+          )}
+
+          {/* ----------------- TAB 2: CALENDAR VIEW ----------------- */}
+          {activeTab === 'calendar' && (
+            <View>
+              <View style={styles.calendarCard}>
+                <View style={styles.calendarHeader}>
+                  <TouchableOpacity
+                    onPress={() => setCalendarMonth('September 2026')}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name="chevron-back" size={20} color="#0D0E15" />
+                  </TouchableOpacity>
+                  <Text style={styles.calendarTitle}>{calendarMonth}</Text>
+                  <TouchableOpacity
+                    onPress={() => setCalendarMonth('November 2026')}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name="chevron-forward" size={20} color="#0D0E15" />
+                  </TouchableOpacity>
                 </View>
 
-                {/* Day's Transactions Header */}
-                <View style={styles.dayHeaderRow}>
-                  <Text style={styles.sectionTitle}>
-                    {selectedDay} Oct 2026
-                  </Text>
-                  <Text style={styles.dayTotalText}>
-                    {selectedDayExpense > 0 && (
-                      <Text style={{ color: '#EF4444' }}>
-                        -RM{selectedDayExpense.toFixed(2)}{' '}
-                      </Text>
-                    )}
-                    {selectedDayIncome > 0 && (
-                      <Text style={{ color: '#10B981' }}>
-                        +RM{selectedDayIncome.toFixed(2)}
-                      </Text>
-                    )}
-                  </Text>
-                </View>
-
-                {/* Selected Day Transaction Items */}
-                {selectedDayTransactions.length === 0 ? (
-                  <View style={styles.emptyCard}>
-                    <Text style={styles.emptyCardText}>
-                      No transactions on {selectedDay} Oct.
+                <View style={styles.weekdaysRow}>
+                  {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, idx) => (
+                    <Text key={idx} style={styles.weekdayText}>
+                      {day}
                     </Text>
-                    <TouchableOpacity
-                      style={styles.addEmptyBtn}
-                      onPress={() => handleOpenModal(selectedDay)}
-                    >
-                      <Text style={styles.addEmptyBtnText}>
-                        + Log transaction for this day
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  selectedDayTransactions.map((tx) => {
-                    const isIncome = tx.type === 'income';
+                  ))}
+                </View>
+
+                <View style={styles.daysGrid}>
+                  {paddingDays.map((_, i) => (
+                    <View key={`pad-${i}`} style={styles.dayCell} />
+                  ))}
+
+                  {daysInOctober.map((day) => {
+                    const isSelected = day === selectedDay;
+                    const hasTx = daysWithTransactions.has(day);
 
                     return (
                       <TouchableOpacity
-                        key={tx.id}
-                        style={styles.card}
-                        activeOpacity={0.7}
-                        onPress={() => confirmDeleteTx(tx.id, tx.title, tx.amount)}
-                      >
-                        <View style={styles.itemLeft}>
-                          <Text style={styles.emojiIcon}>{tx.emoji}</Text>
-                          <View>
-                            <Text style={styles.itemTitle}>{tx.title}</Text>
-                            <Text style={styles.itemSubtitle}>
-                              {tx.subtitle ? `${tx.subtitle}   ` : ''}
-                              {tx.time}
-                            </Text>
-                          </View>
-                        </View>
-                        <Text
-                          style={
-                            isIncome ? styles.positiveAmount : styles.negativeAmount
-                          }
-                        >
-                          {isIncome
-                            ? `RM${tx.amount.toFixed(2)}`
-                            : `-RM${tx.amount.toFixed(2)}`}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })
-                )}
-              </View>
-            )}
-          </ScrollView>
-
-          {/* Floating Action Button (FAB) with color #fd5ca3 */}
-          <TouchableOpacity
-            style={styles.fab}
-            activeOpacity={0.8}
-            onPress={() => handleOpenModal()}
-          >
-            <Ionicons name="add" size={32} color="#FFFFFF" />
-          </TouchableOpacity>
-
-          {/* LOG TRANSACTION MODAL (MATCHING APP COLOR #fd5ca3 & SCREENSHOT) */}
-          <Modal
-            visible={isModalOpen}
-            animationType="slide"
-            presentationStyle="fullScreen"
-            onRequestClose={handleCloseModal}
-          >
-            <SafeAreaView style={styles.logModalSafeArea}>
-              <ScrollView
-                contentContainerStyle={styles.logModalScroll}
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps="handled"
-              >
-                {/* Header with Cancel Button & Title */}
-                <View style={styles.logHeaderRow}>
-                  <TouchableOpacity
-                    style={styles.logCancelBtn}
-                    onPress={handleCloseModal}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.logCancelText}>Cancel</Text>
-                  </TouchableOpacity>
-
-                  <Text style={styles.logHeaderTitle}>Log Transaction</Text>
-                  <View style={{ width: 70 }} />
-                </View>
-
-                {/* Expense / Income Switcher */}
-                <View style={styles.logSegmentedBox}>
-                  <TouchableOpacity
-                    style={[
-                      styles.logSegmentTab,
-                      transactionType === 'expense' && styles.logSegmentTabActive,
-                    ]}
-                    onPress={() => {
-                      setTransactionType('expense');
-                      setSelectedCategory(defaultExpenseCategories[0]);
-                      setIsCustomCategory(false);
-                    }}
-                    activeOpacity={0.8}
-                  >
-                    <Text
-                      style={[
-                        styles.logSegmentText,
-                        transactionType === 'expense' && styles.logSegmentTextActive,
-                      ]}
-                    >
-                      Expense
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={[
-                      styles.logSegmentTab,
-                      transactionType === 'income' && styles.logSegmentTabActive,
-                    ]}
-                    onPress={() => {
-                      setTransactionType('income');
-                      setSelectedCategory(defaultIncomeCategories[0]);
-                      setIsCustomCategory(false);
-                    }}
-                    activeOpacity={0.8}
-                  >
-                    <Text
-                      style={[
-                        styles.logSegmentText,
-                        transactionType === 'income' && styles.logSegmentTextActive,
-                      ]}
-                    >
-                      Income
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                {/* Centered Amount Input */}
-                <View style={styles.logAmountSection}>
-                  <Text style={styles.logAmountCurrency}>RM</Text>
-                  <TextInput
-                    style={styles.logAmountInput}
-                    placeholder="0.00"
-                    placeholderTextColor="#CBD5E1"
-                    keyboardType="decimal-pad"
-                    value={amount}
-                    onChangeText={setAmount}
-                    autoFocus={Platform.OS !== 'web'}
-                  />
-                </View>
-
-                {/* Category Section */}
-                <Text style={styles.logCategoryHeader}>Category</Text>
-
-                <View style={styles.logCategoryGrid}>
-                  {activeCategoryList.map((cat) => {
-                    const isSelected = !isCustomCategory && selectedCategory.id === cat.id;
-
-                    return (
-                      <TouchableOpacity
-                        key={cat.id}
-                        style={[
-                          styles.logCategoryPill,
-                          isSelected && styles.logCategoryPillActive,
-                        ]}
-                        onPress={() => {
-                          setSelectedCategory(cat);
-                          setIsCustomCategory(false);
-                        }}
+                        key={`day-${day}`}
+                        style={styles.dayCell}
+                        onPress={() => setSelectedDay(day)}
                         activeOpacity={0.7}
                       >
-                        <Text style={{ fontSize: 16 }}>{cat.emoji}</Text>
-                        <Text
+                        <View
                           style={[
-                            styles.logCategoryText,
-                            isSelected && styles.logCategoryTextActive,
+                            styles.dayPill,
+                            isSelected && styles.dayPillSelected,
                           ]}
                         >
-                          {cat.name}
-                        </Text>
+                          <Text
+                            style={[
+                              styles.dayText,
+                              isSelected && styles.dayTextSelected,
+                            ]}
+                          >
+                            {day}
+                          </Text>
+                        </View>
+                        {hasTx && (
+                          <View
+                            style={[
+                              styles.txDot,
+                              isSelected && { backgroundColor: '#FFFFFF' },
+                            ]}
+                          />
+                        )}
                       </TouchableOpacity>
                     );
                   })}
+                </View>
+              </View>
 
-                  {/* More Button */}
-                  <TouchableOpacity
-                    style={[
-                      styles.logCategoryPill,
-                      showMore && styles.logCategoryPillActive,
-                    ]}
-                    onPress={() => setShowMore((prev) => !prev)}
-                    activeOpacity={0.7}
-                  >
-                    <Text
-                      style={[
-                        styles.logCategoryText,
-                        showMore && styles.logCategoryTextActive,
-                        { marginLeft: 0 },
-                      ]}
-                    >
-                      {showMore ? 'Less' : 'More'}
+              <View style={styles.dayHeaderRow}>
+                <Text style={styles.sectionTitle}>{selectedDay} Oct 2026</Text>
+                <Text style={styles.dayTotalText}>
+                  {selectedDayExpense > 0 && (
+                    <Text style={{ color: '#EF4444' }}>
+                      -RM{selectedDayExpense.toFixed(2)}{' '}
                     </Text>
-                  </TouchableOpacity>
+                  )}
+                  {selectedDayIncome > 0 && (
+                    <Text style={{ color: '#10B981' }}>
+                      +RM{selectedDayIncome.toFixed(2)}
+                    </Text>
+                  )}
+                </Text>
+              </View>
 
-                  {/* Custom Button */}
+              {selectedDayTransactions.length === 0 ? (
+                <View style={styles.emptyCard}>
+                  <Text style={styles.emptyCardText}>
+                    No transactions on {selectedDay} Oct.
+                  </Text>
                   <TouchableOpacity
-                    style={[
-                      styles.logCategoryPill,
-                      isCustomCategory && styles.logCategoryPillActive,
-                    ]}
-                    onPress={() => setIsCustomCategory(true)}
-                    activeOpacity={0.7}
+                    style={styles.addEmptyBtn}
+                    onPress={() => handleOpenManualLog(selectedDay)}
                   >
-                    <Text
-                      style={[
-                        styles.logCategoryText,
-                        isCustomCategory && styles.logCategoryTextActive,
-                        { marginLeft: 0 },
-                      ]}
-                    >
-                      Custom
+                    <Text style={styles.addEmptyBtnText}>
+                      + Log transaction for this day
                     </Text>
                   </TouchableOpacity>
                 </View>
+              ) : (
+                selectedDayTransactions.map((tx) => {
+                  const isIncome = tx.type === 'income';
 
-                {/* Custom Category Input if Custom Selected */}
-                {isCustomCategory && (
-                  <View style={styles.customCategoryRow}>
-                    <TextInput
-                      style={styles.customCategoryInput}
-                      placeholder="Type custom category name..."
-                      placeholderTextColor="#94A3B8"
-                      value={customCategoryName}
-                      onChangeText={setCustomCategoryName}
-                    />
-                  </View>
-                )}
+                  return (
+                    <TouchableOpacity
+                      key={tx.id}
+                      style={styles.card}
+                      activeOpacity={0.7}
+                      onPress={() => confirmDeleteTx(tx.id, tx.title, tx.amount)}
+                    >
+                      <View style={styles.itemLeft}>
+                        <Text style={styles.emojiIcon}>{tx.emoji}</Text>
+                        <View>
+                          <Text style={styles.itemTitle}>{tx.title}</Text>
+                          <Text style={styles.itemSubtitle}>
+                            {tx.subtitle ? `${tx.subtitle}   ` : ''}
+                            {tx.time || '8:10 PM'}
+                          </Text>
+                        </View>
+                      </View>
+                      <Text
+                        style={
+                          isIncome ? styles.positiveAmount : styles.negativeAmount
+                        }
+                      >
+                        {isIncome
+                          ? `+RM${tx.amount.toFixed(2)}`
+                          : `-RM${tx.amount.toFixed(2)}`}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })
+              )}
+            </View>
+          )}
 
-                {/* Form List: Name, Date, Recurring */}
-                <View style={styles.logFormContainer}>
-                  {/* Name Row */}
-                  <View style={styles.logFormRow}>
-                    <Text style={styles.logFormLabel}>Name</Text>
-                    <TextInput
-                      style={styles.logNameInput}
-                      placeholder="Optional"
-                      placeholderTextColor="#94A3B8"
-                      value={transactionName}
-                      onChangeText={setTransactionName}
-                    />
-                  </View>
-                  <View style={styles.logFormDivider} />
+          {/* ----------------- TAB 3: 48-HOUR CHILL LOCK (FAKTOR WOW III) ----------------- */}
+          {activeTab === 'chill' && (
+            <View>
+              {/* Savings Shield Card */}
+              <View style={styles.shieldCard}>
+                <View style={styles.shieldIconBox}>
+                  <Text style={{ fontSize: 26 }}>🛡️</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.shieldTitle}>Impulse Savings Shield</Text>
+                  <Text style={styles.shieldBigAmount}>
+                    +RM{totalResistedSavings.toFixed(2)} Saved
+                  </Text>
+                  <Text style={styles.shieldDesc}>
+                    Money saved by letting impulse urges cool down for 48 hours.
+                  </Text>
+                </View>
+              </View>
 
-                  {/* Date Row */}
-                  <View style={styles.logFormRow}>
-                    <Text style={styles.logFormLabel}>Date</Text>
-                    <View style={styles.logDatePillsRow}>
-                      <View style={styles.logDateBadge}>
-                        <Text style={styles.logDateBadgeText}>
-                          {`${String(activeTab === 'calendar' ? selectedDay : 15).padStart(2, '0')}/10/26`}
+              <View style={styles.chillHeaderRow}>
+                <Text style={styles.sectionTitle}>Chilling Items ({impulseItems.length})</Text>
+                <TouchableOpacity
+                  style={styles.addChillSmallBtn}
+                  onPress={() => setIsImpulseModalOpen(true)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.addChillSmallText}>+ New 48h Lock</Text>
+                </TouchableOpacity>
+              </View>
+
+              {impulseItems.map((item) => {
+                const isChilling = item.status === 'active';
+                const isResisted = item.status === 'resisted';
+                const isBought = item.status === 'bought';
+
+                const progressPercent = Math.min(
+                  100,
+                  Math.round(((item.totalHours - item.hoursRemaining) / item.totalHours) * 100)
+                );
+
+                return (
+                  <View key={item.id} style={styles.chillCard}>
+                    <View style={styles.chillCardTop}>
+                      <View style={styles.chillLeftRow}>
+                        <Text style={styles.chillEmoji}>{item.emoji || '🛍️'}</Text>
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.chillTitle}>{item.title}</Text>
+                          <Text style={styles.chillReason}>&ldquo;{item.reason}&rdquo;</Text>
+                        </View>
+                      </View>
+                      <Text style={styles.chillPrice}>RM{item.price.toFixed(2)}</Text>
+                    </View>
+
+                    {/* Ratio & Status Row */}
+                    <View style={styles.ratioRow}>
+                      <View style={styles.budgetRatioBadge}>
+                        <Text style={styles.budgetRatioText}>
+                          = {item.dailyBudgetRatio} Days of Daily Budget
                         </Text>
                       </View>
-                      <View style={styles.logDateBadge}>
-                        <Text style={styles.logDateBadgeText}>8:10 PM</Text>
+
+                      {isChilling && (
+                        <View style={styles.statusBadgeChilling}>
+                          <Text style={styles.statusBadgeTextChilling}>
+                            ⏳ {item.hoursRemaining}h remaining
+                          </Text>
+                        </View>
+                      )}
+
+                      {isResisted && (
+                        <View style={styles.statusBadgeResisted}>
+                          <Text style={styles.statusBadgeTextResisted}>
+                            🛡️ Resisted & Saved!
+                          </Text>
+                        </View>
+                      )}
+
+                      {isBought && (
+                        <View style={styles.statusBadgeBought}>
+                          <Text style={styles.statusBadgeTextBought}>
+                            🛍️ Bought
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+
+                    {/* Countdown Progress Bar */}
+                    {isChilling && (
+                      <View style={styles.chillProgressContainer}>
+                        <View style={styles.chillProgressBg}>
+                          <View
+                            style={[
+                              styles.chillProgressFill,
+                              { width: `${progressPercent}%` },
+                            ]}
+                          />
+                        </View>
+                        <Text style={styles.chillProgressLabel}>
+                          {progressPercent}% cool-down elapsed ({item.hoursRemaining} hours left)
+                        </Text>
                       </View>
+                    )}
+
+                    {/* Action Decision Buttons */}
+                    {isChilling && (
+                      <View style={styles.chillActionsRow}>
+                        <TouchableOpacity
+                          style={styles.resistActionBtn}
+                          onPress={() => markImpulseResisted(item.id)}
+                          activeOpacity={0.8}
+                        >
+                          <Ionicons
+                            name="shield-checkmark"
+                            size={16}
+                            color="#16A34A"
+                            style={{ marginRight: 6 }}
+                          />
+                          <Text style={styles.resistActionText}>
+                            I Resisted! (+RM{item.price})
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.buyActionBtn}
+                          onPress={() => convertImpulseToExpense(item.id)}
+                          activeOpacity={0.8}
+                        >
+                          <Text style={styles.buyActionText}>Still Want It</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
+            </View>
+          )}
+        </ScrollView>
+
+        {/* Floating Action Button (FAB) -> Opens Log Transaction directly (Matches Home Page) */}
+        <TouchableOpacity
+          style={styles.fab}
+          activeOpacity={0.85}
+          onPress={() => handleOpenManualLog()}
+        >
+          <Ionicons name="add" size={32} color="#FFFFFF" />
+        </TouchableOpacity>
+
+        {/* FAB Action Picker — inline View overlay (avoids iOS modal-on-modal bug) */}
+        {isFabMenuOpen && (
+          <TouchableOpacity
+            style={styles.modalOverlay}
+            activeOpacity={1}
+            onPress={() => setIsFabMenuOpen(false)}
+          >
+            <View style={styles.fabMenuSheet}>
+              <View style={styles.sheetHandle} />
+              <Text style={styles.sheetTitle}>Choose Action</Text>
+              <Text style={styles.sheetSubtitle}>
+                Add transactions manually or use AI FYP tools
+              </Text>
+
+              {/* Action 1: Manual Input */}
+              <TouchableOpacity
+                style={styles.actionItem}
+                onPress={() => {
+                  setIsFabMenuOpen(false);
+                  handleOpenManualLog();
+                }}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.actionIconBox, { backgroundColor: '#F1F5F9' }]}>
+                  <Ionicons name="create-outline" size={24} color="#0D0E15" />
+                </View>
+                <View style={styles.actionTextBox}>
+                  <Text style={styles.actionTitle}>Input Manual</Text>
+                  <Text style={styles.actionDesc}>Type amount, category & note</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+              </TouchableOpacity>
+
+              {/* Action 2: AI Receipt Scanner */}
+              <TouchableOpacity
+                style={styles.actionItem}
+                onPress={() => {
+                  setIsFabMenuOpen(false);
+                  setIsReceiptScannerOpen(true);
+                }}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.actionIconBox, { backgroundColor: '#FFF0F5' }]}>
+                  <Text style={{ fontSize: 22 }}>📸</Text>
+                </View>
+                <View style={styles.actionTextBox}>
+                  <View style={styles.wowBadgeRow}>
+                    <Text style={styles.actionTitle}>Imbas Resit (AI OCR)</Text>
+                    <View style={styles.wowBadge}>
+                      <Text style={styles.wowBadgeText}>AI VISION</Text>
                     </View>
                   </View>
-                  <View style={styles.logFormDivider} />
+                  <Text style={styles.actionDesc}>
+                    Scan physical receipt with camera to auto-fill
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+              </TouchableOpacity>
 
-                  {/* Recurring Row */}
+              {/* Action 3: Impulse Buy 48h Lock */}
+              <TouchableOpacity
+                style={styles.actionItem}
+                onPress={() => {
+                  setIsFabMenuOpen(false);
+                  setIsImpulseModalOpen(true);
+                }}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.actionIconBox, { backgroundColor: '#FEF3C7' }]}>
+                  <Text style={{ fontSize: 22 }}>⏳</Text>
+                </View>
+                <View style={styles.actionTextBox}>
+                  <View style={styles.wowBadgeRow}>
+                    <Text style={styles.actionTitle}>48-Hour Chill Calculator</Text>
+                    <View style={[styles.wowBadge, { backgroundColor: '#FEF3C7' }]}>
+                      <Text style={[styles.wowBadgeText, { color: '#D97706' }]}>IMPULSE RULE</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.actionDesc}>
+                    Cool down impulse urges & save money
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.cancelSheetBtn}
+                onPress={() => setIsFabMenuOpen(false)}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.cancelSheetText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        {/* AI Receipt Scanner Modal (Faktor Wow II) */}
+        <AIReceiptScannerModal
+          visible={isReceiptScannerOpen}
+          onClose={() => {
+            setIsReceiptScannerOpen(false);
+            // Reopen Log Modal if scanner was launched from inside it
+            if (scanFromLogModal) {
+              setScanFromLogModal(false);
+              setTimeout(() => setIsLogModalOpen(true), 350);
+            }
+          }}
+          onSaveReceipt={handleSaveScannedReceipt}
+        />
+
+        {/* Impulse Buy 48-Hour Chill Calculator Modal (Faktor Wow III) */}
+        <ImpulseCalculatorModal
+          visible={isImpulseModalOpen}
+          onClose={() => setIsImpulseModalOpen(false)}
+          onStartChillLock={handleStartImpulseLock}
+        />
+
+        {/* MANUAL LOG TRANSACTION MODAL */}
+        <Modal
+          visible={isLogModalOpen}
+          animationType="slide"
+          presentationStyle="fullScreen"
+          onRequestClose={() => setIsLogModalOpen(false)}
+        >
+          <SafeAreaView style={styles.logModalSafeArea}>
+            <ScrollView
+              contentContainerStyle={styles.logModalScroll}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              {/* Header with Cancel Button, Title & Scanner Icon Button */}
+              <View style={styles.logHeaderRow}>
+                <TouchableOpacity
+                  style={styles.logCancelBtn}
+                  onPress={() => setIsLogModalOpen(false)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.logCancelText}>Cancel</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.logHeaderTitle}>Log Transaction</Text>
+
+                {/* Top-Right Scanner Icon Button — closes Log Modal first (iOS nested modal fix) */}
+                <TouchableOpacity
+                  style={styles.logScanHeaderBtn}
+                  onPress={handleScanFromInsideLog}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="scan-outline" size={20} color="#E91E63" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.logSegmentedBox}>
+                <TouchableOpacity
+                  style={[
+                    styles.logSegmentTab,
+                    transactionType === 'expense' && styles.logSegmentTabActive,
+                  ]}
+                  onPress={() => {
+                    setTransactionType('expense');
+                    setSelectedCategory(defaultExpenseCategories[0]);
+                    setIsCustomCategory(false);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text
+                    style={[
+                      styles.logSegmentText,
+                      transactionType === 'expense' && styles.logSegmentTextActive,
+                    ]}
+                  >
+                    Expense
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.logSegmentTab,
+                    transactionType === 'income' && styles.logSegmentTabActive,
+                  ]}
+                  onPress={() => {
+                    setTransactionType('income');
+                    setSelectedCategory(defaultIncomeCategories[0]);
+                    setIsCustomCategory(false);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text
+                    style={[
+                      styles.logSegmentText,
+                      transactionType === 'income' && styles.logSegmentTextActive,
+                    ]}
+                  >
+                    Income
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Amount Section with RM Label & Centered "Scan receipt" Pill Button */}
+              <View style={styles.logAmountSection}>
+                <Text style={styles.logAmountCurrencyLabel}>RM</Text>
+                <TextInput
+                  style={styles.logAmountInput}
+                  placeholder="0.00"
+                  placeholderTextColor="#CBD5E1"
+                  keyboardType="decimal-pad"
+                  value={amount}
+                  onChangeText={setAmount}
+                  autoFocus={Platform.OS !== 'web'}
+                />
+
+                {/* Centered Scan Receipt Button — closes Log Modal first (iOS nested modal fix) */}
+                <TouchableOpacity
+                  style={styles.scanReceiptPillBtn}
+                  onPress={handleScanFromInsideLog}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons
+                    name="scan-outline"
+                    size={16}
+                    color="#E91E63"
+                    style={{ marginRight: 6 }}
+                  />
+                  <Text style={styles.scanReceiptPillText}>Scan receipt</Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.logCategoryHeader}>Category</Text>
+
+              <View style={styles.logCategoryGrid}>
+                {activeCategoryList.map((cat) => {
+                  const isSelected = !isCustomCategory && selectedCategory.id === cat.id;
+
+                  return (
+                    <TouchableOpacity
+                      key={cat.id}
+                      style={[
+                        styles.logCategoryPill,
+                        isSelected && styles.logCategoryPillActive,
+                      ]}
+                      onPress={() => {
+                        setSelectedCategory(cat);
+                        setIsCustomCategory(false);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={{ fontSize: 16 }}>{cat.emoji}</Text>
+                      <Text
+                        style={[
+                          styles.logCategoryText,
+                          isSelected && styles.logCategoryTextActive,
+                        ]}
+                      >
+                        {cat.name} {isSelected ? '✓' : ''}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+
+                {/* More Button */}
+                <TouchableOpacity
+                  style={[
+                    styles.logCategoryPill,
+                    showMore && styles.logCategoryPillActive,
+                  ]}
+                  onPress={() => setShowMore((prev) => !prev)}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons
+                    name="grid-outline"
+                    size={16}
+                    color={showMore ? '#FFFFFF' : '#0D0E15'}
+                    style={{ marginRight: 6 }}
+                  />
+                  <Text
+                    style={[
+                      styles.logCategoryText,
+                      showMore && styles.logCategoryTextActive,
+                      { marginLeft: 0 },
+                    ]}
+                  >
+                    {showMore ? 'Less' : 'More'}
+                  </Text>
+                </TouchableOpacity>
+
+                {/* + Custom Button (Dashed Border per screenshot) */}
+                <TouchableOpacity
+                  style={[
+                    styles.logCategoryPill,
+                    styles.logCategoryPillCustom,
+                    isCustomCategory && styles.logCategoryPillActive,
+                  ]}
+                  onPress={() => setIsCustomCategory(true)}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.logCategoryText,
+                      isCustomCategory && styles.logCategoryTextActive,
+                      { marginLeft: 0 },
+                    ]}
+                  >
+                    + Custom
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {isCustomCategory && (
+                <View style={styles.customCategoryRow}>
+                  <TextInput
+                    style={styles.customCategoryInput}
+                    placeholder="Type custom category name..."
+                    placeholderTextColor="#94A3B8"
+                    value={customCategoryName}
+                    onChangeText={setCustomCategoryName}
+                  />
+                </View>
+              )}
+
+              <View style={styles.logFormContainer}>
+                <View style={styles.logFormRow}>
+                  <Text style={styles.logFormLabel}>Name</Text>
+                  <TextInput
+                    style={styles.logNameInput}
+                    placeholder="Optional"
+                    placeholderTextColor="#94A3B8"
+                    value={transactionName}
+                    onChangeText={setTransactionName}
+                  />
+                </View>
+                <View style={styles.logFormDivider} />
+
+                <View style={styles.logFormRow}>
+                  <Text style={styles.logFormLabel}>Date</Text>
+                  <View style={styles.logDatePillsRow}>
+                    <View style={styles.logDateBadge}>
+                      <Text style={styles.logDateBadgeText}>15/10/26</Text>
+                    </View>
+                    <View style={styles.logDateBadge}>
+                      <Text style={styles.logDateBadgeText}>12:36 AM</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.logFormDivider} />
+
+                {transactionType === 'expense' && (
                   <View style={styles.logFormRow}>
                     <Text style={styles.logFormLabel}>Recurring</Text>
                     <Switch
                       value={isRecurring}
                       onValueChange={setIsRecurring}
-                      trackColor={{ false: '#CBD5E1', true: '#fd5ca3' }}
+                      trackColor={{ false: '#E2E8F0', true: '#E91E63' }}
                       thumbColor="#FFFFFF"
-                      ios_backgroundColor="#CBD5E1"
                     />
                   </View>
-                </View>
+                )}
+              </View>
 
-                {/* Big Pink Add Button */}
-                <TouchableOpacity
-                  style={styles.logAddButton}
-                  activeOpacity={0.8}
-                  onPress={handleSaveTransaction}
+              {/* Add Button: active (pink) when amount > 0, disabled (light pink) otherwise */}
+              <TouchableOpacity
+                style={[
+                  styles.logAddButton,
+                  parseFloat(amount) > 0
+                    ? styles.logAddButtonActive
+                    : styles.logAddButtonDisabled,
+                ]}
+                onPress={handleSaveTransaction}
+                activeOpacity={0.8}
+              >
+                <Text
+                  style={[
+                    styles.logAddButtonText,
+                    parseFloat(amount) > 0
+                      ? styles.logAddButtonTextActive
+                      : styles.logAddButtonTextDisabled,
+                  ]}
                 >
-                  <Text style={styles.logAddButtonText}>Add</Text>
-                </TouchableOpacity>
-              </ScrollView>
-            </SafeAreaView>
-          </Modal>
-        </SafeAreaView>
-      </View>
-    </ImageBackground>
+                  Add
+                </Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </SafeAreaView>
+        </Modal>
+      </SafeAreaView>
+    </AppBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  backgroundImage: {
+  gradientContainer: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
   },
   container: {
     flex: 1,
-    maxWidth: 430,
-    width: '100%',
-    alignSelf: 'center',
+  },
+  scrollView: {
+    flex: 1,
   },
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 110,
+    paddingBottom: 110, // 110px paddingBottom per design.md
   },
   headerRow: {
     flexDirection: 'row',
@@ -872,125 +1101,121 @@ const styles = StyleSheet.create({
   },
   pillButton: {
     backgroundColor: '#FFFFFF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
+    paddingVertical: 9,
+    paddingHorizontal: 16,
+    borderRadius: 27,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   pillButtonText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
-    color: '#0F172A',
+    color: '#0D0E15',
   },
   dateFilterButton: {
     backgroundColor: '#FFFFFF',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 24,
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    borderRadius: 27,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   dateFilterText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#0F172A',
+    color: '#0D0E15',
   },
   segmentedContainer: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: 25,
-    padding: 4,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 24,
+    padding: 3,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   segmentButton: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 8,
     alignItems: 'center',
-    borderRadius: 22,
+    justifyContent: 'center',
+    borderRadius: 21,
   },
   activeSegment: {
     backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   segmentText: {
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#666666',
   },
   activeSegmentText: {
-    color: '#0F172A',
+    color: '#0D0E15',
     fontWeight: '700',
+  },
+  tabBadge: {
+    backgroundColor: '#E91E63',
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+    borderRadius: 8,
+    marginLeft: 4,
+  },
+  tabBadgeText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#FFFFFF',
   },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    gap: 12,
+    marginBottom: 16,
   },
   summaryBox: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 18,
     padding: 16,
-    marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   summaryLabel: {
-    fontSize: 14,
-    color: '#64748B',
+    fontSize: 12,
+    color: '#666666',
     marginBottom: 4,
   },
   incomeAmount: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#10B981',
   },
   expenseAmount: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#EF4444',
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
-    color: '#0F172A',
-    marginBottom: 12,
-    marginTop: 4,
+    color: '#0D0E15',
+    marginBottom: 10,
+    marginTop: 6,
   },
+  // Flat White Card per design.md
   card: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 16,
     marginBottom: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
-    elevation: 2,
   },
   itemLeft: {
     flexDirection: 'row',
@@ -998,81 +1223,74 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   emojiIcon: {
-    fontSize: 24,
-    marginRight: 14,
+    fontSize: 22,
+    marginRight: 12,
   },
   itemTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#0D0E15',
   },
   itemSubtitle: {
     fontSize: 12,
-    color: '#64748B',
+    color: '#666666',
     marginTop: 2,
   },
-  negativeAmount: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#EF4444',
-  },
   positiveAmount: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
     color: '#10B981',
   },
+  negativeAmount: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0D0E15',
+  },
   emptyCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.04)',
     padding: 24,
     alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 6,
-    elevation: 2,
   },
   emptyCardText: {
-    fontSize: 15,
-    color: '#94A3B8',
+    fontSize: 14,
+    color: '#666666',
     marginBottom: 12,
   },
   addEmptyBtn: {
-    backgroundColor: '#FCE7F3',
-    paddingHorizontal: 18,
+    backgroundColor: '#FFF0F5',
+    paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 16,
+    borderRadius: 20,
   },
   addEmptyBtnText: {
-    color: '#fd5ca3',
+    fontSize: 13,
     fontWeight: '700',
-    fontSize: 14,
+    color: '#E91E63',
   },
-  // Calendar View Styles
+
+  // Calendar Card
   calendarCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 18,
-    marginBottom: 18,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    marginBottom: 16,
   },
   calendarHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
-    paddingHorizontal: 8,
   },
   calendarTitle: {
-    fontSize: 17,
-    fontWeight: '800',
-    color: '#0F172A',
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#0D0E15',
   },
   weekdaysRow: {
     flexDirection: 'row',
@@ -1080,10 +1298,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   weekdayText: {
-    fontSize: 13,
-    fontWeight: '700',
+    fontSize: 12,
+    fontWeight: '600',
     color: '#94A3B8',
-    width: 36,
+    width: 32,
     textAlign: 'center',
   },
   daysGrid: {
@@ -1092,8 +1310,9 @@ const styles = StyleSheet.create({
   },
   dayCell: {
     width: '14.28%',
-    height: 44,
     alignItems: 'center',
+    paddingVertical: 4,
+    minHeight: 40,
     justifyContent: 'center',
   },
   dayPill: {
@@ -1104,12 +1323,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dayPillSelected: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#E91E63',
   },
   dayText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-    color: '#0F172A',
+    color: '#0D0E15',
   },
   dayTextSelected: {
     color: '#FFFFFF',
@@ -1119,40 +1338,336 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#E91E63',
     marginTop: 2,
   },
   dayHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   dayTotalText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
   },
+
+  // 48-Hour Chill Tab Styles
+  shieldCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    padding: 18,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  shieldIconBox: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#ECFDF5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  shieldTitle: {
+    fontSize: 13,
+    color: '#666666',
+    fontWeight: '500',
+  },
+  shieldBigAmount: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: '#10B981',
+    marginVertical: 2,
+  },
+  shieldDesc: {
+    fontSize: 11,
+    color: '#94A3B8',
+    lineHeight: 15,
+  },
+  chillHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  addChillSmallBtn: {
+    backgroundColor: '#FFF0F5',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  addChillSmallText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#E91E63',
+  },
+  chillCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    padding: 16,
+    marginBottom: 14,
+  },
+  chillCardTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  chillLeftRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 10,
+  },
+  chillEmoji: {
+    fontSize: 26,
+    marginRight: 12,
+  },
+  chillTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0D0E15',
+  },
+  chillReason: {
+    fontSize: 12,
+    color: '#666666',
+    fontStyle: 'italic',
+    marginTop: 2,
+  },
+  chillPrice: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#0D0E15',
+  },
+  ratioRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  budgetRatioBadge: {
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  budgetRatioText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#0D0E15',
+  },
+  statusBadgeChilling: {
+    backgroundColor: '#FFFBEB',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  statusBadgeTextChilling: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#D97706',
+  },
+  statusBadgeResisted: {
+    backgroundColor: '#DCFCE7',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  statusBadgeTextResisted: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#16A34A',
+  },
+  statusBadgeBought: {
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+  },
+  statusBadgeTextBought: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#64748B',
+  },
+  chillProgressContainer: {
+    marginVertical: 6,
+  },
+  chillProgressBg: {
+    height: 6,
+    backgroundColor: '#F1F5F9',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  chillProgressFill: {
+    height: '100%',
+    backgroundColor: '#D97706',
+    borderRadius: 3,
+  },
+  chillProgressLabel: {
+    fontSize: 11,
+    color: '#94A3B8',
+    marginTop: 4,
+  },
+  chillActionsRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 12,
+  },
+  resistActionBtn: {
+    flex: 1.3,
+    backgroundColor: '#DCFCE7',
+    height: 44,
+    borderRadius: 22,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  resistActionText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#16A34A',
+  },
+  buyActionBtn: {
+    flex: 1,
+    backgroundColor: '#F1F5F9',
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buyActionText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#0D0E15',
+  },
+
+  // FAB button
   fab: {
     position: 'absolute',
     bottom: 95,
     right: 20,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#fd5ca3',
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: '#E91E63',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
     zIndex: 101,
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    justifyContent: 'flex-end',
+    zIndex: 999,
+  },
+  fabMenuSheet: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingHorizontal: 22,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 36 : 24,
+  },
+  sheetHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: '#E2E8F0',
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 16,
+  },
+  sheetTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#0D0E15',
+    marginBottom: 4,
+  },
+  sheetSubtitle: {
+    fontSize: 13,
+    color: '#666666',
+    marginBottom: 18,
+  },
+  actionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 18,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+  },
+  actionIconBox: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  actionTextBox: {
+    flex: 1,
+  },
+  wowBadgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  wowBadge: {
+    backgroundColor: '#FFF0F5',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  wowBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#E91E63',
+  },
+  actionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0D0E15',
+  },
+  actionDesc: {
+    fontSize: 12,
+    color: '#666666',
+    marginTop: 2,
+  },
+  cancelSheetBtn: {
+    backgroundColor: '#F1F5F9',
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  cancelSheetText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0D0E15',
   },
 
-  // ----------------------------------------------------
-  // LOG TRANSACTION MODAL STYLES (#fd5ca3)
-  // ----------------------------------------------------
+  // Log Modal
   logModalSafeArea: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -1178,25 +1693,30 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
   },
   logCancelText: {
-    color: '#fd5ca3',
+    color: '#E91E63',
     fontSize: 15,
     fontWeight: '600',
   },
   logHeaderTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#000000',
+    color: '#0D0E15',
+  },
+  logScanHeaderBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#FCE7F3',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logSegmentedBox: {
     flexDirection: 'row',
-    backgroundColor: '#EBECEF',
+    backgroundColor: '#F1F5F9',
     borderRadius: 24,
     padding: 3,
     marginHorizontal: 20,
@@ -1211,44 +1731,57 @@ const styles = StyleSheet.create({
   },
   logSegmentTabActive: {
     backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 2,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   logSegmentText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#475569',
+    color: '#666666',
   },
   logSegmentTextActive: {
-    color: '#000000',
+    color: '#0D0E15',
     fontWeight: '700',
   },
   logAmountSection: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 28,
+    paddingVertical: 14,
   },
-  logAmountCurrency: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#000000',
-    marginRight: 6,
+  logAmountCurrencyLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#94A3B8',
+    marginBottom: 2,
   },
   logAmountInput: {
-    fontSize: 36,
+    fontSize: 40,
     fontWeight: '800',
-    color: '#000000',
-    minWidth: 70,
-    textAlign: 'left',
+    color: '#0D0E15',
+    minWidth: 90,
+    textAlign: 'center',
+    height: 52,
+  },
+  scanReceiptPillBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#FCE7F3',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginTop: 8,
+  },
+  scanReceiptPillText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#E91E63',
   },
   logCategoryHeader: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#000000',
+    color: '#0D0E15',
     paddingHorizontal: 20,
     marginBottom: 12,
   },
@@ -1263,19 +1796,26 @@ const styles = StyleSheet.create({
     width: '48.5%',
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
   },
   logCategoryPillActive: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#E91E63',
+    borderColor: '#E91E63',
+  },
+  logCategoryPillCustom: {
+    borderStyle: 'dashed',
+    borderColor: '#CBD5E1',
   },
   logCategoryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000000',
+    color: '#0D0E15',
     marginLeft: 6,
   },
   logCategoryTextActive: {
@@ -1294,7 +1834,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 44,
     fontSize: 14,
-    color: '#0F172A',
+    color: '#0D0E15',
   },
   logFormContainer: {
     paddingHorizontal: 20,
@@ -1307,13 +1847,13 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   logFormLabel: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#000000',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#0D0E15',
   },
   logNameInput: {
     fontSize: 15,
-    color: '#000000',
+    color: '#0D0E15',
     textAlign: 'right',
     flex: 1,
     marginLeft: 20,
@@ -1324,38 +1864,43 @@ const styles = StyleSheet.create({
   },
   logDateBadge: {
     backgroundColor: '#F1F5F9',
-    paddingHorizontal: 14,
-    paddingVertical: 7,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: 16,
     marginLeft: 8,
   },
   logDateBadgeText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-    color: '#0F172A',
+    color: '#0D0E15',
   },
   logFormDivider: {
     height: 1,
     backgroundColor: '#F1F5F9',
   },
   logAddButton: {
-    backgroundColor: '#fd5ca3',
     height: 54,
     borderRadius: 27,
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 20,
-    marginTop: 28,
+    marginTop: 24,
     marginBottom: 20,
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
+  },
+  logAddButtonActive: {
+    backgroundColor: '#E91E63',
+  },
+  logAddButtonDisabled: {
+    backgroundColor: '#FCE4EC',
   },
   logAddButtonText: {
     fontSize: 16,
     fontWeight: '700',
+  },
+  logAddButtonTextActive: {
     color: '#FFFFFF',
+  },
+  logAddButtonTextDisabled: {
+    color: '#F48FB1',
   },
 });

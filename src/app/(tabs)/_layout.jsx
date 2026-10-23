@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import React from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-// Custom Floating Pill Tab Bar (Universal & Rendah Sikit)
+// Custom Floating Pill Tab Bar
 function CustomTabBar({ state, descriptors, navigation }) {
   return (
     <View style={styles.tabBarContainer}>
@@ -52,12 +53,12 @@ function CustomTabBar({ state, descriptors, navigation }) {
               <Ionicons
                 name={iconName}
                 size={22}
-                color={isFocused ? '#fd5ca3' : '#64748B'}
+                color={isFocused ? '#E91E63' : '#666666'}
               />
               <Text
                 style={[
                   styles.tabLabel,
-                  { color: isFocused ? '#fd5ca3' : '#64748B' },
+                  { color: isFocused ? '#E91E63' : '#666666' },
                   isFocused && styles.activeTabLabel,
                 ]}
               >
@@ -108,12 +109,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    elevation: 12,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
   },
   tabItem: {
     flex: 1,
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   activeTabPill: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FFF0F5',
   },
   tabLabel: {
     fontSize: 11,
