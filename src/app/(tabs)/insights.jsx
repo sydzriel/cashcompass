@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
-import AppBackground from '../../components/AppBackground';
+import { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import AICoachChatModal from '../../components/AICoachChatModal';
+import AppBackground from '../../components/AppBackground';
 import { useApp } from '../../context/AppContext';
 
 export default function InsightsScreen() {
@@ -27,7 +27,7 @@ export default function InsightsScreen() {
       : 0;
 
   return (
-    <AppBackground opacity={0.35} style={styles.gradientContainer}>
+    <AppBackground opacity={1.00} style={styles.gradientContainer}>
       <SafeAreaView style={styles.container}>
         <ScrollView
           style={styles.scrollView}

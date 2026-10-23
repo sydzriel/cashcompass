@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -140,265 +140,274 @@ export default function AIReceiptScannerModal({ visible, onClose, onSaveReceipt 
       presentationStyle="fullScreen"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.safeArea}>
-        {/* Top Header */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.circleButton}
-            onPress={onClose}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="close" size={22} color="#0D0E15" />
-          </TouchableOpacity>
+      <LinearGradient
+        colors={['#FFFFFF', '#FFF0F5', '#FCE7F3']}
+        locations={[0, 0.45, 1]}
+        style={styles.modalGradient}
+      >
+        <SafeAreaView style={styles.safeArea}>
+          {/* Top Header */}
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.circleButton}
+              onPress={onClose}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="close" size={22} color="#0D0E15" />
+            </TouchableOpacity>
 
-          <View style={styles.headerTitleBox}>
-            <Text style={styles.headerTitle}>AI Receipt Scanner</Text>
-            <Text style={styles.headerSubtitle}>Camera OCR with Auto-Fill</Text>
+            <View style={styles.headerTitleBox}>
+              <Text style={styles.headerTitle}>AI Receipt Scanner</Text>
+              <Text style={styles.headerSubtitle}>Camera OCR with Auto-Fill</Text>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.circleButton, flashOn && styles.circleButtonActive]}
+              onPress={() => setFlashOn((prev) => !prev)}
+              activeOpacity={0.8}
+            >
+              <Ionicons
+                name={flashOn ? 'flash' : 'flash-outline'}
+                size={20}
+                color={flashOn ? '#E91E63' : '#0D0E15'}
+              />
+            </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={[styles.circleButton, flashOn && styles.circleButtonActive]}
-            onPress={() => setFlashOn((prev) => !prev)}
-            activeOpacity={0.8}
-          >
-            <Ionicons
-              name={flashOn ? 'flash' : 'flash-outline'}
-              size={20}
-              color={flashOn ? '#E91E63' : '#0D0E15'}
-            />
-          </TouchableOpacity>
-        </View>
+          {scanState === 'viewfinder' && (
+            <View style={styles.viewfinderContainer}>
+              {/* Camera Viewfinder Frame */}
+              <View style={styles.viewfinderFrame}>
+                {/* Corner Targets */}
+                <View style={[styles.corner, styles.topLeft]} />
+                <View style={[styles.corner, styles.topRight]} />
+                <View style={[styles.corner, styles.bottomLeft]} />
+                <View style={[styles.corner, styles.bottomRight]} />
 
-        {scanState === 'viewfinder' && (
-          <View style={styles.viewfinderContainer}>
-            {/* Camera Viewfinder Frame */}
-            <View style={styles.viewfinderFrame}>
-              {/* Corner Targets */}
-              <View style={[styles.corner, styles.topLeft]} />
-              <View style={[styles.corner, styles.topRight]} />
-              <View style={[styles.corner, styles.bottomLeft]} />
-              <View style={[styles.corner, styles.bottomRight]} />
+                {/* Animated Laser Line */}
+                <Animated.View
+                  style={[
+                    styles.laserLine,
+                    {
+                      transform: [
+                        {
+                          translateY: laserAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [10, 270],
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                >
+                  <LinearGradient
+                    colors={['rgba(233, 30, 99, 0)', '#E91E63', 'rgba(233, 30, 99, 0)']}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.5 }}
+                    style={styles.laserGradient}
+                  />
+                </Animated.View>
 
-              {/* Animated Laser Line */}
-              <Animated.View
-                style={[
-                  styles.laserLine,
-                  {
-                    transform: [
-                      {
-                        translateY: laserAnim.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [10, 270],
-                        }),
-                      },
-                    ],
-                  },
-                ]}
-              >
-                <LinearGradient
-                  colors={['rgba(233, 30, 99, 0)', '#E91E63', 'rgba(233, 30, 99, 0)']}
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1, y: 0.5 }}
-                  style={styles.laserGradient}
-                />
-              </Animated.View>
+                {/* Viewfinder Center Content */}
+                <View style={styles.viewfinderCenter}>
+                  <View style={styles.hudBadge}>
+                    <Text style={styles.hudBadgeText}>ALIGN RECEIPT WITHIN FRAME</Text>
+                  </View>
 
-              {/* Viewfinder Center Content */}
-              <View style={styles.viewfinderCenter}>
-                <View style={styles.hudBadge}>
-                  <Text style={styles.hudBadgeText}>ALIGN RECEIPT WITHIN FRAME</Text>
-                </View>
-
-                {/* Simulated receipt paper silhouette */}
-                <View style={styles.receiptSilhouette}>
-                  <Text style={styles.silhouetteText}>{selectedReceipt.merchant}</Text>
-                  <Text style={styles.silhouetteSub}>Total: RM{selectedReceipt.total.toFixed(2)}</Text>
-                  <View style={styles.barcodeLines}>
-                    <View style={styles.barcodeLine} />
-                    <View style={[styles.barcodeLine, { width: 40 }]} />
-                    <View style={[styles.barcodeLine, { width: 70 }]} />
+                  {/* Simulated receipt paper silhouette */}
+                  <View style={styles.receiptSilhouette}>
+                    <Text style={styles.silhouetteText}>{selectedReceipt.merchant}</Text>
+                    <Text style={styles.silhouetteSub}>Total: RM{selectedReceipt.total.toFixed(2)}</Text>
+                    <View style={styles.barcodeLines}>
+                      <View style={styles.barcodeLine} />
+                      <View style={[styles.barcodeLine, { width: 40 }]} />
+                      <View style={[styles.barcodeLine, { width: 70 }]} />
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
 
-            {/* Instruction Banner */}
-            <View style={styles.instructionCard}>
-              <Ionicons name="sparkles" size={18} color="#E91E63" style={{ marginRight: 8 }} />
-              <Text style={styles.instructionText}>
-                Select a sample receipt below or tap capture to auto-detect merchant & amount.
-              </Text>
-            </View>
-
-            {/* Sample Receipts Selector */}
-            <Text style={styles.selectorLabel}>DEMO SAMPLE RECEIPTS:</Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.sampleChipsRow}
-            >
-              {sampleReceipts.map((rc) => {
-                const isSelected = selectedReceipt.id === rc.id;
-                return (
-                  <TouchableOpacity
-                    key={rc.id}
-                    style={[
-                      styles.sampleChip,
-                      isSelected && styles.sampleChipActive,
-                    ]}
-                    onPress={() => setSelectedReceipt(rc)}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.sampleChipEmoji}>{rc.emoji}</Text>
-                    <View>
-                      <Text
-                        style={[
-                          styles.sampleChipTitle,
-                          isSelected && styles.sampleChipTitleActive,
-                        ]}
-                      >
-                        {rc.merchant}
-                      </Text>
-                      <Text style={styles.sampleChipPrice}>RM{rc.total.toFixed(2)}</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-
-            {/* Shutter Button */}
-            <View style={styles.bottomBar}>
-              <TouchableOpacity
-                style={styles.shutterOuter}
-                onPress={() => handleCapture()}
-                activeOpacity={0.85}
-              >
-                <View style={styles.shutterInner}>
-                  <Ionicons name="camera" size={28} color="#FFFFFF" />
-                </View>
-              </TouchableOpacity>
-              <Text style={styles.shutterHint}>Tap to Scan & Auto-Fill</Text>
-            </View>
-          </View>
-        )}
-
-        {scanState === 'scanning' && (
-          <View style={styles.scanningContainer}>
-            <View style={styles.scanAnimationCard}>
-              <ActivityIndicator size="large" color="#E91E63" style={{ marginBottom: 16 }} />
-              <Text style={styles.scanStatusTitle}>AI Vision OCR Scanning...</Text>
-              <Text style={styles.scanStatusDesc}>
-                Reading receipt from {selectedReceipt.merchant}
-              </Text>
-              <View style={styles.scanningPills}>
-                <View style={styles.scanPillItem}>
-                  <Ionicons name="checkmark-circle" size={14} color="#10B981" />
-                  <Text style={styles.scanPillText}>Detecting Merchant</Text>
-                </View>
-                <View style={styles.scanPillItem}>
-                  <Ionicons name="checkmark-circle" size={14} color="#10B981" />
-                  <Text style={styles.scanPillText}>Extracting Line Items</Text>
-                </View>
-                <View style={styles.scanPillItem}>
-                  <Ionicons name="checkmark-circle" size={14} color="#10B981" />
-                  <Text style={styles.scanPillText}>Predicting Category</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        )}
-
-        {scanState === 'result' && (
-          <ScrollView
-            contentContainerStyle={styles.resultScroll}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Success Pill */}
-            <View style={styles.successPill}>
-              <Ionicons name="checkmark-circle" size={18} color="#10B981" style={{ marginRight: 6 }} />
-              <Text style={styles.successPillText}>
-                Receipt Extracted with {selectedReceipt.confidence} Accuracy
-              </Text>
-            </View>
-
-            {/* Extracted Receipt Card (Flat White per design.md) */}
-            <View style={styles.receiptCard}>
-              <View style={styles.receiptTop}>
-                <Text style={styles.receiptEmoji}>{selectedReceipt.emoji}</Text>
-                <Text style={styles.receiptMerchant}>{selectedReceipt.merchant}</Text>
-                <Text style={styles.receiptBranch}>{selectedReceipt.branch}</Text>
-                <Text style={styles.receiptMeta}>
-                  {selectedReceipt.date} • {selectedReceipt.time}
+              {/* Instruction Banner */}
+              <View style={styles.instructionCard}>
+                <Ionicons name="sparkles" size={18} color="#E91E63" style={{ marginRight: 8 }} />
+                <Text style={styles.instructionText}>
+                  Select a sample receipt below or tap capture to auto-detect merchant & amount.
                 </Text>
               </View>
 
-              <View style={styles.dashedDivider} />
+              {/* Sample Receipts Selector */}
+              <Text style={styles.selectorLabel}>DEMO SAMPLE RECEIPTS:</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.sampleChipsRow}
+              >
+                {sampleReceipts.map((rc) => {
+                  const isSelected = selectedReceipt.id === rc.id;
+                  return (
+                    <TouchableOpacity
+                      key={rc.id}
+                      style={[
+                        styles.sampleChip,
+                        isSelected && styles.sampleChipActive,
+                      ]}
+                      onPress={() => setSelectedReceipt(rc)}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={styles.sampleChipEmoji}>{rc.emoji}</Text>
+                      <View>
+                        <Text
+                          style={[
+                            styles.sampleChipTitle,
+                            isSelected && styles.sampleChipTitleActive,
+                          ]}
+                        >
+                          {rc.merchant}
+                        </Text>
+                        <Text style={styles.sampleChipPrice}>RM{rc.total.toFixed(2)}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
 
-              <View style={styles.itemsSection}>
-                <Text style={styles.itemsHeader}>ITEMIZED BREAKDOWN</Text>
-                {selectedReceipt.items.map((item, idx) => (
-                  <View key={idx} style={styles.itemRow}>
-                    <Text style={styles.itemName}>{item.name}</Text>
-                    <Text style={styles.itemPrice}>RM{item.price.toFixed(2)}</Text>
+              {/* Shutter Button */}
+              <View style={styles.bottomBar}>
+                <TouchableOpacity
+                  style={styles.shutterOuter}
+                  onPress={() => handleCapture()}
+                  activeOpacity={0.85}
+                >
+                  <View style={styles.shutterInner}>
+                    <Ionicons name="camera" size={28} color="#FFFFFF" />
                   </View>
-                ))}
+                </TouchableOpacity>
+                <Text style={styles.shutterHint}>Tap to Scan & Auto-Fill</Text>
               </View>
+            </View>
+          )}
 
-              <View style={styles.dashedDivider} />
-
-              {/* Total Row */}
-              <View style={styles.totalRow}>
-                <Text style={styles.totalLabel}>TOTAL AMOUNT</Text>
-                <Text style={styles.totalAmount}>RM{selectedReceipt.total.toFixed(2)}</Text>
-              </View>
-
-              {/* AI Auto-Categorized Badge */}
-              <View style={styles.categoryBadgeRow}>
-                <Text style={styles.categoryBadgeLabel}>AI Auto-Categorized:</Text>
-                <View style={styles.categoryPill}>
-                  <Text style={styles.categoryPillText}>
-                    {selectedReceipt.emoji} {selectedReceipt.category}
-                  </Text>
+          {scanState === 'scanning' && (
+            <View style={styles.scanningContainer}>
+              <View style={styles.scanAnimationCard}>
+                <ActivityIndicator size="large" color="#E91E63" style={{ marginBottom: 16 }} />
+                <Text style={styles.scanStatusTitle}>AI Vision OCR Scanning...</Text>
+                <Text style={styles.scanStatusDesc}>
+                  Reading receipt from {selectedReceipt.merchant}
+                </Text>
+                <View style={styles.scanningPills}>
+                  <View style={styles.scanPillItem}>
+                    <Ionicons name="checkmark-circle" size={14} color="#10B981" />
+                    <Text style={styles.scanPillText}>Detecting Merchant</Text>
+                  </View>
+                  <View style={styles.scanPillItem}>
+                    <Ionicons name="checkmark-circle" size={14} color="#10B981" />
+                    <Text style={styles.scanPillText}>Extracting Line Items</Text>
+                  </View>
+                  <View style={styles.scanPillItem}>
+                    <Ionicons name="checkmark-circle" size={14} color="#10B981" />
+                    <Text style={styles.scanPillText}>Predicting Category</Text>
+                  </View>
                 </View>
               </View>
             </View>
+          )}
 
-            {/* Action Buttons */}
-            <View style={styles.resultActionsRow}>
-              <TouchableOpacity
-                style={styles.retakeBtn}
-                onPress={handleRetake}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.retakeBtnText}>Retake / Choose Another</Text>
-              </TouchableOpacity>
+          {scanState === 'result' && (
+            <ScrollView
+              contentContainerStyle={styles.resultScroll}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* Success Pill */}
+              <View style={styles.successPill}>
+                <Ionicons name="checkmark-circle" size={18} color="#10B981" style={{ marginRight: 6 }} />
+                <Text style={styles.successPillText}>
+                  Receipt Extracted with {selectedReceipt.confidence} Accuracy
+                </Text>
+              </View>
 
-              <TouchableOpacity
-                style={styles.confirmBtn}
-                onPress={handleConfirmAdd}
-                activeOpacity={0.8}
-              >
-                <LinearGradient
-                  colors={['#E91E63', '#fd5ca3']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.confirmGradient}
+              {/* Extracted Receipt Card (Flat White per design.md) */}
+              <View style={styles.receiptCard}>
+                <View style={styles.receiptTop}>
+                  <Text style={styles.receiptEmoji}>{selectedReceipt.emoji}</Text>
+                  <Text style={styles.receiptMerchant}>{selectedReceipt.merchant}</Text>
+                  <Text style={styles.receiptBranch}>{selectedReceipt.branch}</Text>
+                  <Text style={styles.receiptMeta}>
+                    {selectedReceipt.date} • {selectedReceipt.time}
+                  </Text>
+                </View>
+
+                <View style={styles.dashedDivider} />
+
+                <View style={styles.itemsSection}>
+                  <Text style={styles.itemsHeader}>ITEMIZED BREAKDOWN</Text>
+                  {selectedReceipt.items.map((item, idx) => (
+                    <View key={idx} style={styles.itemRow}>
+                      <Text style={styles.itemName}>{item.name}</Text>
+                      <Text style={styles.itemPrice}>RM{item.price.toFixed(2)}</Text>
+                    </View>
+                  ))}
+                </View>
+
+                <View style={styles.dashedDivider} />
+
+                {/* Total Row */}
+                <View style={styles.totalRow}>
+                  <Text style={styles.totalLabel}>TOTAL AMOUNT</Text>
+                  <Text style={styles.totalAmount}>RM{selectedReceipt.total.toFixed(2)}</Text>
+                </View>
+
+                {/* AI Auto-Categorized Badge */}
+                <View style={styles.categoryBadgeRow}>
+                  <Text style={styles.categoryBadgeLabel}>AI Auto-Categorized:</Text>
+                  <View style={styles.categoryPill}>
+                    <Text style={styles.categoryPillText}>
+                      {selectedReceipt.emoji} {selectedReceipt.category}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Action Buttons */}
+              <View style={styles.resultActionsRow}>
+                <TouchableOpacity
+                  style={styles.retakeBtn}
+                  onPress={handleRetake}
+                  activeOpacity={0.8}
                 >
-                  <Text style={styles.confirmBtnText}>Confirm & Auto-Fill ✨</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        )}
-      </SafeAreaView>
+                  <Text style={styles.retakeBtnText}>Retake / Choose Another</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.confirmBtn}
+                  onPress={handleConfirmAdd}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={['#E91E63', '#fd5ca3']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.confirmGradient}
+                  >
+                    <Text style={styles.confirmBtnText}>Confirm & Auto-Fill ✨</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          )}
+        </SafeAreaView>
+      </LinearGradient>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  modalGradient: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: 'transparent',
   },
   header: {
     flexDirection: 'row',
@@ -407,6 +416,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: Platform.OS === 'android' ? 16 : 8,
     paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(233, 30, 99, 0.08)',
   },
   circleButton: {
     width: 44,
@@ -415,6 +426,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(233, 30, 99, 0.15)',
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   circleButtonActive: {
     backgroundColor: '#FFF0F5',
@@ -427,11 +445,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: '#0D0E15',
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: '#E91E63',
+    fontWeight: '600',
     marginTop: 2,
   },
   viewfinderContainer: {
@@ -442,49 +461,54 @@ const styles = StyleSheet.create({
   },
   viewfinderFrame: {
     height: 310,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderRadius: 22,
     marginTop: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(233, 30, 99, 0.25)',
     position: 'relative',
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 14,
+    elevation: 4,
   },
   corner: {
     position: 'absolute',
-    width: 24,
-    height: 24,
+    width: 26,
+    height: 26,
     borderColor: '#E91E63',
   },
   topLeft: {
     top: 14,
     left: 14,
-    borderTopWidth: 3,
-    borderLeftWidth: 3,
-    borderTopLeftRadius: 6,
+    borderTopWidth: 3.5,
+    borderLeftWidth: 3.5,
+    borderTopLeftRadius: 8,
   },
   topRight: {
     top: 14,
     right: 14,
-    borderTopWidth: 3,
-    borderRightWidth: 3,
-    borderTopRightRadius: 6,
+    borderTopWidth: 3.5,
+    borderRightWidth: 3.5,
+    borderTopRightRadius: 8,
   },
   bottomLeft: {
     bottom: 14,
     left: 14,
-    borderBottomWidth: 3,
-    borderLeftWidth: 3,
-    borderBottomLeftRadius: 6,
+    borderBottomWidth: 3.5,
+    borderLeftWidth: 3.5,
+    borderBottomLeftRadius: 8,
   },
   bottomRight: {
     bottom: 14,
     right: 14,
-    borderBottomWidth: 3,
-    borderRightWidth: 3,
-    borderBottomRightRadius: 6,
+    borderBottomWidth: 3.5,
+    borderRightWidth: 3.5,
+    borderBottomRightRadius: 8,
   },
   laserLine: {
     position: 'absolute',
@@ -502,36 +526,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   hudBadge: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: '#FFF0F5',
+    borderWidth: 1,
+    borderColor: 'rgba(233, 30, 99, 0.3)',
     paddingHorizontal: 12,
     paddingVertical: 5,
-    borderRadius: 12,
+    borderRadius: 14,
     marginBottom: 16,
   },
   hudBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#E91E63',
     letterSpacing: 0.5,
   },
   receiptSilhouette: {
-    width: 190,
-    padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: 12,
+    width: 200,
+    padding: 18,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
+    borderColor: 'rgba(233, 30, 99, 0.2)',
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
   },
   silhouetteText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#0D0E15',
     marginBottom: 4,
   },
   silhouetteSub: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#E91E63',
     marginBottom: 10,
   },
@@ -542,13 +573,15 @@ const styles = StyleSheet.create({
   barcodeLine: {
     height: 2,
     width: 60,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: 'rgba(233, 30, 99, 0.35)',
     borderRadius: 1,
   },
   instructionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#FFF0F5',
+    borderWidth: 1,
+    borderColor: 'rgba(233, 30, 99, 0.2)',
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -557,13 +590,14 @@ const styles = StyleSheet.create({
   instructionText: {
     flex: 1,
     fontSize: 12,
-    color: '#E2E8F0',
+    color: '#0D0E15',
     lineHeight: 17,
+    fontWeight: '500',
   },
   selectorLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#94A3B8',
+    color: '#E91E63',
     letterSpacing: 0.5,
     marginTop: 12,
     marginBottom: 8,
@@ -574,16 +608,21 @@ const styles = StyleSheet.create({
   sampleChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1E293B',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderColor: 'rgba(233, 30, 99, 0.15)',
     borderRadius: 18,
     paddingHorizontal: 14,
     paddingVertical: 8,
     marginRight: 10,
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   sampleChipActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF0F5',
     borderColor: '#E91E63',
     borderWidth: 1.5,
   },
@@ -594,14 +633,14 @@ const styles = StyleSheet.create({
   sampleChipTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#0D0E15',
   },
   sampleChipTitleActive: {
-    color: '#0D0E15',
+    color: '#E91E63',
   },
   sampleChipPrice: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#E91E63',
   },
   bottomBar: {
@@ -616,8 +655,13 @@ const styles = StyleSheet.create({
     borderColor: '#E91E63',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: '#FFFFFF',
     marginBottom: 6,
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   shutterInner: {
     width: 56,
@@ -630,7 +674,7 @@ const styles = StyleSheet.create({
   shutterHint: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#94A3B8',
+    color: '#666666',
   },
   scanningContainer: {
     flex: 1,
@@ -645,6 +689,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     maxWidth: 340,
+    borderWidth: 1.5,
+    borderColor: 'rgba(233, 30, 99, 0.2)',
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 5,
   },
   scanStatusTitle: {
     fontSize: 18,
@@ -665,11 +716,13 @@ const styles = StyleSheet.create({
   scanPillItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFF0F5',
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 14,
     gap: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(233, 30, 99, 0.15)',
   },
   scanPillText: {
     fontSize: 13,
@@ -685,7 +738,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DCFCE7',
+    backgroundColor: '#FFF0F5',
+    borderWidth: 1,
+    borderColor: 'rgba(233, 30, 99, 0.25)',
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 20,
@@ -694,15 +749,20 @@ const styles = StyleSheet.create({
   successPillText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#16A34A',
+    color: '#E91E63',
   },
   receiptCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.04)',
+    borderColor: 'rgba(233, 30, 99, 0.15)',
     padding: 20,
     marginBottom: 20,
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
   },
   receiptTop: {
     alignItems: 'center',
@@ -730,7 +790,7 @@ const styles = StyleSheet.create({
   dashedDivider: {
     height: 1,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#FCE7F3',
     borderStyle: 'dashed',
     marginVertical: 14,
   },
@@ -740,7 +800,7 @@ const styles = StyleSheet.create({
   itemsHeader: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#94A3B8',
+    color: '#E91E63',
     letterSpacing: 0.5,
     marginBottom: 10,
   },
@@ -782,9 +842,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFF0F5',
     padding: 12,
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(233, 30, 99, 0.12)',
   },
   categoryBadgeLabel: {
     fontSize: 12,
@@ -794,7 +856,7 @@ const styles = StyleSheet.create({
   categoryPill: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: 'rgba(233, 30, 99, 0.25)',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -802,7 +864,7 @@ const styles = StyleSheet.create({
   categoryPillText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0D0E15',
+    color: '#E91E63',
   },
   resultActionsRow: {
     gap: 12,
@@ -825,15 +887,15 @@ const styles = StyleSheet.create({
   retakeBtn: {
     height: 48,
     borderRadius: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderWidth: 1.5,
+    borderColor: '#E91E63',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: '#FFFFFF',
   },
   retakeBtnText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#E2E8F0',
+    fontWeight: '700',
+    color: '#E91E63',
   },
 });

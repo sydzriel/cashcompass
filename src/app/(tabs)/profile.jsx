@@ -1,7 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import AppBackground from '../../components/AppBackground';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AppBackground from '../../components/AppBackground';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -19,7 +18,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <AppBackground opacity={0.35} style={styles.gradientContainer}>
+    <AppBackground opacity={1.00} style={styles.gradientContainer}>
       <SafeAreaView style={styles.container}>
         <ScrollView
           style={styles.scrollView}

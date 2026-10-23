@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -121,13 +122,20 @@ export default function AICoachChatModal({
         locations={[0, 0.45, 1]}
         style={styles.gradientContainer}
       >
+        {/* Liquid Glass overlay */}
+        <BlurView
+          intensity={50}
+          tint="light"
+          style={styles.glassOverlay}
+        >
         <SafeAreaView style={styles.safeArea}>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             style={{ flex: 1 }}
           >
-            {/* Header */}
-            <View style={styles.header}>
+            {/* Header with Glass Backdrop */}
+            <BlurView intensity={50} tint="light" style={styles.headerBlur}>
+              <View style={styles.header}>
               <View style={styles.coachHeaderInfo}>
                 <View style={styles.coachAvatar}>
                   <Text style={{ fontSize: 24 }}>🤖</Text>
@@ -146,7 +154,8 @@ export default function AICoachChatModal({
               >
                 <Ionicons name="close" size={22} color="#0D0E15" />
               </TouchableOpacity>
-            </View>
+              </View>
+            </BlurView>
 
             {/* Context Pill (Live Financial Standing) */}
             <View style={styles.statsPill}>
@@ -269,6 +278,7 @@ export default function AICoachChatModal({
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
+        </BlurView>
       </LinearGradient>
     </Modal>
   );
@@ -278,8 +288,16 @@ const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
   },
+  glassOverlay: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
+  },
+  headerBlur: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.3)',
+    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',
@@ -288,9 +306,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: Platform.OS === 'android' ? 16 : 8,
     paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.04)',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
   },
   coachHeaderInfo: {
     flexDirection: 'row',

@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useMemo, useState } from 'react';
-import AppBackground from '../../components/AppBackground';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useMemo, useRef, useState } from 'react';
 import {
   Alert,
   Image,
@@ -16,6 +17,7 @@ import {
   View,
 } from 'react-native';
 import AIReceiptScannerModal from '../../components/AIReceiptScannerModal';
+import AppBackground from '../../components/AppBackground';
 import AutoSpendingBanner from '../../components/AutoSpendingBanner';
 import ImpulseCalculatorModal from '../../components/ImpulseCalculatorModal';
 import {
@@ -60,6 +62,8 @@ export default function HomeScreen() {
   const [scanFromLogModal, setScanFromLogModal] = useState(false);
   const [isBalanceSheetOpen, setIsBalanceSheetOpen] = useState(false);
   const [selectedBalanceMetric, setSelectedBalanceMetric] = useState('left');
+  const [isBalanceHidden, setIsBalanceHidden] = useState(false);
+  const scrollViewRef = useRef(null);
 
   // Manual Log Transaction Form State
   const [transactionType, setTransactionType] = useState('expense'); // 'expense' | 'income'
@@ -592,7 +596,7 @@ export default function HomeScreen() {
   );
 
   return (
-    <AppBackground opacity={0.35} style={styles.gradientContainer}>
+    <AppBackground opacity={1.00} style={styles.gradientContainer}>
       <SafeAreaView style={styles.container}>
         {/* FAKTOR WOW I: Auto-Spending Notification Listener Banner */}
         <AutoSpendingBanner
@@ -601,11 +605,12 @@ export default function HomeScreen() {
         />
 
         <ScrollView
+          ref={scrollViewRef}
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Top Header Row Controls */}
+          {/* Top Header Row Controls (Restored) */}
           <View style={styles.headerRow}>
             <TouchableOpacity
               style={styles.pillButton}
@@ -618,16 +623,6 @@ export default function HomeScreen() {
             </TouchableOpacity>
 
             <View style={styles.headerRightActions}>
-              {/* Simulation Trigger Pill for Auto-Spending Tracker */}
-              <TouchableOpacity
-                style={styles.autoDetectPill}
-                onPress={() => setIsSimulatePickerOpen(true)}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.autoDetectDot}>⚡</Text>
-                <Text style={styles.autoDetectText}>Auto-Tracker</Text>
-              </TouchableOpacity>
-
               <TouchableOpacity style={styles.dateFilterButton} activeOpacity={0.8}>
                 <Text style={styles.dateFilterText}>Oct 2026</Text>
                 <Ionicons
@@ -640,25 +635,110 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/* Dynamic Balance Metric Trigger (Matches User Screenshot) */}
+          {/* Big Hero Card (Liquid Glass Gradient) */}
           <TouchableOpacity
-            style={styles.balanceContainer}
-            activeOpacity={0.7}
+            style={styles.heroCardContainer}
+            activeOpacity={0.92}
             onPress={() => setIsBalanceSheetOpen(true)}
           >
-            <View style={styles.balanceLabelRow}>
-              <Text style={styles.balanceLabel}>{activeMetric.title}</Text>
-              <Ionicons
-                name="swap-vertical"
-                size={13}
-                color="#8E8E93"
-                style={styles.balanceChevronIcon}
-              />
-            </View>
-            <Text style={styles.balanceAmount}>{activeMetric.valueText}</Text>
+            <BlurView intensity={50} tint="light" style={styles.heroGlassBlur}>
+              <LinearGradient
+                colors={[
+                  'rgba(255, 255, 255, 0.85)',
+                  'rgba(255, 255, 255, 0.50)',
+                  'rgba(244, 232, 248, 0.65)',
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.heroGlassGradient}
+              >
+                {/* Card Top Row: Personal Account Header */}
+                <View style={styles.heroTopRow}>
+                  <View>
+                    <Text style={styles.heroBankName}>Personal</Text>
+                    <Text style={styles.heroAccountType}>STUDENT WALLET</Text>
+                  </View>
+                  <View style={styles.heroTagPill}>
+                    <Ionicons name="swap-vertical" size={13} color="#E91E63" />
+                    <Text style={styles.heroTagText}>Details</Text>
+                  </View>
+                </View>
+
+                {/* Card Middle: Balance Label & Big Amount */}
+                <View style={styles.heroBalanceSection}>
+                  <View style={styles.heroBalanceLabelRow}>
+                    <Text style={styles.heroBalanceLabel}>
+                      {activeMetric.title.toUpperCase()}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => setIsBalanceHidden(!isBalanceHidden)}
+                      hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                      style={styles.heroEyeBtn}
+                    >
+                      <Ionicons
+                        name={isBalanceHidden ? 'eye-off-outline' : 'eye-outline'}
+                        size={16}
+                        color="#666666"
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.heroBalanceRow}>
+                    <Text style={styles.heroCurrencyPrefix}>RM</Text>
+                    <Text style={styles.heroBalanceNumber}>
+                      {isBalanceHidden
+                        ? '••••••'
+                        : activeMetric.id === 'left'
+                          ? (leftThisMonth < 0
+                            ? `-${Math.abs(leftThisMonth).toFixed(2)}`
+                            : leftThisMonth.toFixed(2))
+                          : activeMetric.valueText.replace('RM', '')}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Card Bottom: Income & Spending */}
+                <View style={styles.heroBottomRow}>
+                  <View style={styles.heroStatCol}>
+                    <Text style={styles.heroStatLabel}>INCOME</Text>
+                    <Text style={styles.heroStatValue}>
+                      {isBalanceHidden ? '••••' : `RM ${Number(totalIncome).toFixed(2)}`}
+                    </Text>
+                  </View>
+
+                  <View style={styles.heroStatCol}>
+                    <Text style={styles.heroStatLabel}>SPENDING</Text>
+                    <Text style={styles.heroStatValue}>
+                      {isBalanceHidden ? '••••' : `RM ${Number(totalExpenses).toFixed(2)}`}
+                    </Text>
+                  </View>
+                </View>
+              </LinearGradient>
+            </BlurView>
           </TouchableOpacity>
 
-          {/* Expenses Section (Variable Expenses) */}
+          {/* Action Row: Bills & Receipts (Clean Flat White Cards) */}
+          <View style={styles.quickActionRow}>
+            <TouchableOpacity
+              style={styles.quickActionCard}
+              activeOpacity={0.8}
+              onPress={() => scrollViewRef.current?.scrollTo({ y: 540, animated: true })}
+            >
+              <Ionicons name="document-text-outline" size={18} color="#0D0E15" />
+              <Text style={styles.quickActionTitle}>Bills</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.quickActionCard}
+              activeOpacity={0.8}
+              onPress={handleOpenReceiptScanner}
+            >
+              <Ionicons name="images-outline" size={18} color="#0D0E15" />
+              <Text style={styles.quickActionTitle}>Receipts</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Expenses Section */}
           <Text style={styles.sectionTitle}>Expenses</Text>
 
           <View style={styles.card}>
@@ -855,9 +935,8 @@ export default function HomeScreen() {
                 style={[
                   styles.tooltip,
                   {
-                    left: `${
-                      monthlyExpensesData.findIndex((m) => m.month === selectedMonth) * 15 + 4
-                    }%`,
+                    left: `${monthlyExpensesData.findIndex((m) => m.month === selectedMonth) * 15 + 4
+                      }%`,
                   },
                 ]}
               >
@@ -929,7 +1008,7 @@ export default function HomeScreen() {
           <Ionicons name="add" size={32} color="#FFFFFF" />
         </TouchableOpacity>
 
-        {/* FAB Action Picker — inline View overlay (avoids iOS modal-on-modal bug) */}
+        {/* FAB Action Picker — Liquid Glass overlay (avoids iOS modal-on-modal bug) */}
         {isFabMenuOpen && (
           <TouchableOpacity
             style={styles.modalOverlay}
@@ -959,51 +1038,63 @@ export default function HomeScreen() {
                 <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
               </TouchableOpacity>
 
-              {/* Action 2: AI Receipt Scanner (Camera OCR) */}
-              <TouchableOpacity
-                style={styles.actionItem}
-                onPress={handleOpenReceiptScanner}
-                activeOpacity={0.7}
+              {/* Action 2: AI Receipt Scanner (Camera OCR) — Liquid Glass */}
+              <BlurView
+                intensity={50}
+                tint="light"
+                style={styles.actionItemGlassWrapper}
               >
-                <View style={[styles.actionIconBox, { backgroundColor: '#FFF0F5' }]}>
-                  <Text style={{ fontSize: 22 }}>📸</Text>
-                </View>
-                <View style={styles.actionTextBox}>
-                  <View style={styles.wowBadgeRow}>
-                    <Text style={styles.actionTitle}>Imbas Resit (AI OCR)</Text>
-                    <View style={styles.wowBadge}>
-                      <Text style={styles.wowBadgeText}>AI VISION</Text>
-                    </View>
+                <TouchableOpacity
+                  style={styles.actionItemGlass}
+                  onPress={handleOpenReceiptScanner}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.actionIconBox, { backgroundColor: 'rgba(255, 240, 245, 0.7)' }]}>
+                    <Text style={{ fontSize: 22 }}>📸</Text>
                   </View>
-                  <Text style={styles.actionDesc}>
-                    Scan physical receipt with camera to auto-fill
-                  </Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
-              </TouchableOpacity>
+                  <View style={styles.actionTextBox}>
+                    <View style={styles.wowBadgeRow}>
+                      <Text style={styles.actionTitle}>Imbas Resit (AI OCR)</Text>
+                      <View style={styles.wowBadge}>
+                        <Text style={styles.wowBadgeText}>AI VISION</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.actionDesc}>
+                      Scan physical receipt with camera to auto-fill
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+                </TouchableOpacity>
+              </BlurView>
 
-              {/* Action 3: Impulse Buy 48-Hour Chill Calculator */}
-              <TouchableOpacity
-                style={styles.actionItem}
-                onPress={handleOpenImpulseCalculator}
-                activeOpacity={0.7}
+              {/* Action 3: Impulse Buy 48-Hour Chill Calculator — Liquid Glass */}
+              <BlurView
+                intensity={50}
+                tint="light"
+                style={styles.actionItemGlassWrapper}
               >
-                <View style={[styles.actionIconBox, { backgroundColor: '#FEF3C7' }]}>
-                  <Text style={{ fontSize: 22 }}>⏳</Text>
-                </View>
-                <View style={styles.actionTextBox}>
-                  <View style={styles.wowBadgeRow}>
-                    <Text style={styles.actionTitle}>48-Hour Chill Calculator</Text>
-                    <View style={[styles.wowBadge, { backgroundColor: '#FEF3C7' }]}>
-                      <Text style={[styles.wowBadgeText, { color: '#D97706' }]}>IMPULSE RULE</Text>
-                    </View>
+                <TouchableOpacity
+                  style={styles.actionItemGlass}
+                  onPress={handleOpenImpulseCalculator}
+                  activeOpacity={0.7}
+                >
+                  <View style={[styles.actionIconBox, { backgroundColor: 'rgba(254, 243, 199, 0.7)' }]}>
+                    <Text style={{ fontSize: 22 }}>⏳</Text>
                   </View>
-                  <Text style={styles.actionDesc}>
-                    Cool down impulse urges & save money
-                  </Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
-              </TouchableOpacity>
+                  <View style={styles.actionTextBox}>
+                    <View style={styles.wowBadgeRow}>
+                      <Text style={styles.actionTitle}>48-Hour Chill Calculator</Text>
+                      <View style={[styles.wowBadge, { backgroundColor: 'rgba(254, 243, 199, 0.75)' }]}>
+                        <Text style={[styles.wowBadgeText, { color: '#D97706' }]}>IMPULSE RULE</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.actionDesc}>
+                      Cool down impulse urges & save money
+                    </Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={18} color="#94A3B8" />
+                </TouchableOpacity>
+              </BlurView>
 
               <TouchableOpacity
                 style={styles.cancelSheetBtn}
@@ -1933,28 +2024,144 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#0D0E15',
   },
-  balanceContainer: {
+
+  // Big Hero Card (Liquid Glass Gradient Style)
+  heroCardContainer: {
+    borderRadius: 24,
+    overflow: 'hidden',
     marginBottom: 20,
-    alignSelf: 'flex-start',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.65)',
+    shadowColor: '#E91E63',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
+    elevation: 4,
   },
-  balanceLabelRow: {
+  heroGlassBlur: {
+    borderRadius: 24,
+    overflow: 'hidden',
+  },
+  heroGlassGradient: {
+    paddingHorizontal: 22,
+    paddingTop: 20,
+    paddingBottom: 22,
+    borderRadius: 24,
+  },
+  heroTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 18,
+  },
+  heroBankName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#0D0E15',
+    letterSpacing: 0.2,
+  },
+  heroAccountType: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#666666',
+    letterSpacing: 1.2,
+    marginTop: 2,
+  },
+  heroTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.65)',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
   },
-  balanceChevronIcon: {
-    marginLeft: 4,
+  heroTagText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#E91E63',
+    marginLeft: 3,
   },
-  balanceLabel: {
-    fontSize: 14,
+  heroBalanceSection: {
+    marginBottom: 20,
+  },
+  heroBalanceLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  heroBalanceLabel: {
+    fontSize: 11,
+    fontWeight: '600',
     color: '#666666',
-    fontWeight: '500',
+    letterSpacing: 1.2,
   },
-  balanceAmount: {
-    fontSize: 48, // 48px Bold per design.md
+  heroEyeBtn: {
+    marginLeft: 8,
+    padding: 2,
+  },
+  heroBalanceRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
+  heroCurrencyPrefix: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#0D0E15',
+    marginRight: 6,
+  },
+  heroBalanceNumber: {
+    fontSize: 36,
     fontWeight: '800',
     color: '#0D0E15',
     letterSpacing: -1,
+  },
+  heroBottomRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    gap: 40,
+  },
+  heroStatCol: {
+    minWidth: 90,
+  },
+  heroStatLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#666666',
+    letterSpacing: 1,
+    marginBottom: 3,
+  },
+  heroStatValue: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0D0E15',
+  },
+
+  // Quick Action Buttons (Bills & Receipts)
+  quickActionRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 20,
+  },
+  quickActionCard: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+  },
+  quickActionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#0D0E15',
+    marginLeft: 8,
   },
   // Metric Selector Bottom Sheet (User Screenshot)
   metricSheetContainer: {
@@ -2203,11 +2410,11 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 29,
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 101,
-    shadowColor: '#E91E63',
+    shadowColor: '#fd5ca3',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
@@ -2265,6 +2472,19 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.04)',
+  },
+  actionItemGlassWrapper: {
+    borderRadius: 18,
+    overflow: 'hidden',
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.45)',
+  },
+  actionItemGlass: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
   },
   actionIconBox: {
     width: 46,

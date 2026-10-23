@@ -1,6 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useMemo, useState } from 'react';
-import AppBackground from '../../components/AppBackground';
+import { useMemo, useState } from 'react';
 import {
   Alert,
   Modal,
@@ -15,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import AIReceiptScannerModal from '../../components/AIReceiptScannerModal';
+import AppBackground from '../../components/AppBackground';
 import ImpulseCalculatorModal from '../../components/ImpulseCalculatorModal';
 import {
   defaultExpenseCategories,
@@ -240,7 +240,7 @@ export default function TransactionsScreen() {
   const activeChillCount = impulseItems.filter((it) => it.status === 'active').length;
 
   return (
-    <AppBackground opacity={0.35} style={styles.gradientContainer}>
+    <AppBackground opacity={1.00} style={styles.gradientContainer}>
       <SafeAreaView style={styles.container}>
         <ScrollView
           style={styles.scrollView}
@@ -1559,11 +1559,11 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 29,
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 101,
-    shadowColor: '#E91E63',
+    shadowColor: '#fd5ca3',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 8,

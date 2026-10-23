@@ -1,73 +1,79 @@
 import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
-import React from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-// Custom Floating Pill Tab Bar
+// Custom Floating Pill Tab Bar with Liquid Glass Effect
 function CustomTabBar({ state, descriptors, navigation }) {
   return (
     <View style={styles.tabBarContainer}>
-      <View style={styles.floatingBar}>
-        {state.routes.map((route, index) => {
-          const isFocused = state.index === index;
+      <BlurView
+        intensity={50}
+        tint="light"
+        style={styles.floatingBar}
+      >
+        <View style={styles.floatingBarInner}>
+          {state.routes.map((route, index) => {
+            const isFocused = state.index === index;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name);
+              }
+            };
+
+            let iconName = 'home';
+            let label = 'Home';
+
+            if (route.name === 'index') {
+              iconName = isFocused ? 'home' : 'home-outline';
+              label = 'Home';
+            } else if (route.name === 'transactions') {
+              iconName = isFocused ? 'swap-horizontal' : 'swap-horizontal-outline';
+              label = 'Transactions';
+            } else if (route.name === 'insights') {
+              iconName = isFocused ? 'stats-chart' : 'stats-chart-outline';
+              label = 'Insights';
+            } else if (route.name === 'profile') {
+              iconName = isFocused ? 'person' : 'person-outline';
+              label = 'Profile';
             }
-          };
 
-          let iconName = 'home';
-          let label = 'Home';
-
-          if (route.name === 'index') {
-            iconName = isFocused ? 'home' : 'home-outline';
-            label = 'Home';
-          } else if (route.name === 'transactions') {
-            iconName = isFocused ? 'swap-horizontal' : 'swap-horizontal-outline';
-            label = 'Transactions';
-          } else if (route.name === 'insights') {
-            iconName = isFocused ? 'stats-chart' : 'stats-chart-outline';
-            label = 'Insights';
-          } else if (route.name === 'profile') {
-            iconName = isFocused ? 'person' : 'person-outline';
-            label = 'Profile';
-          }
-
-          return (
-            <TouchableOpacity
-              key={route.key}
-              onPress={onPress}
-              activeOpacity={0.8}
-              style={[
-                styles.tabItem,
-                isFocused && styles.activeTabPill,
-              ]}
-            >
-              <Ionicons
-                name={iconName}
-                size={22}
-                color={isFocused ? '#E91E63' : '#666666'}
-              />
-              <Text
+            return (
+              <TouchableOpacity
+                key={route.key}
+                onPress={onPress}
+                activeOpacity={0.8}
                 style={[
-                  styles.tabLabel,
-                  { color: isFocused ? '#E91E63' : '#666666' },
-                  isFocused && styles.activeTabLabel,
+                  styles.tabItem,
+                  isFocused && styles.activeTabPill,
                 ]}
               >
-                {label}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+                <Ionicons
+                  name={iconName}
+                  size={22}
+                  color={isFocused ? '#fd5ca3' : '#666666'}
+                />
+                <Text
+                  style={[
+                    styles.tabLabel,
+                    { color: isFocused ? '#fd5ca3' : '#666666' },
+                    isFocused && styles.activeTabLabel,
+                  ]}
+                >
+                  {label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </BlurView>
     </View>
   );
 }
@@ -99,22 +105,20 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   floatingBar: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
     borderRadius: 36,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+    overflow: 'hidden',
     width: '100%',
     maxWidth: 390,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.45)',
+  },
+  floatingBarInner: {
+    flexDirection: 'row',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.04)',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
   },
   tabItem: {
     flex: 1,
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   activeTabPill: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: 'rgba(255, 240, 245, 0.75)',
   },
   tabLabel: {
     fontSize: 11,
