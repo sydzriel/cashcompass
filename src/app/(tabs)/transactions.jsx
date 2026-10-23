@@ -270,7 +270,7 @@ export default function TransactionsScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Segmented Switcher: List | Calendar | Chill Lock ⏳ */}
+          {/* Segmented Switcher: List | Calendar | Chill Lock */}
           <View style={styles.segmentedContainer}>
             <TouchableOpacity
               style={[
@@ -323,7 +323,7 @@ export default function TransactionsScreen() {
                     activeTab === 'chill' && styles.activeSegmentText,
                   ]}
                 >
-                  Chill Lock ⏳
+                  Chill Lock
                 </Text>
                 {activeChillCount > 0 && (
                   <View style={styles.tabBadge}>
@@ -838,7 +838,7 @@ export default function TransactionsScreen() {
                   onPress={handleScanFromInsideLog}
                   activeOpacity={0.8}
                 >
-                  <Ionicons name="scan-outline" size={20} color="#E91E63" />
+                  <Ionicons name="scan-outline" size={20} color="#fd5ca3" />
                 </TouchableOpacity>
               </View>
 
@@ -910,7 +910,7 @@ export default function TransactionsScreen() {
                   <Ionicons
                     name="scan-outline"
                     size={16}
-                    color="#E91E63"
+                    color="#fd5ca3"
                     style={{ marginRight: 6 }}
                   />
                   <Text style={styles.scanReceiptPillText}>Scan receipt</Text>
@@ -921,33 +921,33 @@ export default function TransactionsScreen() {
 
               <View style={styles.logCategoryGrid}>
                 {activeCategoryList.map((cat) => {
-                  const isSelected = !isCustomCategory && selectedCategory.id === cat.id;
+                 const isSelected = !isCustomCategory && selectedCategory?.name === cat.name;
 
-                  return (
-                    <TouchableOpacity
-                      key={cat.id}
-                      style={[
-                        styles.logCategoryPill,
-                        isSelected && styles.logCategoryPillActive,
-                      ]}
-                      onPress={() => {
-                        setSelectedCategory(cat);
-                        setIsCustomCategory(false);
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={{ fontSize: 16 }}>{cat.emoji}</Text>
-                      <Text
-                        style={[
-                          styles.logCategoryText,
-                          isSelected && styles.logCategoryTextActive,
-                        ]}
-                      >
-                        {cat.name} {isSelected ? '✓' : ''}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
+  return (
+    <TouchableOpacity
+      key={cat.id || cat.name}
+      style={[
+        styles.logCategoryPill,
+        isSelected && styles.logCategoryPillActive, // Style ni akan aktif bila isSelected === true
+      ]}
+      onPress={() => {
+        setSelectedCategory(cat);
+        setIsCustomCategory(false);
+      }}
+      activeOpacity={0.7}
+    >
+      <Text style={{ fontSize: 16 }}>{cat.emoji}</Text>
+      <Text
+        style={[
+          styles.logCategoryText,
+          isSelected && styles.logCategoryTextActive,
+        ]}
+      >
+        {cat.name} {isSelected ? '✓' : ''}
+      </Text>
+    </TouchableOpacity>
+  );
+})}
 
                 {/* More Button */}
                 <TouchableOpacity
@@ -1041,7 +1041,7 @@ export default function TransactionsScreen() {
                     <Switch
                       value={isRecurring}
                       onValueChange={setIsRecurring}
-                      trackColor={{ false: '#E2E8F0', true: '#E91E63' }}
+                      trackColor={{ false: '#E2E8F0', true: '#fd5ca3' }}
                       thumbColor="#FFFFFF"
                     />
                   </View>
@@ -1104,7 +1104,7 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     paddingHorizontal: 16,
     borderRadius: 27,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   pillButtonText: {
@@ -1119,7 +1119,7 @@ const styles = StyleSheet.create({
     borderRadius: 27,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   dateFilterText: {
@@ -1133,7 +1133,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 3,
     marginBottom: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   segmentButton: {
@@ -1145,7 +1145,7 @@ const styles = StyleSheet.create({
   },
   activeSegment: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   segmentText: {
@@ -1158,7 +1158,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   tabBadge: {
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
     paddingHorizontal: 6,
     paddingVertical: 1,
     borderRadius: 8,
@@ -1180,7 +1180,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
     padding: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   summaryLabel: {
@@ -1209,7 +1209,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 16,
     marginBottom: 12,
@@ -1249,7 +1249,7 @@ const styles = StyleSheet.create({
   emptyCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0,0,0,0.04)',
     padding: 24,
     alignItems: 'center',
@@ -1269,14 +1269,14 @@ const styles = StyleSheet.create({
   addEmptyBtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
 
   // Calendar Card
   calendarCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 18,
     marginBottom: 16,
@@ -1323,7 +1323,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dayPillSelected: {
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
   },
   dayText: {
     fontSize: 13,
@@ -1338,7 +1338,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
     marginTop: 2,
   },
   dayHeaderRow: {
@@ -1356,7 +1356,7 @@ const styles = StyleSheet.create({
   shieldCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 18,
     marginBottom: 16,
@@ -1403,12 +1403,12 @@ const styles = StyleSheet.create({
   addChillSmallText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   chillCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 16,
     marginBottom: 14,
@@ -1455,7 +1455,7 @@ const styles = StyleSheet.create({
   },
   budgetRatioBadge: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#E2E8F0',
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -1564,9 +1564,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 101,
     shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
     elevation: 4,
   },
   modalOverlay: {
@@ -1613,7 +1613,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 14,
     marginBottom: 12,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   actionIconBox: {
@@ -1641,7 +1641,7 @@ const styles = StyleSheet.create({
   wowBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   actionTitle: {
     fontSize: 15,
@@ -1691,11 +1691,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#E2E8F0',
   },
   logCancelText: {
-    color: '#E91E63',
+    color: '#fd5ca3',
     fontSize: 15,
     fontWeight: '600',
   },
@@ -1709,7 +1709,7 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 16,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#FCE7F3',
     alignItems: 'center',
     justifyContent: 'center',
@@ -1731,7 +1731,7 @@ const styles = StyleSheet.create({
   },
   logSegmentTabActive: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   logSegmentText: {
@@ -1766,7 +1766,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#FCE7F3',
     borderRadius: 20,
     paddingHorizontal: 16,
@@ -1776,7 +1776,7 @@ const styles = StyleSheet.create({
   scanReceiptPillText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   logCategoryHeader: {
     fontSize: 16,
@@ -1797,7 +1797,7 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#E2E8F0',
     flexDirection: 'row',
     alignItems: 'center',
@@ -1805,8 +1805,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   logCategoryPillActive: {
-    backgroundColor: '#E91E63',
-    borderColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
+    borderColor: '#fd5ca3',
   },
   logCategoryPillCustom: {
     borderStyle: 'dashed',
@@ -1828,7 +1828,7 @@ const styles = StyleSheet.create({
   },
   customCategoryInput: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#E2E8F0',
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -1888,7 +1888,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   logAddButtonActive: {
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
   },
   logAddButtonDisabled: {
     backgroundColor: '#FCE4EC',

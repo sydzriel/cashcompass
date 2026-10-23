@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -159,7 +159,7 @@ export default function AICoachChatModal({
 
             {/* Context Pill (Live Financial Standing) */}
             <View style={styles.statsPill}>
-              <Ionicons name="analytics" size={16} color="#E91E63" style={{ marginRight: 6 }} />
+              <Ionicons name="analytics" size={16} color="#fd5ca3" style={{ marginRight: 6 }} />
               <Text style={styles.statsPillText}>
                 Oct 2026: RM{totalExpenses} spent • {savingsRate}% savings rate • RM{leftThisMonth} left
               </Text>
@@ -222,7 +222,7 @@ export default function AICoachChatModal({
                     <Text style={{ fontSize: 14 }}>🤖</Text>
                   </View>
                   <View style={[styles.messageBubble, styles.coachBubble, { paddingVertical: 12 }]}>
-                    <ActivityIndicator size="small" color="#E91E63" />
+                    <ActivityIndicator size="small" color="#fd5ca3" />
                   </View>
                 </View>
               )}
@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 12,
     position: 'relative',
-    borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.2)',
+    borderWidth: 0,
+    borderColor: 'rgba(253, 92, 163, 0.2)',
   },
   onlineBadge: {
     position: 'absolute',
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: '#10B981',
-    borderWidth: 1.5,
+    borderWidth: 0,
     borderColor: '#FFFFFF',
   },
   coachName: {
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     marginHorizontal: 20,
     marginTop: 10,
@@ -406,12 +406,12 @@ const styles = StyleSheet.create({
   },
   coachBubble: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     borderBottomLeftRadius: 4,
   },
   userBubble: {
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
     borderBottomRightRadius: 4,
   },
   messageText: {
@@ -445,8 +445,8 @@ const styles = StyleSheet.create({
   },
   promptChip: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.25)',
+    borderWidth: 0,
+    borderColor: 'rgba(253, 92, 163, 0.25)',
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 7,
@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
   promptChipText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
     marginBottom: Platform.OS === 'ios' ? 16 : 12,
     marginTop: 6,
     borderRadius: 27,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     paddingLeft: 18,
     paddingRight: 6,
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sendButtonActive: {
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
   },
   sendButtonInactive: {
     backgroundColor: '#F1F5F9',

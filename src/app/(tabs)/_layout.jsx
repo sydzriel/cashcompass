@@ -8,7 +8,7 @@ function CustomTabBar({ state, descriptors, navigation }) {
   return (
     <View style={styles.tabBarContainer}>
       <BlurView
-        intensity={50}
+        intensity={30}
         tint="light"
         style={styles.floatingBar}
       >
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: '100%',
     maxWidth: 390,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.45)',
+    borderWidth: 0.5,
+    borderColor: 'rgb(203, 203, 203)',
   },
   floatingBarInner: {
     flexDirection: 'row',

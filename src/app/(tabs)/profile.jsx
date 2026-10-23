@@ -36,7 +36,7 @@ export default function ProfileScreen() {
             <Text style={styles.userName}>Syed Zariel</Text>
             <Text style={styles.userEmail}>syedzariel@gmail.com</Text>
             <View style={styles.studentBadge}>
-              <Text style={styles.studentBadgeText}>🎓 University Student Plan</Text>
+              <Text style={styles.studentBadgeText}>University Student Plan</Text>
             </View>
           </View>
 
@@ -87,7 +87,7 @@ export default function ProfileScreen() {
                 <Ionicons name="timer-outline" size={20} color="#0D0E15" style={{ marginRight: 12 }} />
                 <Text style={styles.menuLabel}>48-Hour Chill Mode</Text>
               </View>
-              <Text style={styles.menuValue}>Active ⏳</Text>
+              <Text style={styles.menuValue}>Active</Text>
             </TouchableOpacity>
           </View>
 
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
     height: 96,
     borderRadius: 48,
     backgroundColor: '#FFF0F5',
-    borderWidth: 2,
-    borderColor: '#E91E63',
+    borderWidth: 0,
+    borderColor: '#fd5ca3',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   avatarInitial: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   userName: {
     fontSize: 22,
@@ -176,8 +176,8 @@ const styles = StyleSheet.create({
   },
   studentBadge: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderWidth: 0,
+    borderColor: '#ffffff',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 14,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     paddingVertical: 18,
     paddingHorizontal: 18,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   badgePillText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   divider: {
     height: 1,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(239, 68, 68, 0.2)',
     paddingVertical: 14,
     paddingHorizontal: 40,

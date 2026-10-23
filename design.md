@@ -8,7 +8,7 @@
 ## 1. Palet Warna (Color Palette)
 * **Latar Belakang (Gradient):** `#FFFFFF` -> `#F4E8F8` -> `#E5D9F2` (Kelegapan/Opacity direndahkan supaya kad menyerlah)
 * **Kad Maklumat:** `#FFFFFF` (Putih bersih)
-* **Aksen Utama (Butang/Progress Bar):** `#E91E63` (Merah Jambu / Pink)
+* **Aksen Utama (Butang/Progress Bar):** `#fd5ca3` (Merah Jambu / Pink)
 * **Teks Utama (Jumlah Baki, Nama Item):** `#0D0E15` (Hitam Gelap)
 * **Teks Sekunder (Label, Kategori):** `#666666` (Kelabu)
 

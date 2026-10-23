@@ -118,7 +118,7 @@ export default function HomeScreen() {
         } else if (lower.includes('subscrip') || lower.includes('stream') || lower.includes('cloud') || lower.includes('spotify')) {
           color = '#F97316';
         } else if (lower.includes('coffee') || lower.includes('food') || lower.includes('makan')) {
-          color = '#E91E63';
+          color = '#fd5ca3';
         } else if (lower.includes('transp') || lower.includes('lrt') || lower.includes('car')) {
           color = '#10B981';
         } else if (lower.includes('grocer') || lower.includes('market')) {
@@ -641,7 +641,7 @@ export default function HomeScreen() {
             activeOpacity={0.92}
             onPress={() => setIsBalanceSheetOpen(true)}
           >
-            <BlurView intensity={50} tint="light" style={styles.heroGlassBlur}>
+            <BlurView intensity={30} tint="light" style={styles.heroGlassBlur}>
               <LinearGradient
                 colors={[
                   'rgba(255, 255, 255, 0.85)',
@@ -659,7 +659,7 @@ export default function HomeScreen() {
                     <Text style={styles.heroAccountType}>STUDENT WALLET</Text>
                   </View>
                   <View style={styles.heroTagPill}>
-                    <Ionicons name="swap-vertical" size={13} color="#E91E63" />
+                    <Ionicons name="swap-vertical" size={13} color="#fd5ca3" />
                     <Text style={styles.heroTagText}>Details</Text>
                   </View>
                 </View>
@@ -754,7 +754,7 @@ export default function HomeScreen() {
                     No daily expenses yet
                   </Text>
                 </View>
-                <Text style={{ color: '#E91E63', fontWeight: '700', fontSize: 14 }}>
+                <Text style={{ color: '#fd5ca3', fontWeight: '700', fontSize: 14 }}>
                   + Add
                 </Text>
               </TouchableOpacity>
@@ -963,7 +963,7 @@ export default function HomeScreen() {
                           styles.barPill,
                           {
                             height: calculatedHeight,
-                            backgroundColor: isSelected ? '#E91E63' : '#E2E8F0',
+                            backgroundColor: isSelected ? '#fd5ca3' : '#E2E8F0',
                           },
                         ]}
                       />
@@ -1140,7 +1140,7 @@ export default function HomeScreen() {
                   <Text style={styles.actionTitle}>Maybank MAE • Starbucks Coffee</Text>
                   <Text style={styles.actionDesc}>RM15.00 • Auto-insert into Coffee</Text>
                 </View>
-                <Text style={{ color: '#E91E63', fontWeight: '700' }}>Trigger ⚡</Text>
+                <Text style={{ color: '#fd5ca3', fontWeight: '700' }}>Trigger ⚡</Text>
               </TouchableOpacity>
 
               {/* Preset 2: Touch 'n Go eWallet */}
@@ -1159,7 +1159,7 @@ export default function HomeScreen() {
                   <Text style={styles.actionTitle}>{"Touch 'n Go \u2022 FamilyMart Oden"}</Text>
                   <Text style={styles.actionDesc}>RM9.80 • Auto-insert into Food</Text>
                 </View>
-                <Text style={{ color: '#E91E63', fontWeight: '700' }}>Trigger ⚡</Text>
+                <Text style={{ color: '#fd5ca3', fontWeight: '700' }}>Trigger ⚡</Text>
               </TouchableOpacity>
 
               {/* Preset 3: GrabPay */}
@@ -1178,7 +1178,7 @@ export default function HomeScreen() {
                   <Text style={styles.actionTitle}>GrabPay • Subway Lunch</Text>
                   <Text style={styles.actionDesc}>RM16.50 • Auto-insert into Food</Text>
                 </View>
-                <Text style={{ color: '#E91E63', fontWeight: '700' }}>Trigger ⚡</Text>
+                <Text style={{ color: '#fd5ca3', fontWeight: '700' }}>Trigger ⚡</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -1229,7 +1229,7 @@ export default function HomeScreen() {
                       </View>
 
                       {isSelected && (
-                        <Ionicons name="checkmark" size={20} color="#E91E63" />
+                        <Ionicons name="checkmark" size={20} color="#fd5ca3" />
                       )}
                     </TouchableOpacity>
                   </View>
@@ -1290,7 +1290,7 @@ export default function HomeScreen() {
                   onPress={handleScanFromInsideLog}
                   activeOpacity={0.8}
                 >
-                  <Ionicons name="scan-outline" size={20} color="#E91E63" />
+                  <Ionicons name="scan-outline" size={20} color="#fd5ca3" />
                 </TouchableOpacity>
               </View>
 
@@ -1363,7 +1363,7 @@ export default function HomeScreen() {
                   <Ionicons
                     name="scan-outline"
                     size={16}
-                    color="#E91E63"
+                    color="#fd5ca3"
                     style={{ marginRight: 6 }}
                   />
                   <Text style={styles.scanReceiptPillText}>Scan receipt</Text>
@@ -1498,7 +1498,7 @@ export default function HomeScreen() {
                     <Switch
                       value={isRecurring}
                       onValueChange={setIsRecurring}
-                      trackColor={{ false: '#E2E8F0', true: '#E91E63' }}
+                      trackColor={{ false: '#E2E8F0', true: '#fd5ca3' }}
                       thumbColor="#FFFFFF"
                     />
                   </View>
@@ -1995,7 +1995,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFF0F5',
     borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.25)',
+    borderColor: 'rgba(253, 92, 163, 0.25)',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 27,
@@ -2007,7 +2007,7 @@ const styles = StyleSheet.create({
   autoDetectText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   dateFilterButton: {
     backgroundColor: '#FFFFFF',
@@ -2030,9 +2030,9 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     overflow: 'hidden',
     marginBottom: 20,
-    borderWidth: 1.5,
+    borderWidth: 0,
     borderColor: 'rgba(255, 255, 255, 0.65)',
-    shadowColor: '#E91E63',
+    shadowColor: '#fd5ca3',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.08,
     shadowRadius: 18,
@@ -2074,13 +2074,13 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(255, 255, 255, 0.8)',
   },
   heroTagText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#E91E63',
+    color: '#fd5ca3',
     marginLeft: 3,
   },
   heroBalanceSection: {
@@ -2154,7 +2154,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   quickActionTitle: {
@@ -2171,7 +2171,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: Platform.OS === 'ios' ? 38 : 24,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   metricSheetHandle: {
@@ -2228,7 +2228,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 16,
     marginBottom: 16,
@@ -2255,7 +2255,7 @@ const styles = StyleSheet.create({
   },
   autoLoggedBadge: {
     fontSize: 11,
-    color: '#E91E63',
+    color: '#fd5ca3',
     fontWeight: '600',
     marginTop: 1,
   },
@@ -2273,7 +2273,7 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#E91E63', // Aksen Utama per design.md
+    backgroundColor: '#fd5ca3', // Aksen Utama per design.md
     borderRadius: 3,
   },
   divider: {
@@ -2375,7 +2375,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 2,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0,0,0,0.06)',
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -2389,7 +2389,7 @@ const styles = StyleSheet.create({
   },
   chartBaseline: {
     height: 2,
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
     borderRadius: 1,
     marginTop: 2,
   },
@@ -2402,7 +2402,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666666',
   },
-  // FAB (27px radius style, 60x60, #E91E63)
+  // FAB (27px radius style, 60x60, #fd5ca3)
   fab: {
     position: 'absolute',
     bottom: 95,
@@ -2415,9 +2415,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 101,
     shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
     elevation: 4,
   },
   modalOverlay: {
@@ -2470,14 +2470,14 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 14,
     marginBottom: 12,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   actionItemGlassWrapper: {
     borderRadius: 18,
     overflow: 'hidden',
     marginBottom: 12,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(255, 255, 255, 0.45)',
   },
   actionItemGlass: {
@@ -2511,7 +2511,7 @@ const styles = StyleSheet.create({
   wowBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   actionTitle: {
     fontSize: 15,
@@ -2561,11 +2561,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#E2E8F0',
   },
   logCancelText: {
-    color: '#E91E63',
+    color: '#fd5ca3',
     fontSize: 15,
     fontWeight: '600',
   },
@@ -2579,7 +2579,7 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 16,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#FCE7F3',
     alignItems: 'center',
     justifyContent: 'center',
@@ -2601,7 +2601,7 @@ const styles = StyleSheet.create({
   },
   logSegmentTabActive: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   logSegmentText: {
@@ -2636,7 +2636,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#FCE7F3',
     borderRadius: 20,
     paddingHorizontal: 16,
@@ -2646,7 +2646,7 @@ const styles = StyleSheet.create({
   scanReceiptPillText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   logCategoryHeader: {
     fontSize: 16,
@@ -2667,7 +2667,7 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#E2E8F0',
     flexDirection: 'row',
     alignItems: 'center',
@@ -2675,12 +2675,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   logCategoryPillActive: {
-    backgroundColor: '#E91E63',
-    borderColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
+    borderColor: '#fd5ca3',
   },
   logCategoryPillCustom: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#CBD5E1',
     borderStyle: 'dashed',
   },
@@ -2700,7 +2700,7 @@ const styles = StyleSheet.create({
   },
   customCategoryInput: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#E2E8F0',
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -2760,7 +2760,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   logAddButtonActive: {
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
   },
   logAddButtonDisabled: {
     backgroundColor: '#FCE4EC',
@@ -2800,7 +2800,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#F1F5F9',
   },
   detailHeaderTitle: {
@@ -2816,7 +2816,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     minWidth: 180,
     zIndex: 999,
@@ -2869,7 +2869,7 @@ const styles = StyleSheet.create({
   detailTransactionCard: {
     backgroundColor: '#F8FAFC',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: 'rgba(0,0,0,0.04)',
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -2920,7 +2920,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 24,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   editLimitHeader: {
@@ -2943,7 +2943,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: '#E2E8F0',
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -2963,7 +2963,7 @@ const styles = StyleSheet.create({
     color: '#0D0E15',
   },
   editLimitSaveBtn: {
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
     height: 50,
     borderRadius: 25,
     alignItems: 'center',
@@ -2993,13 +2993,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 22,
     borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.25)',
+    borderColor: 'rgba(253, 92, 163, 0.25)',
     backgroundColor: '#FFFFFF',
   },
   txDetailEditText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   txDetailScroll: {
     flex: 1,
@@ -3047,7 +3047,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#F8FAFC',
     borderRadius: 22,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     paddingHorizontal: 16,
     paddingVertical: 6,
@@ -3087,7 +3087,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 18,
-    borderWidth: 1.5,
+    borderWidth: 0.5,
     borderStyle: 'dashed',
     borderColor: '#CBD5E1',
     backgroundColor: '#FFFFFF',
@@ -3139,7 +3139,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 20,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   editTxHeader: {

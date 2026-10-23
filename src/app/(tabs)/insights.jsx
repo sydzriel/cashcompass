@@ -37,8 +37,6 @@ export default function InsightsScreen() {
           {/* Top Header: Prestigious "🤖 Talk to Coach" Button (Faktor Wow IV) */}
           <View style={styles.topHeader}>
             <View>
-              <Text style={styles.screenTitle}>Financial Insights</Text>
-              <Text style={styles.screenSubtitle}>October 2026 Analytics</Text>
             </View>
 
             <TouchableOpacity
@@ -50,7 +48,7 @@ export default function InsightsScreen() {
                 colors={['#FFF0F5', '#FFFFFF']}
                 style={styles.coachGradient}
               >
-                <Text style={styles.coachButtonText}>🤖 Talk to Coach</Text>
+                <Text style={styles.coachButtonText}>Talk to Coach</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -339,7 +337,7 @@ export default function InsightsScreen() {
             <View style={styles.catItem}>
               <View style={styles.catInfoRow}>
                 <View style={styles.itemLeft}>
-                  <View style={[styles.dot, { backgroundColor: '#E91E63' }]} />
+                  <View style={[styles.dot, { backgroundColor: '#fd5ca3' }]} />
                   <Text style={styles.catTitle}>Coffee & Food</Text>
                 </View>
                 <View style={styles.catRightRow}>
@@ -351,7 +349,7 @@ export default function InsightsScreen() {
                 <View
                   style={[
                     styles.catBarFill,
-                    { width: '4%', backgroundColor: '#E91E63' },
+                    { width: '4%', backgroundColor: '#fd5ca3' },
                   ]}
                 />
               </View>
@@ -407,7 +405,7 @@ export default function InsightsScreen() {
             </View>
             <View style={styles.highlightBox}>
               <Text style={styles.hlBoxLabel}>48h Chill Rules Resisted</Text>
-              <Text style={[styles.hlBoxValue, { color: '#E91E63' }]}>
+              <Text style={[styles.hlBoxValue, { color: '#fd5ca3' }]}>
                 2 Saved
               </Text>
             </View>
@@ -428,14 +426,14 @@ export default function InsightsScreen() {
             <View style={styles.fixedVariableLegendRow}>
               <View style={styles.fvLegendItem}>
                 <View style={styles.legendRow}>
-                  <View style={[styles.dot, { backgroundColor: '#E91E63' }]} />
+                  <View style={[styles.dot, { backgroundColor: '#fd5ca3' }]} />
                   <Text style={styles.legendLabel}>Fixed Commitments 63%</Text>
                 </View>
                 <Text style={styles.fvAmount}>RM189</Text>
               </View>
               <View style={styles.fvLegendItem}>
                 <View style={styles.legendRow}>
-                  <View style={[styles.dot, { backgroundColor: '#F472B6' }]} />
+                  <View style={[styles.dot, { backgroundColor: '#efa5cb' }]} />
                   <Text style={styles.legendLabel}>Variable 37%</Text>
                 </View>
                 <Text style={styles.fvAmount}>RM112</Text>
@@ -492,9 +490,9 @@ const styles = StyleSheet.create({
   coachButton: {
     borderRadius: 27, // Bulat penuh 27px
     overflow: 'hidden',
-    borderWidth: 1.5,
-    borderColor: '#E91E63',
-    shadowColor: '#E91E63',
+    borderWidth: 0,
+    borderColor: '#fd5ca3',
+    shadowColor: '#fd5ca3',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
@@ -507,7 +505,7 @@ const styles = StyleSheet.create({
   coachButtonText: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   timeSegmentContainer: {
     flexDirection: 'row',
@@ -515,7 +513,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 3,
     marginBottom: 14,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   timeSegmentButton: {
@@ -526,7 +524,7 @@ const styles = StyleSheet.create({
   },
   activeTimeSegment: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   timeSegmentText: {
@@ -546,7 +544,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 27,
     marginBottom: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   dateNavigatorText: {
@@ -561,7 +559,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 18,
     marginBottom: 16,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   cardSubLabel: {
@@ -635,7 +633,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
     padding: 12,
     borderRadius: 14,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   itemLeft: {
@@ -753,7 +751,7 @@ const styles = StyleSheet.create({
   },
   activeMiniSegment: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0,0,0,0.04)',
   },
   miniSegmentText: {
@@ -852,7 +850,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 16,
     marginBottom: 12,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   hlBoxLabel: {
@@ -887,12 +885,12 @@ const styles = StyleSheet.create({
   fixedBarFill: {
     width: '63%',
     height: '100%',
-    backgroundColor: '#E91E63',
+    backgroundColor: '#fd5ca3',
   },
   variableBarFill: {
     width: '37%',
     height: '100%',
-    backgroundColor: '#F472B6',
+    backgroundColor: '#efa5cb',
   },
   fixedVariableLegendRow: {
     flexDirection: 'row',
