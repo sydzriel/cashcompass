@@ -20,7 +20,7 @@
 * **Teks Subtajuk (Kategori):** 14px, Regular
 
 ## 3. Garis Panduan UI (UI Guidelines)
-* **Kad (Cards):** Tiada bayang tebal (*shadow-less*). Gunakan sempadan halus `borderWidth: 1` dengan warna `rgba(0, 0, 0, 0.04)` untuk efek terapung bersih.
+* **Kad (Cards):** Tiada bayang tebal (*shadow-less*). Gunakan sempadan halus `borderWidth: 0` dengan warna `rgba(0, 0, 0, 0.04)` untuk efek terapung bersih.
 * **Ruang & Jarak (Spacing):** Seragamkan jarak (contoh: `marginBottom: 16`) antara kad dan tajuk seksyen supaya tidak bersaing untuk perhatian.
 * **Radius Sudut (Border Radius):** 18px untuk kad, bulat penuh untuk butang (27px).
 * **Ruang Bawah (Padding):** Ruang bawah `paddingBottom: 110px` pada kawasan skrol utama bagi mengelakkan kandungan tertutup oleh bar navigasi bawah.

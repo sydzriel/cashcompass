@@ -853,26 +853,34 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Income</Text>
 
           <View style={styles.card}>
-            {incomes.map((item, index) => (
-              <View key={item.id}>
-                {index > 0 && <View style={styles.divider} />}
-                <TouchableOpacity
-                  style={styles.itemRow}
-                  activeOpacity={0.7}
-                  onPress={() =>
-                    confirmDeleteItem(item.id, 'income', item.title, item.amount)
-                  }
-                >
-                  <View style={styles.itemLeft}>
-                    <Text style={styles.emojiIcon}>{item.emoji || '💰'}</Text>
-                    <Text style={styles.itemTitle}>{item.title}</Text>
-                  </View>
-                  <Text style={[styles.itemAmount, { color: '#10B981' }]}>
-                    RM{item.amount}
-                  </Text>
-                </TouchableOpacity>
+            {incomes.length === 0 ? (
+              <View style={{ paddingVertical: 14, alignItems: 'center' }}>
+                <Text style={{ fontSize: 14, color: '#94A3B8', fontWeight: '500' }}>
+                  No income logged yet
+                </Text>
               </View>
-            ))}
+            ) : (
+              incomes.map((item, index) => (
+                <View key={item.id}>
+                  {index > 0 && <View style={styles.divider} />}
+                  <TouchableOpacity
+                    style={styles.itemRow}
+                    activeOpacity={0.7}
+                    onPress={() =>
+                      confirmDeleteItem(item.id, 'income', item.title, item.amount)
+                    }
+                  >
+                    <View style={styles.itemLeft}>
+                      <Text style={styles.emojiIcon}>{item.emoji || '💰'}</Text>
+                      <Text style={styles.itemTitle}>{item.title}</Text>
+                    </View>
+                    <Text style={[styles.itemAmount, { color: '#10B981' }]}>
+                      RM{item.amount}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))
+            )}
           </View>
 
           {/* Pie Chart Summary Card */}

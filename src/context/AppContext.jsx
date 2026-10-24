@@ -43,6 +43,51 @@ export function AppProvider({ children }) {
     { id: 'inc-1', title: 'Monthly Allowance', amount: 800, emoji: '💰', category: 'Salary', date: '15/10/26', day: 15, time: '8:10 PM' },
   ]);
 
+  const setupInitialIncome = (amount, frequency = 'Monthly') => {
+    const parsed = parseFloat(amount);
+    if (isNaN(parsed) || parsed <= 0) return;
+
+    let title = 'Monthly Salary';
+    if (frequency === 'Weekly') title = 'Weekly Allowance';
+    if (frequency === 'Yearly') title = 'Yearly Income';
+
+    const newIncome = {
+      id: generateUniqueId('inc'),
+      title,
+      amount: parsed,
+      emoji: '💰',
+      category: 'Salary',
+      frequency,
+      date: '15/10/26',
+      day: 15,
+      time: '8:10 PM',
+    };
+
+    setIncomes([newIncome]);
+  };
+
+  const setupInitialRent = (hasRent, amount = 0) => {
+    const parsed = parseFloat(amount) || 0;
+    if (!hasRent || parsed <= 0) {
+      setRecurringExpenses((prev) => prev.filter((item) => item.category !== 'Rent & Mortgage'));
+    } else {
+      setRecurringExpenses((prev) => {
+        const filtered = prev.filter((item) => item.category !== 'Rent & Mortgage');
+        const rentCommitment = {
+          id: generateUniqueId('rec'),
+          title: 'Room Rental',
+          amount: parsed,
+          emoji: '🏠',
+          category: 'Rent & Mortgage',
+          date: '15/10/26',
+          day: 15,
+          time: '8:10 PM',
+        };
+        return [...filtered, rentCommitment];
+      });
+    }
+  };
+
   // Recurring Expenses (Commitments)
   const [recurringExpenses, setRecurringExpenses] = useState([
     {
@@ -206,6 +251,17 @@ export function AppProvider({ children }) {
   };
 
   // ----------------------------------------------------
+  // Reset All Financial Data
+  // ----------------------------------------------------
+  const resetAllFinancialData = () => {
+    setIncomes([]);
+    setExpenses([]);
+    setRecurringExpenses([]);
+    setImpulseItems([]);
+    setAutoSpendingBanner(null);
+  };
+
+  // ----------------------------------------------------
   // Calculations
   // ----------------------------------------------------
   const totalIncome = useMemo(
@@ -267,6 +323,8 @@ export function AppProvider({ children }) {
         setSelectedMonth,
         incomes,
         setIncomes,
+        setupInitialIncome,
+        setupInitialRent,
         recurringExpenses,
         setRecurringExpenses,
         expenses,
@@ -287,6 +345,7 @@ export function AppProvider({ children }) {
         markImpulseResisted,
         convertImpulseToExpense,
         totalResistedSavings,
+        resetAllFinancialData,
       }}
     >
       {children}

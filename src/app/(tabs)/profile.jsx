@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,12 +10,32 @@ import {
   View,
 } from 'react-native';
 import AppBackground from '../../components/AppBackground';
+import { useApp } from '../../context/AppContext';
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { recurringExpenses, totalIncome, resetAllFinancialData } = useApp();
 
   const handleLogout = () => {
     router.replace('/login');
+  };
+
+  const handleResetData = () => {
+    Alert.alert(
+      'Delete All Financial Data?',
+      'Are you sure you want to reset all your financial data? This will permanently clear all incomes, expenses, recurring commitments, and 48-hour chill items. This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete All',
+          style: 'destructive',
+          onPress: () => {
+            resetAllFinancialData();
+            Alert.alert('Reset Completed', 'All financial data has been successfully reset.');
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -50,7 +71,7 @@ export default function ProfileScreen() {
                 <Ionicons name="wallet-outline" size={20} color="#0D0E15" style={{ marginRight: 12 }} />
                 <Text style={styles.menuLabel}>Monthly Budget Limit</Text>
               </View>
-              <Text style={styles.menuValue}>RM800.00</Text>
+              <Text style={styles.menuValue}>RM{totalIncome.toFixed(2)}</Text>
             </TouchableOpacity>
 
             <View style={styles.divider} />
@@ -62,7 +83,7 @@ export default function ProfileScreen() {
                 <Text style={styles.menuLabel}>Recurring Commitments</Text>
               </View>
               <View style={styles.badgePill}>
-                <Text style={styles.badgePillText}>3 Active</Text>
+                <Text style={styles.badgePillText}>{recurringExpenses.length} Active</Text>
               </View>
             </TouchableOpacity>
 
@@ -88,6 +109,25 @@ export default function ProfileScreen() {
                 <Text style={styles.menuLabel}>48-Hour Chill Mode</Text>
               </View>
               <Text style={styles.menuValue}>Active</Text>
+            </TouchableOpacity>
+
+            <View style={styles.divider} />
+
+            {/* Delete All My Data / Reset All Financial Data */}
+            <TouchableOpacity
+              style={styles.menuItem}
+              activeOpacity={0.7}
+              onPress={handleResetData}
+            >
+              <View style={styles.menuLeft}>
+                <Ionicons name="trash-outline" size={20} color="#EF4444" style={{ marginRight: 12 }} />
+                <Text style={[styles.menuLabel, { color: '#EF4444', fontWeight: '600' }]}>
+                  Delete All My Data
+                </Text>
+              </View>
+              <View style={styles.dangerBadgePill}>
+                <Text style={styles.dangerBadgePillText}>Reset</Text>
+              </View>
             </TouchableOpacity>
           </View>
 
@@ -234,6 +274,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#fd5ca3',
+  },
+  dangerBadgePill: {
+    backgroundColor: '#FEF2F2',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  dangerBadgePillText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#EF4444',
   },
   divider: {
     height: 1,

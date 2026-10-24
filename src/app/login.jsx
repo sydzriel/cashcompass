@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -20,7 +20,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleNavigateHome = () => {
-    router.replace('/(tabs)');
+    router.push('/income-setup');
   };
 
   return (
@@ -41,7 +41,7 @@ export default function LoginScreen() {
               Welcome to <Text style={styles.brandInline}>CashCompass</Text>
             </Text>
             <Text style={styles.subtitleTag}>
-              Smart Student Finance • Hybrid Flat Edition
+              Finance Tracker
             </Text>
           </View>
 
@@ -115,7 +115,7 @@ export default function LoginScreen() {
               activeOpacity={0.85}
             >
               <LinearGradient
-                colors={['#E91E63', '#fd5ca3']}
+                colors={['#000000ff']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.primaryGradient}
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0,0,0,0.04)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   logoC: {
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   greetingHello: {
     fontSize: 24,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   },
   brandInline: {
     fontWeight: '900',
-    color: '#E91E63',
+    color: '#fd5ca3',
   },
   subtitleTag: {
     fontSize: 12,
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     borderRadius: 24,
     paddingHorizontal: 18,
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 26,
     marginBottom: 10,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   socialIcon: {
