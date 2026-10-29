@@ -2,9 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Custom Floating Pill Tab Bar with Liquid Glass Effect
 function CustomTabBar({ state, descriptors, navigation }) {
+  const { t } = useLanguage();
+
   return (
     <View style={styles.tabBarContainer}>
       <BlurView
@@ -29,20 +32,20 @@ function CustomTabBar({ state, descriptors, navigation }) {
             };
 
             let iconName = 'home';
-            let label = 'Home';
+            let label = t('tab_home');
 
             if (route.name === 'index') {
               iconName = isFocused ? 'home' : 'home-outline';
-              label = 'Home';
+              label = t('tab_home');
             } else if (route.name === 'transactions') {
               iconName = isFocused ? 'swap-horizontal' : 'swap-horizontal-outline';
-              label = 'Transactions';
+              label = t('tab_transactions');
             } else if (route.name === 'insights') {
               iconName = isFocused ? 'stats-chart' : 'stats-chart-outline';
-              label = 'Insights';
+              label = t('tab_goals');
             } else if (route.name === 'profile') {
               iconName = isFocused ? 'person' : 'person-outline';
-              label = 'Profile';
+              label = t('tab_profile');
             }
 
             return (

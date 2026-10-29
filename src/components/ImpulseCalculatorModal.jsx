@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -102,7 +102,8 @@ export default function ImpulseCalculatorModal({ visible, onClose, onStartChillL
     >
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
           style={{ flex: 1 }}
         >
           {/* Header */}
@@ -124,7 +125,7 @@ export default function ImpulseCalculatorModal({ visible, onClose, onStartChillL
           </View>
 
           <ScrollView
-            contentContainerStyle={styles.scrollContent}
+            contentContainerStyle={[styles.scrollContent, { flexGrow: 1 }]}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
@@ -236,7 +237,7 @@ export default function ImpulseCalculatorModal({ visible, onClose, onStartChillL
               activeOpacity={0.85}
             >
               <LinearGradient
-                colors={['#E91E63', '#fd5ca3']}
+                colors={['#fd5ca3', '#fd5ca3']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.btnGradient}
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.2)',
+    borderColor: 'rgba(253, 92, 163, 0.2)',
   },
   conceptEmoji: {
     fontSize: 32,
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
   conceptTitle: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#E91E63',
+    color: '#fd5ca3',
     marginBottom: 4,
   },
   conceptText: {

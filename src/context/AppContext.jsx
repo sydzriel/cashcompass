@@ -34,6 +34,15 @@ export function generateUniqueId(prefix = 'item') {
 }
 
 export function AppProvider({ children }) {
+  // User Profile & Language State
+  const [language, setLanguage] = useState('EN'); // 'EN' | 'BM'
+  const [userProfile, setUserProfile] = useState({
+    name: 'Syed Zariel',
+    email: 'syedzariel@gmail.com',
+    avatar: 'SZ',
+    dailyBudget: '30.00',
+  });
+
   // Account & Filter States
   const [accountType, setAccountType] = useState('Personal');
   const [selectedMonth, setSelectedMonth] = useState('Oct');
@@ -84,6 +93,30 @@ export function AppProvider({ children }) {
           time: '8:10 PM',
         };
         return [...filtered, rentCommitment];
+      });
+    }
+  };
+
+  const setupInitialSubscriptions = (hasSubs, subscriptionsList = []) => {
+    if (!hasSubs || !subscriptionsList.length) {
+      setRecurringExpenses((prev) => prev.filter((item) => item.category !== 'Subscriptions'));
+    } else {
+      setRecurringExpenses((prev) => {
+        const filtered = prev.filter((item) => item.category !== 'Subscriptions');
+        const newSubs = subscriptionsList
+          .filter((sub) => parseFloat(sub.amount) > 0)
+          .map((sub) => ({
+            id: generateUniqueId('rec-sub'),
+            title: sub.name,
+            amount: parseFloat(sub.amount),
+            emoji: sub.emoji || '📱',
+            category: 'Subscriptions',
+            limit: Math.max(36, parseFloat(sub.amount) * 1.5),
+            date: '15/10/26',
+            day: 15,
+            time: '8:10 PM',
+          }));
+        return [...filtered, ...newSubs];
       });
     }
   };
@@ -325,6 +358,7 @@ export function AppProvider({ children }) {
         setIncomes,
         setupInitialIncome,
         setupInitialRent,
+        setupInitialSubscriptions,
         recurringExpenses,
         setRecurringExpenses,
         expenses,
@@ -346,6 +380,11 @@ export function AppProvider({ children }) {
         convertImpulseToExpense,
         totalResistedSavings,
         resetAllFinancialData,
+        // Language & Profile
+        language,
+        setLanguage,
+        userProfile,
+        setUserProfile,
       }}
     >
       {children}

@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Animated, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function AutoSpendingBanner({ banner, onDismiss }) {
@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.25)',
+    borderColor: 'rgba(253, 92, 163, 0.25)',
     paddingVertical: 12,
     paddingHorizontal: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#E91E63',
+    shadowColor: '#fd5ca3',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 12,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   bankBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#E91E63',
+    color: '#fd5ca3',
     textTransform: 'uppercase',
   },
   timeText: {

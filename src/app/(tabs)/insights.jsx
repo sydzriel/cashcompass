@@ -12,9 +12,11 @@ import {
 import AICoachChatModal from '../../components/AICoachChatModal';
 import AppBackground from '../../components/AppBackground';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function InsightsScreen() {
   const { totalIncome, totalExpenses, leftThisMonth } = useApp();
+  const { t } = useLanguage();
 
   const [timeTab, setTimeTab] = useState('month');
   const [categoryTab, setCategoryTab] = useState('expenses');
@@ -48,7 +50,7 @@ export default function InsightsScreen() {
                 colors={['#FFF0F5', '#FFFFFF']}
                 style={styles.coachGradient}
               >
-                <Text style={styles.coachButtonText}>Talk to Coach</Text>
+                <Text style={styles.coachButtonText}>{t('talk_to_coach')}</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -68,7 +70,7 @@ export default function InsightsScreen() {
                   timeTab === 'month' && styles.activeTimeSegmentText,
                 ]}
               >
-                Month
+                {t('tab_month')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -84,7 +86,7 @@ export default function InsightsScreen() {
                   timeTab === 'year' && styles.activeTimeSegmentText,
                 ]}
               >
-                Year
+                {t('tab_year')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -100,7 +102,7 @@ export default function InsightsScreen() {
                   timeTab === 'all' && styles.activeTimeSegmentText,
                 ]}
               >
-                All
+                {t('tab_all')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -114,10 +116,10 @@ export default function InsightsScreen() {
 
           {/* Money Kept Card (Flat White per design.md) */}
           <View style={styles.card}>
-            <Text style={styles.cardSubLabel}>Money kept</Text>
+            <Text style={styles.cardSubLabel}>{t('money_kept')}</Text>
             <Text style={styles.mainAmount}>RM{leftThisMonth}</Text>
             <View style={styles.savingsRateRow}>
-              <Text style={styles.savingsRateLabel}>Savings rate</Text>
+              <Text style={styles.savingsRateLabel}>{t('savings_rate')}</Text>
               <Text style={styles.savingsRateValue}>{savingsRate}%</Text>
             </View>
             <View style={styles.progressBarBackground}>
@@ -133,16 +135,16 @@ export default function InsightsScreen() {
           {/* Goals Card */}
           <View style={styles.card}>
             <View style={styles.goalsHeaderRow}>
-              <Text style={styles.cardTitle}>Goals</Text>
+              <Text style={styles.cardTitle}>{t('goals_title')}</Text>
               <View style={styles.onTrackBadge}>
-                <Text style={styles.onTrackText}>On track</Text>
+                <Text style={styles.onTrackText}>{t('on_track')}</Text>
               </View>
             </View>
             <View style={styles.goalItemRow}>
               <View style={styles.itemLeft}>
                 <Text style={styles.emojiIcon}>✈️</Text>
                 <View>
-                  <Text style={styles.itemTitle}>Travel fund</Text>
+                  <Text style={styles.itemTitle}>{t('travel_fund')}</Text>
                   <Text style={styles.itemSubtitle}>RM100 a month</Text>
                 </View>
               </View>

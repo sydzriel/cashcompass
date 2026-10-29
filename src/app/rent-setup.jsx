@@ -59,13 +59,13 @@ export default function RentSetupScreen() {
   };
 
   const handleSkip = () => {
-    router.replace('/(tabs)');
+    router.push('/subscription-setup');
   };
 
   const handleContinue = () => {
     if (isContinueEnabled) {
       setupInitialRent(hasRent === 'yes', rentAmount);
-      router.replace('/(tabs)');
+      router.push('/subscription-setup');
     }
   };
 
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   progressFill: {
-    width: '100%',
+    width: '66%',
     height: '100%',
     borderRadius: 3,
     backgroundColor: '#fd5ca3',

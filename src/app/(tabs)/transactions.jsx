@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
   Alert,
+  KeyboardAvoidingView,
   Modal,
   Platform,
   SafeAreaView,
@@ -23,8 +25,11 @@ import {
   moreExpenseCategories,
   useApp,
 } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function TransactionsScreen() {
+  const { t } = useLanguage();
+  const { mode } = useLocalSearchParams();
   const {
     accountType,
     setAccountType,
@@ -40,7 +45,17 @@ export default function TransactionsScreen() {
     totalResistedSavings,
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState('list'); // 'list' | 'calendar' | 'chill'
+  const [activeTab, setActiveTab] = useState(
+    mode === 'chill-lock' || mode === 'chill' ? 'chill' : 'list'
+  );
+  const [prevMode, setPrevMode] = useState(mode);
+
+  if (mode !== prevMode) {
+    setPrevMode(mode);
+    if (mode === 'chill-lock' || mode === 'chill') {
+      setActiveTab('chill');
+    }
+  }
   const [selectedDay, setSelectedDay] = useState(15);
   const [calendarMonth, setCalendarMonth] = useState('October 2026');
 
@@ -66,14 +81,14 @@ export default function TransactionsScreen() {
   const groupedTransactions = useMemo(() => {
     const map = {};
     allTransactions.forEach((tx) => {
-      const dateKey = tx.date === '15/10/26' ? 'Today' : tx.date || 'Earlier';
+      const dateKey = tx.date === '15/10/26' ? t('today_label') : tx.date || 'Earlier';
       if (!map[dateKey]) {
         map[dateKey] = [];
       }
       map[dateKey].push(tx);
     });
     return map;
-  }, [allTransactions]);
+  }, [allTransactions, t]);
 
   // Days with transactions
   const daysWithTransactions = useMemo(() => {
@@ -286,7 +301,7 @@ export default function TransactionsScreen() {
                   activeTab === 'list' && styles.activeSegmentText,
                 ]}
               >
-                List
+                {t('tab_list')}
               </Text>
             </TouchableOpacity>
 
@@ -304,7 +319,7 @@ export default function TransactionsScreen() {
                   activeTab === 'calendar' && styles.activeSegmentText,
                 ]}
               >
-                Calendar
+                {t('tab_calendar')}
               </Text>
             </TouchableOpacity>
 
@@ -323,7 +338,7 @@ export default function TransactionsScreen() {
                     activeTab === 'chill' && styles.activeSegmentText,
                   ]}
                 >
-                  Chill Lock
+                  {t('tab_chill_lock')}
                 </Text>
                 {activeChillCount > 0 && (
                   <View style={styles.tabBadge}>
@@ -337,11 +352,11 @@ export default function TransactionsScreen() {
           {/* Income & Expenses Summary Cards (Flat White per design.md) */}
           <View style={styles.summaryRow}>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>My Income</Text>
+              <Text style={styles.summaryLabel}>{t('my_income')}</Text>
               <Text style={styles.incomeAmount}>RM{totalIncome.toFixed(2)}</Text>
             </View>
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryLabel}>My Expenses</Text>
+              <Text style={styles.summaryLabel}>{t('my_expenses')}</Text>
               <Text style={styles.expenseAmount}>-RM{totalExpenses.toFixed(2)}</Text>
             </View>
           </View>
@@ -815,11 +830,16 @@ export default function TransactionsScreen() {
           onRequestClose={() => setIsLogModalOpen(false)}
         >
           <SafeAreaView style={styles.logModalSafeArea}>
-            <ScrollView
-              contentContainerStyle={styles.logModalScroll}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+              style={{ flex: 1 }}
             >
+              <ScrollView
+                contentContainerStyle={[styles.logModalScroll, { flexGrow: 1 }]}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+              >
               {/* Header with Cancel Button, Title & Scanner Icon Button */}
               <View style={styles.logHeaderRow}>
                 <TouchableOpacity
@@ -1071,8 +1091,9 @@ export default function TransactionsScreen() {
                 </Text>
               </TouchableOpacity>
             </ScrollView>
-          </SafeAreaView>
-        </Modal>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </Modal>
       </SafeAreaView>
     </AppBackground>
   );

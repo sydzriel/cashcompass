@@ -5,6 +5,7 @@ import { useMemo, useRef, useState } from 'react';
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   Modal,
   Platform,
   SafeAreaView,
@@ -27,8 +28,10 @@ import {
   moreExpenseCategories,
   useApp,
 } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function HomeScreen() {
+  const { t } = useLanguage();
   const {
     accountType,
     setAccountType,
@@ -179,55 +182,55 @@ export default function HomeScreen() {
     return [
       {
         id: 'left',
-        title: 'Left',
-        subtitle: 'Income minus spending',
+        title: t('metric_left'),
+        subtitle: t('metric_left_desc'),
         symbol: '±',
         valueText: leftThisMonth < 0 ? `-RM${Math.abs(leftThisMonth)}` : `RM${leftThisMonth}`,
       },
       {
         id: 'spent',
-        title: 'Spent',
-        subtitle: 'What went out',
+        title: t('metric_spent'),
+        subtitle: t('metric_spent_desc'),
         iconName: 'card-outline',
         valueText: `RM${totalExpenses}`,
       },
       {
         id: 'income',
-        title: 'Income',
-        subtitle: 'What came in',
+        title: t('metric_income'),
+        subtitle: t('metric_income_desc'),
         iconName: 'arrow-down',
         valueText: `RM${totalIncome}`,
       },
       {
         id: 'bills',
-        title: 'Bills',
-        subtitle: 'Rent, bills, and repeats',
+        title: t('metric_bills'),
+        subtitle: t('metric_bills_desc'),
         iconName: 'home-outline',
         valueText: `RM${totalRecurring}`,
       },
       {
         id: 'everyday',
-        title: 'Everyday',
-        subtitle: 'Spending besides bills',
+        title: t('metric_everyday'),
+        subtitle: t('metric_everyday_desc'),
         iconName: 'cart-outline',
         valueText: `RM${totalRegularExpenses}`,
       },
       {
         id: 'per_day',
-        title: 'Per day',
-        subtitle: 'Spending split across the days so far',
+        title: t('metric_per_day'),
+        subtitle: t('metric_per_day_desc'),
         iconName: 'calendar-outline',
         valueText: `RM${perDayAmount}`,
       },
       {
         id: 'daily_room',
-        title: 'Daily room',
-        subtitle: "What's left, split across the days ahead",
+        title: t('metric_daily_room'),
+        subtitle: t('metric_daily_room_desc'),
         iconName: 'hourglass-outline',
         valueText: `RM${dailyRoomAmount}`,
       },
     ];
-  }, [leftThisMonth, totalExpenses, totalIncome, totalRecurring, totalRegularExpenses]);
+  }, [leftThisMonth, totalExpenses, totalIncome, totalRecurring, totalRegularExpenses, t]);
 
   const activeMetric = useMemo(() => {
     return (
@@ -655,12 +658,12 @@ export default function HomeScreen() {
                 {/* Card Top Row: Personal Account Header */}
                 <View style={styles.heroTopRow}>
                   <View>
-                    <Text style={styles.heroBankName}>Personal</Text>
-                    <Text style={styles.heroAccountType}>STUDENT WALLET</Text>
+                    <Text style={styles.heroBankName}>{t('personal_wallet')}</Text>
+                    <Text style={styles.heroAccountType}>{t('student_wallet')}</Text>
                   </View>
                   <View style={styles.heroTagPill}>
                     <Ionicons name="swap-vertical" size={13} color="#fd5ca3" />
-                    <Text style={styles.heroTagText}>Details</Text>
+                    <Text style={styles.heroTagText}>{t('details')}</Text>
                   </View>
                 </View>
 
@@ -700,14 +703,14 @@ export default function HomeScreen() {
                 {/* Card Bottom: Income & Spending */}
                 <View style={styles.heroBottomRow}>
                   <View style={styles.heroStatCol}>
-                    <Text style={styles.heroStatLabel}>INCOME</Text>
+                    <Text style={styles.heroStatLabel}>{t('income_label')}</Text>
                     <Text style={styles.heroStatValue}>
                       {isBalanceHidden ? '••••' : `RM ${Number(totalIncome).toFixed(2)}`}
                     </Text>
                   </View>
 
                   <View style={styles.heroStatCol}>
-                    <Text style={styles.heroStatLabel}>SPENDING</Text>
+                    <Text style={styles.heroStatLabel}>{t('spending_label')}</Text>
                     <Text style={styles.heroStatValue}>
                       {isBalanceHidden ? '••••' : `RM ${Number(totalExpenses).toFixed(2)}`}
                     </Text>
@@ -725,7 +728,7 @@ export default function HomeScreen() {
               onPress={() => scrollViewRef.current?.scrollTo({ y: 540, animated: true })}
             >
               <Ionicons name="document-text-outline" size={18} color="#0D0E15" />
-              <Text style={styles.quickActionTitle}>Bills</Text>
+              <Text style={styles.quickActionTitle}>{t('quick_bills')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -734,12 +737,12 @@ export default function HomeScreen() {
               onPress={handleOpenReceiptScanner}
             >
               <Ionicons name="images-outline" size={18} color="#0D0E15" />
-              <Text style={styles.quickActionTitle}>Receipts</Text>
+              <Text style={styles.quickActionTitle}>{t('quick_receipts')}</Text>
             </TouchableOpacity>
           </View>
 
           {/* Expenses Section */}
-          <Text style={styles.sectionTitle}>Expenses</Text>
+          <Text style={styles.sectionTitle}>{t('section_expenses')}</Text>
 
           <View style={styles.card}>
             {expenses.length === 0 ? (
@@ -751,11 +754,11 @@ export default function HomeScreen() {
                 <View style={styles.itemLeft}>
                   <Text style={styles.emojiIcon}>🛒</Text>
                   <Text style={[styles.itemTitle, { color: '#666666' }]}>
-                    No daily expenses yet
+                    {t('no_daily_expenses')}
                   </Text>
                 </View>
                 <Text style={{ color: '#fd5ca3', fontWeight: '700', fontSize: 14 }}>
-                  + Add
+                  {t('add_btn')}
                 </Text>
               </TouchableOpacity>
             ) : (
@@ -789,7 +792,7 @@ export default function HomeScreen() {
           </View>
 
           {/* Recurring Expenses Section (Commitments) */}
-          <Text style={styles.sectionTitle}>Recurring Expenses</Text>
+          <Text style={styles.sectionTitle}>{t('section_recurring')}</Text>
 
           {/* Card 1: Subscriptions with Progress Bar */}
           {subscriptionItem && (
@@ -850,13 +853,13 @@ export default function HomeScreen() {
           )}
 
           {/* Income Section */}
-          <Text style={styles.sectionTitle}>Income</Text>
+          <Text style={styles.sectionTitle}>{t('section_income')}</Text>
 
           <View style={styles.card}>
             {incomes.length === 0 ? (
               <View style={{ paddingVertical: 14, alignItems: 'center' }}>
                 <Text style={{ fontSize: 14, color: '#94A3B8', fontWeight: '500' }}>
-                  No income logged yet
+                  {t('no_income_logged')}
                 </Text>
               </View>
             ) : (
@@ -1275,267 +1278,273 @@ export default function HomeScreen() {
           onRequestClose={() => setIsLogModalOpen(false)}
         >
           <SafeAreaView style={styles.logModalSafeArea}>
-            <ScrollView
-              contentContainerStyle={styles.logModalScroll}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+              style={{ flex: 1 }}
             >
-              {/* Header with Cancel Button, Title & Scanner Icon Button */}
-              <View style={styles.logHeaderRow}>
-                <TouchableOpacity
-                  style={styles.logCancelBtn}
-                  onPress={() => setIsLogModalOpen(false)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.logCancelText}>Cancel</Text>
-                </TouchableOpacity>
-
-                <Text style={styles.logHeaderTitle}>Log Transaction</Text>
-
-                {/* Top-Right Scanner Icon Button — closes Log Modal first (iOS nested modal fix) */}
-                <TouchableOpacity
-                  style={styles.logScanHeaderBtn}
-                  onPress={handleScanFromInsideLog}
-                  activeOpacity={0.8}
-                >
-                  <Ionicons name="scan-outline" size={20} color="#fd5ca3" />
-                </TouchableOpacity>
-              </View>
-
-              {/* Expense / Income Segmented Switcher */}
-              <View style={styles.logSegmentedBox}>
-                <TouchableOpacity
-                  style={[
-                    styles.logSegmentTab,
-                    transactionType === 'expense' && styles.logSegmentTabActive,
-                  ]}
-                  onPress={() => {
-                    setTransactionType('expense');
-                    setSelectedCategory(defaultExpenseCategories[0]);
-                    setIsCustomCategory(false);
-                  }}
-                  activeOpacity={0.8}
-                >
-                  <Text
-                    style={[
-                      styles.logSegmentText,
-                      transactionType === 'expense' && styles.logSegmentTextActive,
-                    ]}
+              <ScrollView
+                contentContainerStyle={[styles.logModalScroll, { flexGrow: 1 }]}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+              >
+                {/* Header with Cancel Button, Title & Scanner Icon Button */}
+                <View style={styles.logHeaderRow}>
+                  <TouchableOpacity
+                    style={styles.logCancelBtn}
+                    onPress={() => setIsLogModalOpen(false)}
+                    activeOpacity={0.8}
                   >
-                    Expense
-                  </Text>
-                </TouchableOpacity>
+                    <Text style={styles.logCancelText}>Cancel</Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[
-                    styles.logSegmentTab,
-                    transactionType === 'income' && styles.logSegmentTabActive,
-                  ]}
-                  onPress={() => {
-                    setTransactionType('income');
-                    setSelectedCategory(defaultIncomeCategories[0]);
-                    setIsCustomCategory(false);
-                  }}
-                  activeOpacity={0.8}
-                >
-                  <Text
-                    style={[
-                      styles.logSegmentText,
-                      transactionType === 'income' && styles.logSegmentTextActive,
-                    ]}
+                  <Text style={styles.logHeaderTitle}>Log Transaction</Text>
+
+                  {/* Top-Right Scanner Icon Button — closes Log Modal first (iOS nested modal fix) */}
+                  <TouchableOpacity
+                    style={styles.logScanHeaderBtn}
+                    onPress={handleScanFromInsideLog}
+                    activeOpacity={0.8}
                   >
-                    Income
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                    <Ionicons name="scan-outline" size={20} color="#fd5ca3" />
+                  </TouchableOpacity>
+                </View>
 
-              {/* Amount Section with RM Label & Centered "Scan receipt" Pill Button */}
-              <View style={styles.logAmountSection}>
-                <Text style={styles.logAmountCurrencyLabel}>RM</Text>
-                <TextInput
-                  style={styles.logAmountInput}
-                  placeholder="0.00"
-                  placeholderTextColor="#CBD5E1"
-                  keyboardType="decimal-pad"
-                  value={amount}
-                  onChangeText={setAmount}
-                  autoFocus={Platform.OS !== 'web'}
-                />
-
-                {/* Centered Scan Receipt Button — closes Log Modal first (iOS nested modal fix) */}
-                <TouchableOpacity
-                  style={styles.scanReceiptPillBtn}
-                  onPress={handleScanFromInsideLog}
-                  activeOpacity={0.8}
-                >
-                  <Ionicons
-                    name="scan-outline"
-                    size={16}
-                    color="#fd5ca3"
-                    style={{ marginRight: 6 }}
-                  />
-                  <Text style={styles.scanReceiptPillText}>Scan receipt</Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Category Header */}
-              <Text style={styles.logCategoryHeader}>Category</Text>
-
-              {/* Category Grid */}
-              <View style={styles.logCategoryGrid}>
-                {activeCategoryList.map((cat) => {
-                  const isSelected = !isCustomCategory && selectedCategory.id === cat.id;
-
-                  return (
-                    <TouchableOpacity
-                      key={cat.id}
+                {/* Expense / Income Segmented Switcher */}
+                <View style={styles.logSegmentedBox}>
+                  <TouchableOpacity
+                    style={[
+                      styles.logSegmentTab,
+                      transactionType === 'expense' && styles.logSegmentTabActive,
+                    ]}
+                    onPress={() => {
+                      setTransactionType('expense');
+                      setSelectedCategory(defaultExpenseCategories[0]);
+                      setIsCustomCategory(false);
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <Text
                       style={[
-                        styles.logCategoryPill,
-                        isSelected && styles.logCategoryPillActive,
+                        styles.logSegmentText,
+                        transactionType === 'expense' && styles.logSegmentTextActive,
                       ]}
-                      onPress={() => {
-                        setSelectedCategory(cat);
-                        setIsCustomCategory(false);
-                      }}
-                      activeOpacity={0.7}
                     >
-                      <Text style={{ fontSize: 16 }}>{cat.emoji}</Text>
-                      <Text
+                      Expense
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[
+                      styles.logSegmentTab,
+                      transactionType === 'income' && styles.logSegmentTabActive,
+                    ]}
+                    onPress={() => {
+                      setTransactionType('income');
+                      setSelectedCategory(defaultIncomeCategories[0]);
+                      setIsCustomCategory(false);
+                    }}
+                    activeOpacity={0.8}
+                  >
+                    <Text
+                      style={[
+                        styles.logSegmentText,
+                        transactionType === 'income' && styles.logSegmentTextActive,
+                      ]}
+                    >
+                      Income
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                {/* Amount Section with RM Label & Centered "Scan receipt" Pill Button */}
+                <View style={styles.logAmountSection}>
+                  <Text style={styles.logAmountCurrencyLabel}>RM</Text>
+                  <TextInput
+                    style={styles.logAmountInput}
+                    placeholder="0.00"
+                    placeholderTextColor="#CBD5E1"
+                    keyboardType="decimal-pad"
+                    value={amount}
+                    onChangeText={setAmount}
+                    autoFocus={Platform.OS !== 'web'}
+                  />
+
+                  {/* Centered Scan Receipt Button — closes Log Modal first (iOS nested modal fix) */}
+                  <TouchableOpacity
+                    style={styles.scanReceiptPillBtn}
+                    onPress={handleScanFromInsideLog}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons
+                      name="scan-outline"
+                      size={16}
+                      color="#fd5ca3"
+                      style={{ marginRight: 6 }}
+                    />
+                    <Text style={styles.scanReceiptPillText}>Scan receipt</Text>
+                  </TouchableOpacity>
+                </View>
+
+                {/* Category Header */}
+                <Text style={styles.logCategoryHeader}>Category</Text>
+
+                {/* Category Grid */}
+                <View style={styles.logCategoryGrid}>
+                  {activeCategoryList.map((cat) => {
+                    const isSelected = !isCustomCategory && selectedCategory.id === cat.id;
+
+                    return (
+                      <TouchableOpacity
+                        key={cat.id}
                         style={[
-                          styles.logCategoryText,
-                          isSelected && styles.logCategoryTextActive,
+                          styles.logCategoryPill,
+                          isSelected && styles.logCategoryPillActive,
                         ]}
+                        onPress={() => {
+                          setSelectedCategory(cat);
+                          setIsCustomCategory(false);
+                        }}
+                        activeOpacity={0.7}
                       >
-                        {cat.name} {isSelected ? '✓' : ''}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
+                        <Text style={{ fontSize: 16 }}>{cat.emoji}</Text>
+                        <Text
+                          style={[
+                            styles.logCategoryText,
+                            isSelected && styles.logCategoryTextActive,
+                          ]}
+                        >
+                          {cat.name} {isSelected ? '✓' : ''}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
 
-                {/* More Button */}
-                <TouchableOpacity
-                  style={[
-                    styles.logCategoryPill,
-                    showMore && styles.logCategoryPillActive,
-                  ]}
-                  onPress={() => setShowMore((prev) => !prev)}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons
-                    name="grid-outline"
-                    size={16}
-                    color={showMore ? '#FFFFFF' : '#0D0E15'}
-                    style={{ marginRight: 6 }}
-                  />
-                  <Text
+                  {/* More Button */}
+                  <TouchableOpacity
                     style={[
-                      styles.logCategoryText,
-                      showMore && styles.logCategoryTextActive,
-                      { marginLeft: 0 },
+                      styles.logCategoryPill,
+                      showMore && styles.logCategoryPillActive,
                     ]}
+                    onPress={() => setShowMore((prev) => !prev)}
+                    activeOpacity={0.7}
                   >
-                    {showMore ? 'Less' : 'More'}
-                  </Text>
-                </TouchableOpacity>
+                    <Ionicons
+                      name="grid-outline"
+                      size={16}
+                      color={showMore ? '#FFFFFF' : '#0D0E15'}
+                      style={{ marginRight: 6 }}
+                    />
+                    <Text
+                      style={[
+                        styles.logCategoryText,
+                        showMore && styles.logCategoryTextActive,
+                        { marginLeft: 0 },
+                      ]}
+                    >
+                      {showMore ? 'Less' : 'More'}
+                    </Text>
+                  </TouchableOpacity>
 
-                {/* + Custom Button (Dashed Border per screenshot) */}
-                <TouchableOpacity
-                  style={[
-                    styles.logCategoryPill,
-                    styles.logCategoryPillCustom,
-                    isCustomCategory && styles.logCategoryPillActive,
-                  ]}
-                  onPress={() => setIsCustomCategory(true)}
-                  activeOpacity={0.7}
-                >
-                  <Text
+                  {/* + Custom Button (Dashed Border per screenshot) */}
+                  <TouchableOpacity
                     style={[
-                      styles.logCategoryText,
-                      isCustomCategory && styles.logCategoryTextActive,
-                      { marginLeft: 0 },
+                      styles.logCategoryPill,
+                      styles.logCategoryPillCustom,
+                      isCustomCategory && styles.logCategoryPillActive,
                     ]}
+                    onPress={() => setIsCustomCategory(true)}
+                    activeOpacity={0.7}
                   >
-                    + Custom
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Custom Category Input if selected */}
-              {isCustomCategory && (
-                <View style={styles.customCategoryRow}>
-                  <TextInput
-                    style={styles.customCategoryInput}
-                    placeholder="Type custom category name..."
-                    placeholderTextColor="#94A3B8"
-                    value={customCategoryName}
-                    onChangeText={setCustomCategoryName}
-                  />
+                    <Text
+                      style={[
+                        styles.logCategoryText,
+                        isCustomCategory && styles.logCategoryTextActive,
+                        { marginLeft: 0 },
+                      ]}
+                    >
+                      + Custom
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              )}
 
-              {/* Form List: Name, Date, Recurring */}
-              <View style={styles.logFormContainer}>
-                <View style={styles.logFormRow}>
-                  <Text style={styles.logFormLabel}>Name</Text>
-                  <TextInput
-                    style={styles.logNameInput}
-                    placeholder="Optional"
-                    placeholderTextColor="#94A3B8"
-                    value={transactionName}
-                    onChangeText={setTransactionName}
-                  />
-                </View>
-                <View style={styles.logFormDivider} />
-
-                <View style={styles.logFormRow}>
-                  <Text style={styles.logFormLabel}>Date</Text>
-                  <View style={styles.logDatePillsRow}>
-                    <View style={styles.logDateBadge}>
-                      <Text style={styles.logDateBadgeText}>10/23/26</Text>
-                    </View>
-                    <View style={styles.logDateBadge}>
-                      <Text style={styles.logDateBadgeText}>4:23 PM</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.logFormDivider} />
-
-                {transactionType === 'expense' && (
-                  <View style={styles.logFormRow}>
-                    <Text style={styles.logFormLabel}>Recurring</Text>
-                    <Switch
-                      value={isRecurring}
-                      onValueChange={setIsRecurring}
-                      trackColor={{ false: '#E2E8F0', true: '#fd5ca3' }}
-                      thumbColor="#FFFFFF"
+                {/* Custom Category Input if selected */}
+                {isCustomCategory && (
+                  <View style={styles.customCategoryRow}>
+                    <TextInput
+                      style={styles.customCategoryInput}
+                      placeholder="Type custom category name..."
+                      placeholderTextColor="#94A3B8"
+                      value={customCategoryName}
+                      onChangeText={setCustomCategoryName}
                     />
                   </View>
                 )}
-              </View>
 
-              {/* Add Button */}
-              <TouchableOpacity
-                style={[
-                  styles.logAddButton,
-                  parseFloat(amount) > 0
-                    ? styles.logAddButtonActive
-                    : styles.logAddButtonDisabled,
-                ]}
-                onPress={handleSaveTransaction}
-                activeOpacity={0.8}
-              >
-                <Text
+                {/* Form List: Name, Date, Recurring */}
+                <View style={styles.logFormContainer}>
+                  <View style={styles.logFormRow}>
+                    <Text style={styles.logFormLabel}>Name</Text>
+                    <TextInput
+                      style={styles.logNameInput}
+                      placeholder="Optional"
+                      placeholderTextColor="#94A3B8"
+                      value={transactionName}
+                      onChangeText={setTransactionName}
+                    />
+                  </View>
+                  <View style={styles.logFormDivider} />
+
+                  <View style={styles.logFormRow}>
+                    <Text style={styles.logFormLabel}>Date</Text>
+                    <View style={styles.logDatePillsRow}>
+                      <View style={styles.logDateBadge}>
+                        <Text style={styles.logDateBadgeText}>10/23/26</Text>
+                      </View>
+                      <View style={styles.logDateBadge}>
+                        <Text style={styles.logDateBadgeText}>4:23 PM</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View style={styles.logFormDivider} />
+
+                  {transactionType === 'expense' && (
+                    <View style={styles.logFormRow}>
+                      <Text style={styles.logFormLabel}>Recurring</Text>
+                      <Switch
+                        value={isRecurring}
+                        onValueChange={setIsRecurring}
+                        trackColor={{ false: '#E2E8F0', true: '#fd5ca3' }}
+                        thumbColor="#FFFFFF"
+                      />
+                    </View>
+                  )}
+                </View>
+
+                {/* Add Button */}
+                <TouchableOpacity
                   style={[
-                    styles.logAddButtonText,
+                    styles.logAddButton,
                     parseFloat(amount) > 0
-                      ? styles.logAddButtonTextActive
-                      : styles.logAddButtonTextDisabled,
+                      ? styles.logAddButtonActive
+                      : styles.logAddButtonDisabled,
                   ]}
+                  onPress={handleSaveTransaction}
+                  activeOpacity={0.8}
                 >
-                  Add
-                </Text>
-              </TouchableOpacity>
-            </ScrollView>
+                  <Text
+                    style={[
+                      styles.logAddButtonText,
+                      parseFloat(amount) > 0
+                        ? styles.logAddButtonTextActive
+                        : styles.logAddButtonTextDisabled,
+                    ]}
+                  >
+                    Add
+                  </Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </SafeAreaView>
         </Modal>
 
