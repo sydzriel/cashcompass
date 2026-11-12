@@ -269,7 +269,7 @@ export default function TransactionsScreen() {
             <TouchableOpacity
               style={styles.dateFilterButton}
               activeOpacity={0.8}
-              onPress={() => router.push('/(tabs)/profile')}
+              onPress={() => router.push('/profile')}
             >
               <Text style={styles.dateFilterText}>Oct 2026</Text>
               <Ionicons

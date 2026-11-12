@@ -122,7 +122,7 @@ export default function WhoOwesWhoScreen() {
   return (
     <AppBackground opacity={1.0} style={styles.gradientContainer}>
       <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
-        <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+        <StatusBar barStyle="dark-content" />
 
         {/* Top Header Bar */}
         <View style={styles.headerBar}>

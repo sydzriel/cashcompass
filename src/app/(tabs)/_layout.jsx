@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { Tabs } from 'expo-router';
+import { Tabs, router } from 'expo-router';
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLanguage } from '../../context/LanguageContext';
 
 // Custom Floating Pill Tab Bar with Liquid Glass Effect
-function CustomTabBar({ state, descriptors, navigation }) {
+function CustomTabBar({ state, descriptors, emitter, navigateToTab, navigation }) {
   const { t } = useLanguage();
+
+  if (!state?.routes) return null;
 
   return (
     <View style={styles.tabBarContainer}>
@@ -20,14 +22,22 @@ function CustomTabBar({ state, descriptors, navigation }) {
             const isFocused = state.index === index;
 
             const onPress = () => {
-              const event = navigation.emit({
+              const event = (emitter || navigation || descriptors?.[route.key]?.navigation)?.emit?.({
                 type: 'tabPress',
                 target: route.key,
                 canPreventDefault: true,
               });
 
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate(route.name);
+              if (!isFocused && !event?.defaultPrevented) {
+                if (typeof navigateToTab === 'function') {
+                  navigateToTab(route.key);
+                } else if (navigation?.navigate) {
+                  navigation.navigate(route.name);
+                } else if (descriptors?.[route.key]?.navigation?.navigate) {
+                  descriptors[route.key].navigation.navigate(route.name);
+                } else {
+                  router.navigate(route.name === 'index' ? '/' : `/${route.name}`);
+                }
               }
             };
 

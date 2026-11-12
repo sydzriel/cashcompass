@@ -126,13 +126,13 @@ export default function SubscriptionSetupScreen() {
   };
 
   const handleSkip = () => {
-    router.replace('/(tabs)');
+    router.replace('/');
   };
 
   const handleContinue = () => {
     if (isContinueEnabled) {
       setupInitialSubscriptions(hasSubs === 'yes', activeSubscriptionsList);
-      router.replace('/(tabs)');
+      router.replace('/');
     }
   };
 

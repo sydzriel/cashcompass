@@ -195,7 +195,7 @@ export default function ProfileScreen() {
         );
         break;
       case 'chill_lock':
-        router.push('/(tabs)/transactions?mode=chill-lock');
+        router.push('/transactions?mode=chill-lock');
         break;
       default:
         break;
