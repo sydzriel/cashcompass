@@ -202,7 +202,7 @@ export default function SubscriptionSetupScreen() {
                     <Ionicons
                       name="checkmark"
                       size={20}
-                      color={hasSubs === 'yes' ? '#fd5ca3' : '#64748B'}
+                      color={hasSubs === 'yes' ? '#9264ff' : '#64748B'}
                     />
                   </View>
 
@@ -331,7 +331,7 @@ export default function SubscriptionSetupScreen() {
                     <Ionicons
                       name="close"
                       size={20}
-                      color={hasSubs === 'no' ? '#fd5ca3' : '#64748B'}
+                      color={hasSubs === 'no' ? '#9264ff' : '#64748B'}
                     />
                   </View>
 
@@ -362,7 +362,7 @@ export default function SubscriptionSetupScreen() {
                     activeOpacity={0.85}
                   >
                     <LinearGradient
-                      colors={['#fd5ca3', '#fd5ca3']}
+                      colors={['#9264ff', '#9264ff']}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
                       style={styles.continueGradient}
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 3,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   skipBtn: {
     paddingHorizontal: 18,
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
   },
   optionCardSelected: {
     backgroundColor: '#FFFFFF',
-    borderColor: '#fd5ca3',
+    borderColor: '#9264ff',
   },
   iconBadge: {
     width: 44,
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   iconBadgeActive: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
   },
   optionTextContainer: {
     flex: 1,
@@ -525,14 +525,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   radioOuterSelected: {
-    borderColor: '#fd5ca3',
-    backgroundColor: '#fd5ca3',
+    borderColor: '#9264ff',
+    backgroundColor: '#9264ff',
   },
   // Subscriptions Expandable Panel
   subsPanel: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 22,
-    borderWidth: 1,
+    borderRadius: 18,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 16,
     marginBottom: 16,
@@ -556,8 +556,8 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   subItemCardActive: {
-    backgroundColor: '#FFF8FA',
-    borderColor: 'rgba(253, 92, 163, 0.45)',
+    backgroundColor: '#F4EDFF',
+    borderColor: 'rgba(146, 100, 255, 0.45)',
   },
   subItemRow: {
     flexDirection: 'row',
@@ -589,8 +589,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   subCheckboxActive: {
-    backgroundColor: '#fd5ca3',
-    borderColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
+    borderColor: '#9264ff',
   },
   subInputWrapper: {
     marginTop: 10,
@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
   },
   customNameInput: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 12,
     paddingHorizontal: 12,
@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
   inlineCurrency: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
     marginRight: 6,
   },
   inlineAmountInput: {
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
   totalCurrency: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
     marginRight: 4,
   },
   totalAmountNumber: {
@@ -696,13 +696,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   continueButtonDisabled: {
-    backgroundColor: 'rgba(253, 92, 163, 0.22)',
+    backgroundColor: '#EDE9FE',
     justifyContent: 'center',
     alignItems: 'center',
   },
   continueButtonTextDisabled: {
     fontSize: 16,
     fontWeight: '700',
-    color: 'rgba(233, 30, 99, 0.45)',
+    color: '#A78BFA',
   },
 });

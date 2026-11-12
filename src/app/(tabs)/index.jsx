@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
 import { useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -33,8 +34,6 @@ import { useLanguage } from '../../context/LanguageContext';
 export default function HomeScreen() {
   const { t } = useLanguage();
   const {
-    accountType,
-    setAccountType,
     selectedMonth,
     setSelectedMonth,
     incomes,
@@ -121,7 +120,7 @@ export default function HomeScreen() {
         } else if (lower.includes('subscrip') || lower.includes('stream') || lower.includes('cloud') || lower.includes('spotify')) {
           color = '#F97316';
         } else if (lower.includes('coffee') || lower.includes('food') || lower.includes('makan')) {
-          color = '#fd5ca3';
+          color = '#9264ff';
         } else if (lower.includes('transp') || lower.includes('lrt') || lower.includes('car')) {
           color = '#10B981';
         } else if (lower.includes('grocer') || lower.includes('market')) {
@@ -615,21 +614,19 @@ export default function HomeScreen() {
         >
           {/* Top Header Row Controls (Restored) */}
           <View style={styles.headerRow}>
-            <TouchableOpacity
-              style={styles.pillButton}
-              activeOpacity={0.8}
-              onPress={() =>
-                setAccountType((prev) => (prev === 'Personal' ? 'Business' : 'Personal'))
-              }
-            >
-              <Text style={styles.pillButtonText}>{accountType}</Text>
-            </TouchableOpacity>
+            <View style={styles.pillButton}>
+              <Text style={styles.pillButtonText}>Personal</Text>
+            </View>
 
             <View style={styles.headerRightActions}>
-              <TouchableOpacity style={styles.dateFilterButton} activeOpacity={0.8}>
+              <TouchableOpacity
+                style={styles.dateFilterButton}
+                activeOpacity={0.8}
+                onPress={() => router.push('/(tabs)/profile')}
+              >
                 <Text style={styles.dateFilterText}>Oct 2026</Text>
                 <Ionicons
-                  name="options-outline"
+                  name="settings-outline"
                   size={16}
                   color="#0D0E15"
                   style={{ marginLeft: 6 }}
@@ -662,7 +659,7 @@ export default function HomeScreen() {
                     <Text style={styles.heroAccountType}>{t('student_wallet')}</Text>
                   </View>
                   <View style={styles.heroTagPill}>
-                    <Ionicons name="swap-vertical" size={13} color="#fd5ca3" />
+                    <Ionicons name="swap-vertical" size={13} color="#9264ff" />
                     <Text style={styles.heroTagText}>{t('details')}</Text>
                   </View>
                 </View>
@@ -704,14 +701,14 @@ export default function HomeScreen() {
                 <View style={styles.heroBottomRow}>
                   <View style={styles.heroStatCol}>
                     <Text style={styles.heroStatLabel}>{t('income_label')}</Text>
-                    <Text style={styles.heroStatValue}>
+                    <Text style={[styles.heroStatValue, { color: '#10B981' }]}>
                       {isBalanceHidden ? '••••' : `RM ${Number(totalIncome).toFixed(2)}`}
                     </Text>
                   </View>
 
                   <View style={styles.heroStatCol}>
                     <Text style={styles.heroStatLabel}>{t('spending_label')}</Text>
-                    <Text style={styles.heroStatValue}>
+                    <Text style={[styles.heroStatValue, { color: '#EF4444' }]}>
                       {isBalanceHidden ? '••••' : `RM ${Number(totalExpenses).toFixed(2)}`}
                     </Text>
                   </View>
@@ -757,7 +754,7 @@ export default function HomeScreen() {
                     {t('no_daily_expenses')}
                   </Text>
                 </View>
-                <Text style={{ color: '#fd5ca3', fontWeight: '700', fontSize: 14 }}>
+                <Text style={{ color: '#9264ff', fontWeight: '700', fontSize: 14 }}>
                   {t('add_btn')}
                 </Text>
               </TouchableOpacity>
@@ -784,7 +781,9 @@ export default function HomeScreen() {
                         )}
                       </View>
                     </View>
-                    <Text style={styles.itemAmount}>RM{item.amount}</Text>
+                    <Text style={[styles.itemAmount, { color: '#EF4444' }]}>
+                      RM{item.amount}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               ))
@@ -814,7 +813,9 @@ export default function HomeScreen() {
                   <Text style={styles.emojiIcon}>{subscriptionItem.emoji || '📱'}</Text>
                   <Text style={styles.itemTitle}>{subscriptionItem.title}</Text>
                 </View>
-                <Text style={styles.itemAmount}>RM{subscriptionItem.amount}</Text>
+                <Text style={[styles.itemAmount, { color: '#EF4444' }]}>
+                  RM{subscriptionItem.amount}
+                </Text>
               </TouchableOpacity>
               <View style={styles.progressBarBackground}>
                 <View
@@ -845,7 +846,9 @@ export default function HomeScreen() {
                       <Text style={styles.emojiIcon}>{item.emoji || '🏠'}</Text>
                       <Text style={styles.itemTitle}>{item.title}</Text>
                     </View>
-                    <Text style={styles.itemAmount}>RM{item.amount}</Text>
+                    <Text style={[styles.itemAmount, { color: '#EF4444' }]}>
+                      RM{item.amount}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               ))}
@@ -923,7 +926,7 @@ export default function HomeScreen() {
               </View>
 
               <View style={styles.legendContainer}>
-                <Text style={styles.totalText}>Total: RM{totalExpenses}</Text>
+                <Text style={styles.totalText}>Total: <Text style={{ color: '#EF4444' }}>RM{totalExpenses}</Text></Text>
 
                 {categoryStats.map((cat) => (
                   <View key={cat.name} style={styles.legendRow}>
@@ -974,7 +977,7 @@ export default function HomeScreen() {
                           styles.barPill,
                           {
                             height: calculatedHeight,
-                            backgroundColor: isSelected ? '#fd5ca3' : '#E2E8F0',
+                            backgroundColor: isSelected ? '#9264ff' : '#E2E8F0',
                           },
                         ]}
                       />
@@ -1151,7 +1154,7 @@ export default function HomeScreen() {
                   <Text style={styles.actionTitle}>Maybank MAE • Starbucks Coffee</Text>
                   <Text style={styles.actionDesc}>RM15.00 • Auto-insert into Coffee</Text>
                 </View>
-                <Text style={{ color: '#fd5ca3', fontWeight: '700' }}>Trigger ⚡</Text>
+                <Text style={{ color: '#9264ff', fontWeight: '700' }}>Trigger ⚡</Text>
               </TouchableOpacity>
 
               {/* Preset 2: Touch 'n Go eWallet */}
@@ -1170,7 +1173,7 @@ export default function HomeScreen() {
                   <Text style={styles.actionTitle}>{"Touch 'n Go \u2022 FamilyMart Oden"}</Text>
                   <Text style={styles.actionDesc}>RM9.80 • Auto-insert into Food</Text>
                 </View>
-                <Text style={{ color: '#fd5ca3', fontWeight: '700' }}>Trigger ⚡</Text>
+                <Text style={{ color: '#9264ff', fontWeight: '700' }}>Trigger ⚡</Text>
               </TouchableOpacity>
 
               {/* Preset 3: GrabPay */}
@@ -1189,7 +1192,7 @@ export default function HomeScreen() {
                   <Text style={styles.actionTitle}>GrabPay • Subway Lunch</Text>
                   <Text style={styles.actionDesc}>RM16.50 • Auto-insert into Food</Text>
                 </View>
-                <Text style={{ color: '#fd5ca3', fontWeight: '700' }}>Trigger ⚡</Text>
+                <Text style={{ color: '#9264ff', fontWeight: '700' }}>Trigger ⚡</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -1240,7 +1243,7 @@ export default function HomeScreen() {
                       </View>
 
                       {isSelected && (
-                        <Ionicons name="checkmark" size={20} color="#fd5ca3" />
+                        <Ionicons name="checkmark" size={20} color="#9264ff" />
                       )}
                     </TouchableOpacity>
                   </View>
@@ -1306,7 +1309,7 @@ export default function HomeScreen() {
                     onPress={handleScanFromInsideLog}
                     activeOpacity={0.8}
                   >
-                    <Ionicons name="scan-outline" size={20} color="#fd5ca3" />
+                    <Ionicons name="scan-outline" size={20} color="#9264ff" />
                   </TouchableOpacity>
                 </View>
 
@@ -1379,7 +1382,7 @@ export default function HomeScreen() {
                     <Ionicons
                       name="scan-outline"
                       size={16}
-                      color="#fd5ca3"
+                      color="#9264ff"
                       style={{ marginRight: 6 }}
                     />
                     <Text style={styles.scanReceiptPillText}>Scan receipt</Text>
@@ -1514,7 +1517,7 @@ export default function HomeScreen() {
                       <Switch
                         value={isRecurring}
                         onValueChange={setIsRecurring}
-                        trackColor={{ false: '#E2E8F0', true: '#fd5ca3' }}
+                        trackColor={{ false: '#E2E8F0', true: '#9264ff' }}
                         thumbColor="#FFFFFF"
                       />
                     </View>
@@ -1865,7 +1868,7 @@ export default function HomeScreen() {
 
                 <View style={styles.detailContentContainer}>
                   <Text style={styles.detailMyExpensesLabel}>Total Spent</Text>
-                  <Text style={styles.detailBigAmount}>
+                  <Text style={[styles.detailBigAmount, { color: '#EF4444' }]}>
                     RM{selectedExpenseDetail?.amount}
                   </Text>
 
@@ -1999,7 +2002,7 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     paddingHorizontal: 16,
     borderRadius: 27,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   pillButtonText: {
@@ -2010,9 +2013,9 @@ const styles = StyleSheet.create({
   autoDetectPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF0F5',
-    borderWidth: 1,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
+    backgroundColor: '#F4EDFF',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 27,
@@ -2024,7 +2027,7 @@ const styles = StyleSheet.create({
   autoDetectText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   dateFilterButton: {
     backgroundColor: '#FFFFFF',
@@ -2033,7 +2036,7 @@ const styles = StyleSheet.create({
     borderRadius: 27,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   dateFilterText: {
@@ -2044,26 +2047,26 @@ const styles = StyleSheet.create({
 
   // Big Hero Card (Liquid Glass Gradient Style)
   heroCardContainer: {
-    borderRadius: 24,
+    borderRadius: 18,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: 16,
     borderWidth: 0,
-    borderColor: 'rgba(255, 255, 255, 0.65)',
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
-    elevation: 4,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   heroGlassBlur: {
-    borderRadius: 24,
+    borderRadius: 18,
     overflow: 'hidden',
   },
   heroGlassGradient: {
     paddingHorizontal: 22,
     paddingTop: 20,
     paddingBottom: 22,
-    borderRadius: 24,
+    borderRadius: 18,
   },
   heroTopRow: {
     flexDirection: 'row',
@@ -2087,17 +2090,17 @@ const styles = StyleSheet.create({
   heroTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.65)',
+    backgroundColor: '#F4EDFF',
     paddingVertical: 5,
     paddingHorizontal: 10,
-    borderRadius: 16,
+    borderRadius: 27,
     borderWidth: 0,
-    borderColor: 'rgba(255, 255, 255, 0.8)',
+    borderColor: 'rgba(146, 100, 255, 0.25)',
   },
   heroTagText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#fd5ca3',
+    color: '#9264ff',
     marginLeft: 3,
   },
   heroBalanceSection: {
@@ -2123,14 +2126,14 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
   },
   heroCurrencyPrefix: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '700',
     color: '#0D0E15',
     marginRight: 6,
   },
   heroBalanceNumber: {
-    fontSize: 36,
-    fontWeight: '800',
+    fontSize: 48,
+    fontWeight: '700',
     color: '#0D0E15',
     letterSpacing: -1,
   },
@@ -2160,7 +2163,7 @@ const styles = StyleSheet.create({
   quickActionRow: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   quickActionCard: {
     flex: 1,
@@ -2235,13 +2238,13 @@ const styles = StyleSheet.create({
     marginLeft: 46,
   },
   sectionTitle: {
-    fontSize: 20, // Clean secondary header per design.md
-    fontWeight: '700',
+    fontSize: 24, // per design.md: 24px, Semi-Bold
+    fontWeight: '600',
     color: '#0D0E15',
-    marginBottom: 12,
+    marginBottom: 16, // per design.md: seragamkan jarak 16px
     marginTop: 6,
   },
-  // Kad Maklumat: Putih flat tanpa bayang tebal (borderWidth: 1, borderColor: 'rgba(0,0,0,0.04)', borderRadius: 18)
+  // Kad Maklumat: Putih flat tanpa bayang tebal (borderWidth: 0, borderColor: 'rgba(0,0,0,0.04)', borderRadius: 18)
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
@@ -2267,12 +2270,12 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#0D0E15',
   },
   autoLoggedBadge: {
     fontSize: 11,
-    color: '#fd5ca3',
+    color: '#9264ff',
     fontWeight: '600',
     marginTop: 1,
   },
@@ -2290,7 +2293,7 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#fd5ca3', // Aksen Utama per design.md
+    backgroundColor: '#9264ff', // Aksen Utama per design.md
     borderRadius: 3,
   },
   divider: {
@@ -2406,7 +2409,7 @@ const styles = StyleSheet.create({
   },
   chartBaseline: {
     height: 2,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     borderRadius: 1,
     marginTop: 2,
   },
@@ -2419,7 +2422,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666666',
   },
-  // FAB (27px radius style, 60x60, #fd5ca3)
+  // FAB (27px radius style, 60x60, #9264ff)
   fab: {
     position: 'absolute',
     bottom: 95,
@@ -2427,15 +2430,15 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 29,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 101,
-    shadowColor: '#fd5ca3',
+    shadowColor: 'transparent',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: 0,
   },
   modalOverlay: {
     position: 'absolute',
@@ -2520,7 +2523,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   wowBadge: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
@@ -2528,7 +2531,7 @@ const styles = StyleSheet.create({
   wowBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   actionTitle: {
     fontSize: 15,
@@ -2582,7 +2585,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   logCancelText: {
-    color: '#fd5ca3',
+    color: '#9264ff',
     fontSize: 15,
     fontWeight: '600',
   },
@@ -2594,10 +2597,10 @@ const styles = StyleSheet.create({
   logScanHeaderBtn: {
     width: 44,
     height: 44,
-    borderRadius: 16,
+    borderRadius: 22,
     backgroundColor: '#FFFFFF',
-    borderWidth: 0.5,
-    borderColor: '#FCE7F3',
+    borderWidth: 0,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2652,9 +2655,9 @@ const styles = StyleSheet.create({
   scanReceiptPillBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.5,
-    borderColor: '#FCE7F3',
+    backgroundColor: '#F4EDFF',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -2663,7 +2666,7 @@ const styles = StyleSheet.create({
   scanReceiptPillText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   logCategoryHeader: {
     fontSize: 16,
@@ -2692,8 +2695,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   logCategoryPillActive: {
-    backgroundColor: '#fd5ca3',
-    borderColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
+    borderColor: '#9264ff',
   },
   logCategoryPillCustom: {
     backgroundColor: '#F8FAFC',
@@ -2777,10 +2780,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   logAddButtonActive: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   logAddButtonDisabled: {
-    backgroundColor: '#FCE4EC',
+    backgroundColor: '#EDE9FE',
   },
   logAddButtonText: {
     fontSize: 16,
@@ -2790,7 +2793,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   logAddButtonTextDisabled: {
-    color: '#F48FB1',
+    color: '#A78BFA',
   },
 
   // Detail Modal Styles
@@ -2980,9 +2983,9 @@ const styles = StyleSheet.create({
     color: '#0D0E15',
   },
   editLimitSaveBtn: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     height: 50,
-    borderRadius: 25,
+    borderRadius: 27,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -3008,15 +3011,15 @@ const styles = StyleSheet.create({
   txDetailEditPill: {
     paddingVertical: 7,
     paddingHorizontal: 18,
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
-    backgroundColor: '#FFFFFF',
+    borderRadius: 27,
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
+    backgroundColor: '#F4EDFF',
   },
   txDetailEditText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   txDetailScroll: {
     flex: 1,
@@ -3125,8 +3128,8 @@ const styles = StyleSheet.create({
   },
   txDeleteBtn: {
     width: '100%',
-    backgroundColor: '#FFF0F5',
-    borderRadius: 24,
+    backgroundColor: '#FEE2E2',
+    borderRadius: 27,
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',

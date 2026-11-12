@@ -350,7 +350,7 @@ function EditProfileModalContent({
 // ==========================================
 // Design Tokens & Styles from design.md
 // Flat White Card (#FFFFFF), Subtle Border rgba(0,0,0,0.04),
-// Pink Accent #fd5ca3, Bulat Penuh Butang 27px
+// Accent #9264ff, Bulat Penuh Butang 27px
 // ==========================================
 
 const styles = StyleSheet.create({
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF', // Pure White surface per design.md
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
-    borderTopWidth: 1,
+    borderTopWidth: 0,
     borderTopColor: 'rgba(0, 0, 0, 0.06)',
     maxHeight: '90%',
     paddingBottom: Platform.OS === 'ios' ? 34 : 20,
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 12,
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -423,10 +423,10 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 16,
   },
-  // Kad Maklumat per design.md: #FFFFFF, borderRadius: 18, borderWidth: 1, rgba(0,0,0,0.04)
+  // Kad Maklumat per design.md: #FFFFFF, borderRadius: 18, borderWidth: 0, rgba(0,0,0,0.04)
   sectionCard: {
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     borderRadius: 18,
     padding: 16,
@@ -456,9 +456,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#FFF0F5',
-    borderWidth: 1.5,
-    borderColor: 'rgba(253, 92, 163, 0.4)',
+    backgroundColor: '#F4EDFF',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
   avatarPreviewText: {
     fontSize: 24,
     fontWeight: '900',
-    color: '#fd5ca3', // Pink Accent per design.md: #fd5ca3 / #E91E63
+    color: '#9264ff', // Accent per design.md: #9264ff
   },
   activeDot: {
     position: 'absolute',
@@ -505,14 +505,15 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 14,
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.06)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarOptionButtonActive: {
-    backgroundColor: '#FFF0F5',
-    borderColor: '#fd5ca3',
+    backgroundColor: '#F4EDFF',
+    borderColor: '#9264ff',
+    borderWidth: 1.5,
   },
   avatarOptionText: {
     fontSize: 18,
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
     color: '#0D0E15',
   },
   avatarOptionTextActive: {
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   customInitialsToggle: {
     paddingVertical: 8,
@@ -529,7 +530,7 @@ const styles = StyleSheet.create({
   customInitialsToggleText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   customInitialsInputRow: {
     flexDirection: 'row',
@@ -540,8 +541,8 @@ const styles = StyleSheet.create({
   customInitialsInput: {
     flex: 1,
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: 'rgba(253, 92, 163, 0.4)',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.4)',
     borderRadius: 14,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -551,7 +552,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   customInitialsApplyBtn: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -578,7 +579,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
     borderRadius: 18,
     padding: 4,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.06)',
     gap: 6,
   },
@@ -592,12 +593,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
   },
   languageSegmentButtonActive: {
-    backgroundColor: '#fd5ca3', // Pink primary accent from design.md!
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: '#9264ff', // Accent from design.md!
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   flagEmoji: {
     fontSize: 18,
@@ -615,7 +616,7 @@ const styles = StyleSheet.create({
   // General text input fields per design.md
   inputField: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 14,
     paddingHorizontal: 14,
@@ -629,7 +630,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 14,
     paddingHorizontal: 14,
@@ -637,7 +638,7 @@ const styles = StyleSheet.create({
   budgetCurrencyPrefix: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
     marginRight: 8,
   },
   budgetInputField: {
@@ -657,7 +658,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     flex: 1,
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 27, // bulat penuh untuk butang 27px per design.md
     paddingVertical: 14,
@@ -671,16 +672,16 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     flex: 2,
-    backgroundColor: '#fd5ca3', // Pink primary accent per design.md
+    backgroundColor: '#9264ff', // Accent per design.md
     borderRadius: 27, // bulat penuh untuk butang 27px per design.md
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   saveButtonText: {
     fontSize: 15,

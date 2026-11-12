@@ -395,12 +395,6 @@ export default function ProfileScreen() {
               </TouchableOpacity>
             </View>
           </View>
-
-          {/* App Version Info Footer */}
-          <View style={styles.footerInfo}>
-            <Text style={styles.versionText}>CashCompass v1.0.0</Text>
-            <Text style={styles.taglineText}>{t('version_tagline')}</Text>
-          </View>
         </ScrollView>
       </SafeAreaView>
 
@@ -542,7 +536,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 24, // per design.md: 24px, Semi-Bold
-    fontWeight: '700',
+    fontWeight: '600',
     color: '#0D0E15', // per design.md: Teks Utama #0D0E15
     marginBottom: 20,
     textAlign: 'center',
@@ -556,17 +550,17 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(233, 30, 99, 0.15)',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
   },
   avatarInitial: {
     fontSize: 30,
     fontWeight: '800',
-    color: '#fd5ca3', // per design.md: pink accent #fd5ca3 / #E91E63
+    color: '#9264ff', // per design.md: accent #9264ff
   },
   userName: {
     fontSize: 22,
@@ -601,7 +595,7 @@ const styles = StyleSheet.create({
   gridCard: {
     backgroundColor: '#FFFFFF', // per design.md: #FFFFFF
     borderRadius: 18, // per design.md: 18px untuk kad
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)', // per design.md: borderWidth 1, rgba(0, 0, 0, 0.04)
     alignItems: 'center',
     justifyContent: 'center',
@@ -626,7 +620,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     overflow: 'hidden',
   },
@@ -655,12 +649,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   listTitle: {
-    fontSize: 15, // per design.md: 15px, Medium/Semi-Bold
-    fontWeight: '600',
+    fontSize: 15, // per design.md: 15px, Medium
+    fontWeight: '500',
     color: '#0D0E15',
   },
   listSubtitle: {
-    fontSize: 12,
+    fontSize: 14, // per design.md: 14px, Regular
+    fontWeight: '400',
     color: '#666666',
     marginTop: 2,
   },
@@ -677,21 +672,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.04)', // per design.md: subtle divider
     marginLeft: 66, // aligned with text start
-  },
-  footerInfo: {
-    alignItems: 'center',
-    marginTop: 6,
-    marginBottom: 20,
-  },
-  versionText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#888888',
-    marginBottom: 2,
-  },
-  taglineText: {
-    fontSize: 11,
-    color: '#AAAAAA',
   },
   // Modal styles
   modalOverlay: {
@@ -752,7 +732,7 @@ const styles = StyleSheet.create({
   },
   modalInput: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 14,
     paddingHorizontal: 14,
@@ -764,16 +744,16 @@ const styles = StyleSheet.create({
   loanResultCard: {
     marginTop: 16,
     padding: 14,
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     alignItems: 'center',
   },
   loanResultLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
     textTransform: 'uppercase',
   },
   loanResultValue: {
@@ -783,7 +763,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   modalCalculateButton: {
-    backgroundColor: '#fd5ca3', // per design.md: #fd5ca3 / #E91E63
+    backgroundColor: '#9264ff', // per design.md: #9264ff
     borderRadius: 27, // per design.md: bulat penuh untuk butang (27px)
     paddingVertical: 14,
     alignItems: 'center',

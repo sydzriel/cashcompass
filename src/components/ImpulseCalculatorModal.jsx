@@ -237,7 +237,7 @@ export default function ImpulseCalculatorModal({ visible, onClose, onStartChillL
               activeOpacity={0.85}
             >
               <LinearGradient
-                colors={['#fd5ca3', '#fd5ca3']}
+                colors={['#9264ff', '#9264ff']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.btnGradient}
@@ -301,12 +301,12 @@ const styles = StyleSheet.create({
   conceptBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     borderRadius: 18,
     padding: 16,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(253, 92, 163, 0.2)',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.2)',
   },
   conceptEmoji: {
     fontSize: 32,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   conceptTitle: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
     marginBottom: 4,
   },
   conceptText: {
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 20,
     paddingHorizontal: 12,
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 18,
     marginBottom: 16,
@@ -374,7 +374,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#E2E8F0',
     borderRadius: 14,
     paddingHorizontal: 14,

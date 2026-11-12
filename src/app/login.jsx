@@ -108,14 +108,14 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* Sign Up / Submit Button (Accent #E91E63 & 27px rounded) */}
+            {/* Sign Up / Submit Button (Accent #9264ff & 27px rounded) */}
             <TouchableOpacity
               style={styles.primaryButton}
               onPress={handleNavigateHome}
               activeOpacity={0.85}
             >
               <LinearGradient
-                colors={['#000000ff']}
+                colors={['#9264ff', '#9264ff']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.primaryGradient}
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   logoC: {
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   greetingHello: {
     fontSize: 24,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   },
   brandInline: {
     fontWeight: '900',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   subtitleTag: {
     fontSize: 12,

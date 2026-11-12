@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -13,7 +14,6 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 import AppBackground from '../components/AppBackground';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -538,9 +538,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.08)',
-    borderRadius: 20,
+    borderWidth: 0,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    borderRadius: 27,
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
@@ -580,11 +580,13 @@ const styles = StyleSheet.create({
   },
   summaryCard: {
     flex: 1,
-    backgroundColor: '#000000', // Pitch Black cards per screenshot
-    borderRadius: 22,
+    backgroundColor: '#FFFFFF', // per design.md: Kad Maklumat #FFFFFF
+    borderRadius: 18, // per design.md: 18px untuk kad
     padding: 16,
     justifyContent: 'space-between',
     minHeight: 120,
+    borderWidth: 0,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   dotRow: {
     flexDirection: 'row',
@@ -604,7 +606,7 @@ const styles = StyleSheet.create({
   cardHeaderLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#888888',
+    color: '#666666',
     letterSpacing: 0.5,
     marginTop: 8,
     textTransform: 'uppercase',
@@ -612,12 +614,12 @@ const styles = StyleSheet.create({
   cardAmount: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: '#0D0E15',
     marginTop: 4,
   },
   cardPeopleCount: {
     fontSize: 12,
-    color: '#777777',
+    color: '#666666',
     marginTop: 2,
   },
   filterTabsRow: {
@@ -627,7 +629,7 @@ const styles = StyleSheet.create({
   },
   filterPill: {
     backgroundColor: '#F1F5F9',
-    borderRadius: 20,
+    borderRadius: 27,
     paddingHorizontal: 14,
     paddingVertical: 9,
   },
@@ -645,8 +647,8 @@ const styles = StyleSheet.create({
   },
   emptyCardContainer: {
     backgroundColor: '#F8FAFC',
-    borderRadius: 24,
-    borderWidth: 1,
+    borderRadius: 18,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     paddingVertical: 52,
     paddingHorizontal: 24,
@@ -680,8 +682,8 @@ const styles = StyleSheet.create({
   },
   recordsListCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    borderWidth: 1,
+    borderRadius: 18,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     overflow: 'hidden',
   },
@@ -703,8 +705,8 @@ const styles = StyleSheet.create({
   recordAvatar: {
     width: 40,
     height: 40,
-    borderRadius: 12,
-    backgroundColor: '#FFF0F5',
+    borderRadius: 20,
+    backgroundColor: '#F4EDFF',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -712,15 +714,16 @@ const styles = StyleSheet.create({
   recordAvatarText: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   recordName: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#0D0E15',
   },
   recordNote: {
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: '400',
     color: '#666666',
     marginTop: 2,
   },
@@ -756,16 +759,16 @@ const styles = StyleSheet.create({
     right: 20,
   },
   bottomPrimaryButton: {
-    backgroundColor: '#0D0E15', // Black full width button per screenshot
+    backgroundColor: '#9264ff', // Aksen Utama per design.md
     borderRadius: 27, // per design.md: bulat penuh untuk butang (27px)
     paddingVertical: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   bottomPrimaryButtonText: {
     fontSize: 15,
@@ -830,7 +833,7 @@ const styles = StyleSheet.create({
   },
   modalInput: {
     backgroundColor: '#F8FAFC',
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.08)',
     borderRadius: 14,
     paddingHorizontal: 14,
@@ -840,7 +843,7 @@ const styles = StyleSheet.create({
     color: '#0D0E15',
   },
   modalSubmitButton: {
-    backgroundColor: '#0D0E15',
+    backgroundColor: '#9264ff', // Aksen Utama per design.md
     borderRadius: 27,
     paddingVertical: 14,
     alignItems: 'center',
@@ -855,16 +858,16 @@ const styles = StyleSheet.create({
   splitResultCard: {
     marginTop: 16,
     padding: 14,
-    backgroundColor: '#FFF0F5',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
+    backgroundColor: '#F4EDFF',
+    borderRadius: 18,
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     alignItems: 'center',
   },
   splitResultLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
     textTransform: 'uppercase',
   },
   splitResultAmount: {

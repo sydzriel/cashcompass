@@ -136,7 +136,7 @@ export default function RentSetupScreen() {
                     <Ionicons
                       name="checkmark"
                       size={20}
-                      color={hasRent === 'yes' ? '#fd5ca3' : '#64748B'}
+                      color={hasRent === 'yes' ? '#9264ff' : '#64748B'}
                     />
                   </View>
 
@@ -201,7 +201,7 @@ export default function RentSetupScreen() {
                     <Ionicons
                       name="close"
                       size={20}
-                      color={hasRent === 'no' ? '#fd5ca3' : '#64748B'}
+                      color={hasRent === 'no' ? '#9264ff' : '#64748B'}
                     />
                   </View>
 
@@ -232,7 +232,7 @@ export default function RentSetupScreen() {
                     activeOpacity={0.85}
                   >
                     <LinearGradient
-                      colors={['#fd5ca3', '#fd5ca3']}
+                      colors={['#9264ff', '#9264ff']}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
                       style={styles.continueGradient}
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     width: '66%',
     height: '100%',
     borderRadius: 3,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   skipBtn: {
     paddingHorizontal: 18,
@@ -388,18 +388,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   radioOuterSelected: {
-    borderColor: '#fd5ca3',
+    borderColor: '#9264ff',
   },
   radioInner: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   // Rent Amount Input Card
   rentAmountCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 18,
     borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     paddingVertical: 20,
@@ -454,13 +454,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   continueButtonDisabled: {
-    backgroundColor: 'rgba(253, 92, 163, 0.22)',
+    backgroundColor: '#EDE9FE',
     justifyContent: 'center',
     alignItems: 'center',
   },
   continueButtonTextDisabled: {
     fontSize: 16,
     fontWeight: '700',
-    color: 'rgba(233, 30, 99, 0.45)',
+    color: '#A78BFA',
   },
 });

@@ -169,7 +169,7 @@ export default function AIReceiptScannerModal({ visible, onClose, onSaveReceipt 
               <Ionicons
                 name={flashOn ? 'flash' : 'flash-outline'}
                 size={20}
-                color={flashOn ? '#fd5ca3' : '#0d0e15'}
+                color={flashOn ? '#9264ff' : '#0d0e15'}
               />
             </TouchableOpacity>
           </View>
@@ -201,7 +201,7 @@ export default function AIReceiptScannerModal({ visible, onClose, onSaveReceipt 
                   ]}
                 >
                   <LinearGradient
-                    colors={['rgba(253, 92, 163, 0)', '#fd5ca3', 'rgba(253, 92, 163, 0)']}
+                    colors={['rgba(146, 100, 255, 0)', '#9264ff', 'rgba(146, 100, 255, 0)']}
                     start={{ x: 0, y: 0.5 }}
                     end={{ x: 1, y: 0.5 }}
                     style={styles.laserGradient}
@@ -229,7 +229,7 @@ export default function AIReceiptScannerModal({ visible, onClose, onSaveReceipt 
 
               {/* Instruction Banner */}
               <View style={styles.instructionCard}>
-                <Ionicons name="sparkles" size={18} color="#fd5ca3" style={{ marginRight: 8 }} />
+                <Ionicons name="sparkles" size={18} color="#9264ff" style={{ marginRight: 8 }} />
                 <Text style={styles.instructionText}>
                   Select a sample receipt below or tap capture to auto-detect merchant & amount.
                 </Text>
@@ -290,7 +290,7 @@ export default function AIReceiptScannerModal({ visible, onClose, onSaveReceipt 
           {scanState === 'scanning' && (
             <View style={styles.scanningContainer}>
               <View style={styles.scanAnimationCard}>
-                <ActivityIndicator size="large" color="#fd5ca3" style={{ marginBottom: 16 }} />
+                <ActivityIndicator size="large" color="#9264ff" style={{ marginBottom: 16 }} />
                 <Text style={styles.scanStatusTitle}>AI Vision OCR Scanning...</Text>
                 <Text style={styles.scanStatusDesc}>
                   Reading receipt from {selectedReceipt.merchant}
@@ -384,7 +384,7 @@ export default function AIReceiptScannerModal({ visible, onClose, onSaveReceipt 
                   activeOpacity={0.8}
                 >
                   <LinearGradient
-                    colors={['#fd5ca3', '#fd5ca3']}
+                    colors={['#9264ff', '#9264ff']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.confirmGradient}
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 16 : 8,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(253, 92, 163, 0.08)',
+    borderBottomColor: 'rgba(146, 100, 255, 0.08)',
   },
   circleButton: {
     width: 44,
@@ -427,17 +427,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.15)',
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   circleButtonActive: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     borderWidth: 0,
-    borderColor: '#fd5ca3',
+    borderColor: '#9264ff',
   },
   headerTitleBox: {
     alignItems: 'center',
@@ -449,7 +449,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#fd5ca3',
+    color: '#9264ff',
     fontWeight: '600',
     marginTop: 2,
   },
@@ -462,25 +462,25 @@ const styles = StyleSheet.create({
   viewfinderFrame: {
     height: 310,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    borderRadius: 22,
+    borderRadius: 18,
     marginTop: 8,
-    borderWidth: 1.5,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
+    borderWidth: 0,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     position: 'relative',
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.1,
-    shadowRadius: 14,
-    elevation: 4,
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   corner: {
     position: 'absolute',
     width: 26,
     height: 26,
-    borderColor: '#fd5ca3',
+    borderColor: '#9264ff',
   },
   topLeft: {
     top: 14,
@@ -526,9 +526,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   hudBadge: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.3)',
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     paddingHorizontal: 12,
     paddingVertical: 5,
     borderRadius: 14,
@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
   hudBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
     letterSpacing: 0.5,
   },
   receiptSilhouette: {
@@ -547,12 +547,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.2)',
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   silhouetteText: {
     fontSize: 15,
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
   silhouetteSub: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
     marginBottom: 10,
   },
   barcodeLines: {
@@ -573,15 +573,15 @@ const styles = StyleSheet.create({
   barcodeLine: {
     height: 2,
     width: 60,
-    backgroundColor: 'rgba(253, 92, 163, 0.35)',
+    backgroundColor: 'rgba(146, 100, 255, 0.35)',
     borderRadius: 1,
   },
   instructionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.2)',
+    borderColor: 'rgba(146, 100, 255, 0.2)',
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
   selectorLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
     letterSpacing: 0.5,
     marginTop: 12,
     marginBottom: 8,
@@ -610,20 +610,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.15)',
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     borderRadius: 18,
     paddingHorizontal: 14,
     paddingVertical: 8,
     marginRight: 10,
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   sampleChipActive: {
-    backgroundColor: '#FFF0F5',
-    borderColor: '#fd5ca3',
+    backgroundColor: '#F4EDFF',
+    borderColor: '#9264ff',
     borderWidth: 1.5,
   },
   sampleChipEmoji: {
@@ -636,12 +636,12 @@ const styles = StyleSheet.create({
     color: '#0D0E15',
   },
   sampleChipTitleActive: {
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   sampleChipPrice: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   bottomBar: {
     alignItems: 'center',
@@ -652,22 +652,22 @@ const styles = StyleSheet.create({
     height: 72,
     borderRadius: 36,
     borderWidth: 4,
-    borderColor: '#fd5ca3',
+    borderColor: '#9264ff',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     marginBottom: 6,
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   shutterInner: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -684,18 +684,18 @@ const styles = StyleSheet.create({
   },
   scanAnimationCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 18,
     padding: 28,
     alignItems: 'center',
     width: '100%',
     maxWidth: 340,
-    borderWidth: 1.5,
-    borderColor: 'rgba(253, 92, 163, 0.2)',
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.1,
-    shadowRadius: 16,
-    elevation: 5,
+    borderWidth: 0,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   scanStatusTitle: {
     fontSize: 18,
@@ -716,13 +716,13 @@ const styles = StyleSheet.create({
   scanPillItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 14,
     gap: 8,
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.15)',
+    borderColor: 'rgba(146, 100, 255, 0.15)',
   },
   scanPillText: {
     fontSize: 13,
@@ -738,9 +738,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 20,
@@ -749,20 +749,20 @@ const styles = StyleSheet.create({
   successPillText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   receiptCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.15)',
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 20,
     marginBottom: 20,
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   receiptTop: {
     alignItems: 'center',
@@ -790,7 +790,7 @@ const styles = StyleSheet.create({
   dashedDivider: {
     height: 1,
     borderWidth: 0,
-    borderColor: '#FCE7F3',
+    borderColor: 'rgba(146, 100, 255, 0.2)',
     borderStyle: 'dashed',
     marginVertical: 14,
   },
@@ -800,7 +800,7 @@ const styles = StyleSheet.create({
   itemsHeader: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
     letterSpacing: 0.5,
     marginBottom: 10,
   },
@@ -836,17 +836,17 @@ const styles = StyleSheet.create({
   totalAmount: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   categoryBadgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     padding: 12,
     borderRadius: 14,
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.12)',
+    borderColor: 'rgba(146, 100, 255, 0.12)',
   },
   categoryBadgeLabel: {
     fontSize: 12,
@@ -856,7 +856,7 @@ const styles = StyleSheet.create({
   categoryPill: {
     backgroundColor: '#FFFFFF',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -864,7 +864,7 @@ const styles = StyleSheet.create({
   categoryPillText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   resultActionsRow: {
     gap: 12,
@@ -886,9 +886,9 @@ const styles = StyleSheet.create({
   },
   retakeBtn: {
     height: 48,
-    borderRadius: 24,
+    borderRadius: 27,
     borderWidth: 1.5,
-    borderColor: '#fd5ca3',
+    borderColor: '#9264ff',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
@@ -896,6 +896,6 @@ const styles = StyleSheet.create({
   retakeBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
 });

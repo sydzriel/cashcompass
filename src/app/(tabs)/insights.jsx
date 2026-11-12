@@ -47,7 +47,7 @@ export default function InsightsScreen() {
               onPress={() => setIsCoachModalOpen(true)}
             >
               <LinearGradient
-                colors={['#FFF0F5', '#FFFFFF']}
+                colors={['#F4EDFF', '#FFFFFF']}
                 style={styles.coachGradient}
               >
                 <Text style={styles.coachButtonText}>{t('talk_to_coach')}</Text>
@@ -175,14 +175,14 @@ export default function InsightsScreen() {
                   <View style={[styles.dot, { backgroundColor: '#10B981' }]} />
                   <Text style={styles.legendLabel}>Income</Text>
                 </View>
-                <Text style={styles.summaryValue}>RM{totalIncome}</Text>
+                <Text style={[styles.summaryValue, { color: '#10B981' }]}>RM{totalIncome}</Text>
               </View>
               <View>
                 <View style={styles.legendRow}>
                   <View style={[styles.dot, { backgroundColor: '#EF4444' }]} />
                   <Text style={styles.legendLabel}>Expenses</Text>
                 </View>
-                <Text style={styles.summaryValue}>RM{totalExpenses}</Text>
+                <Text style={[styles.summaryValue, { color: '#EF4444' }]}>RM{totalExpenses}</Text>
               </View>
             </View>
 
@@ -266,7 +266,7 @@ export default function InsightsScreen() {
               <View style={styles.donutRing}>
                 <View style={styles.donutCenter}>
                   <Text style={styles.donutSubText}>Total spent</Text>
-                  <Text style={styles.donutMainText}>RM{totalExpenses}</Text>
+                  <Text style={[styles.donutMainText, { color: '#EF4444' }]}>RM{totalExpenses}</Text>
                   <Text style={styles.donutCatCount}>Commitments & Daily</Text>
                 </View>
               </View>
@@ -339,7 +339,7 @@ export default function InsightsScreen() {
             <View style={styles.catItem}>
               <View style={styles.catInfoRow}>
                 <View style={styles.itemLeft}>
-                  <View style={[styles.dot, { backgroundColor: '#fd5ca3' }]} />
+                  <View style={[styles.dot, { backgroundColor: '#9264ff' }]} />
                   <Text style={styles.catTitle}>Coffee & Food</Text>
                 </View>
                 <View style={styles.catRightRow}>
@@ -351,7 +351,7 @@ export default function InsightsScreen() {
                 <View
                   style={[
                     styles.catBarFill,
-                    { width: '4%', backgroundColor: '#fd5ca3' },
+                    { width: '4%', backgroundColor: '#9264ff' },
                   ]}
                 />
               </View>
@@ -407,7 +407,7 @@ export default function InsightsScreen() {
             </View>
             <View style={styles.highlightBox}>
               <Text style={styles.hlBoxLabel}>48h Chill Rules Resisted</Text>
-              <Text style={[styles.hlBoxValue, { color: '#fd5ca3' }]}>
+              <Text style={[styles.hlBoxValue, { color: '#9264ff' }]}>
                 2 Saved
               </Text>
             </View>
@@ -428,7 +428,7 @@ export default function InsightsScreen() {
             <View style={styles.fixedVariableLegendRow}>
               <View style={styles.fvLegendItem}>
                 <View style={styles.legendRow}>
-                  <View style={[styles.dot, { backgroundColor: '#fd5ca3' }]} />
+                  <View style={[styles.dot, { backgroundColor: '#9264ff' }]} />
                   <Text style={styles.legendLabel}>Fixed Commitments 63%</Text>
                 </View>
                 <Text style={styles.fvAmount}>RM189</Text>
@@ -493,12 +493,12 @@ const styles = StyleSheet.create({
     borderRadius: 27, // Bulat penuh 27px
     overflow: 'hidden',
     borderWidth: 0,
-    borderColor: '#fd5ca3',
-    shadowColor: '#fd5ca3',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 2,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   coachGradient: {
     paddingVertical: 9,
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
   coachButtonText: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   timeSegmentContainer: {
     flexDirection: 'row',
@@ -607,8 +607,8 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   cardTitle: {
-    fontSize: 17,
-    fontWeight: '700',
+    fontSize: 24, // per design.md: 24px, Semi-Bold
+    fontWeight: '600',
     color: '#0D0E15',
   },
   onTrackBadge: {
@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '500',
     color: '#0D0E15',
   },
   itemSubtitle: {
@@ -887,12 +887,12 @@ const styles = StyleSheet.create({
   fixedBarFill: {
     width: '63%',
     height: '100%',
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   variableBarFill: {
     width: '37%',
     height: '100%',
-    backgroundColor: '#efa5cb',
+    backgroundColor: '#C4B5FD',
   },
   fixedVariableLegendRow: {
     flexDirection: 'row',

@@ -159,7 +159,7 @@ export default function AICoachChatModal({
 
             {/* Context Pill (Live Financial Standing) */}
             <View style={styles.statsPill}>
-              <Ionicons name="analytics" size={16} color="#fd5ca3" style={{ marginRight: 6 }} />
+              <Ionicons name="analytics" size={16} color="#9264ff" style={{ marginRight: 6 }} />
               <Text style={styles.statsPillText}>
                 Oct 2026: RM{totalExpenses} spent • {savingsRate}% savings rate • RM{leftThisMonth} left
               </Text>
@@ -222,7 +222,7 @@ export default function AICoachChatModal({
                     <Text style={{ fontSize: 14 }}>🤖</Text>
                   </View>
                   <View style={[styles.messageBubble, styles.coachBubble, { paddingVertical: 12 }]}>
-                    <ActivityIndicator size="small" color="#fd5ca3" />
+                    <ActivityIndicator size="small" color="#9264ff" />
                   </View>
                 </View>
               )}
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     position: 'relative',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.2)',
+    borderColor: 'rgba(146, 100, 255, 0.2)',
   },
   onlineBadge: {
     position: 'absolute',
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 4,
   },
   userBubble: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     borderBottomRightRadius: 4,
   },
   messageText: {
@@ -444,9 +444,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   promptChip: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: '#F4EDFF',
     borderWidth: 0,
-    borderColor: 'rgba(253, 92, 163, 0.25)',
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 7,
@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
   promptChipText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sendButtonActive: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   sendButtonInactive: {
     backgroundColor: '#F1F5F9',

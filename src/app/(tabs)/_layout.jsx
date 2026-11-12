@@ -61,12 +61,12 @@ function CustomTabBar({ state, descriptors, navigation }) {
                 <Ionicons
                   name={iconName}
                   size={22}
-                  color={isFocused ? '#fd5ca3' : '#666666'}
+                  color={isFocused ? '#9264ff' : '#666666'}
                 />
                 <Text
                   style={[
                     styles.tabLabel,
-                    { color: isFocused ? '#fd5ca3' : '#666666' },
+                    { color: isFocused ? '#9264ff' : '#666666' },
                     isFocused && styles.activeTabLabel,
                   ]}
                 >
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: '100%',
     maxWidth: 390,
-    borderWidth: 0.5,
-    borderColor: 'rgb(203, 203, 203)',
+    borderWidth: 0,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
   },
   floatingBarInner: {
     flexDirection: 'row',
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   activeTabPill: {
-    backgroundColor: 'rgba(255, 240, 245, 0.75)',
+    backgroundColor: '#F4EDFF',
   },
   tabLabel: {
     fontSize: 11,

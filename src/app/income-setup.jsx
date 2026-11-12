@@ -149,7 +149,7 @@ export default function IncomeSetupScreen() {
                             {item.label}
                           </Text>
                           {isSelected && (
-                            <Ionicons name="checkmark" size={20} color="#fd5ca3" />
+                            <Ionicons name="checkmark" size={20} color="#9264ff" />
                           )}
                         </TouchableOpacity>
                       </View>
@@ -169,7 +169,7 @@ export default function IncomeSetupScreen() {
                     activeOpacity={0.85}
                   >
                     <LinearGradient
-                      colors={['#fd5ca3', '#fd5ca3']}
+                      colors={['#9264ff', '#9264ff']}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
                       style={styles.continueGradient}
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     width: '45%',
     height: '100%',
     borderRadius: 3,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   skipBtn: {
     paddingHorizontal: 18,
@@ -364,13 +364,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   continueButtonDisabled: {
-    backgroundColor: 'rgba(253, 92, 163, 0.22)',
+    backgroundColor: '#EDE9FE',
     justifyContent: 'center',
     alignItems: 'center',
   },
   continueButtonTextDisabled: {
     fontSize: 16,
     fontWeight: '700',
-    color: 'rgba(233, 30, 99, 0.45)',
+    color: '#A78BFA',
   },
 });

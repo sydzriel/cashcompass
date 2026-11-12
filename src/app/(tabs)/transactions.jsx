@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
   Alert,
@@ -31,8 +31,6 @@ export default function TransactionsScreen() {
   const { t } = useLanguage();
   const { mode } = useLocalSearchParams();
   const {
-    accountType,
-    setAccountType,
     allTransactions,
     setExpenses,
     totalIncome,
@@ -264,20 +262,18 @@ export default function TransactionsScreen() {
         >
           {/* Top Header Controls */}
           <View style={styles.headerRow}>
-            <TouchableOpacity
-              style={styles.pillButton}
-              activeOpacity={0.8}
-              onPress={() =>
-                setAccountType((prev) => (prev === 'Personal' ? 'Business' : 'Personal'))
-              }
-            >
-              <Text style={styles.pillButtonText}>{accountType}</Text>
-            </TouchableOpacity>
+            <View style={styles.pillButton}>
+              <Text style={styles.pillButtonText}>Personal</Text>
+            </View>
 
-            <TouchableOpacity style={styles.dateFilterButton} activeOpacity={0.8}>
+            <TouchableOpacity
+              style={styles.dateFilterButton}
+              activeOpacity={0.8}
+              onPress={() => router.push('/(tabs)/profile')}
+            >
               <Text style={styles.dateFilterText}>Oct 2026</Text>
               <Ionicons
-                name="options-outline"
+                name="settings-outline"
                 size={16}
                 color="#0D0E15"
                 style={{ marginLeft: 6 }}
@@ -747,7 +743,7 @@ export default function TransactionsScreen() {
                 }}
                 activeOpacity={0.7}
               >
-                <View style={[styles.actionIconBox, { backgroundColor: '#FFF0F5' }]}>
+                <View style={[styles.actionIconBox, { backgroundColor: '#F4EDFF' }]}>
                   <Text style={{ fontSize: 22 }}>📸</Text>
                 </View>
                 <View style={styles.actionTextBox}>
@@ -858,7 +854,7 @@ export default function TransactionsScreen() {
                   onPress={handleScanFromInsideLog}
                   activeOpacity={0.8}
                 >
-                  <Ionicons name="scan-outline" size={20} color="#fd5ca3" />
+                  <Ionicons name="scan-outline" size={20} color="#9264ff" />
                 </TouchableOpacity>
               </View>
 
@@ -930,7 +926,7 @@ export default function TransactionsScreen() {
                   <Ionicons
                     name="scan-outline"
                     size={16}
-                    color="#fd5ca3"
+                    color="#9264ff"
                     style={{ marginRight: 6 }}
                   />
                   <Text style={styles.scanReceiptPillText}>Scan receipt</Text>
@@ -1061,7 +1057,7 @@ export default function TransactionsScreen() {
                     <Switch
                       value={isRecurring}
                       onValueChange={setIsRecurring}
-                      trackColor={{ false: '#E2E8F0', true: '#fd5ca3' }}
+                      trackColor={{ false: '#E2E8F0', true: '#9264ff' }}
                       thumbColor="#FFFFFF"
                     />
                   </View>
@@ -1179,7 +1175,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   tabBadge: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     paddingHorizontal: 6,
     paddingVertical: 1,
     borderRadius: 8,
@@ -1220,10 +1216,10 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 24, // per design.md: 24px, Semi-Bold
+    fontWeight: '600',
     color: '#0D0E15',
-    marginBottom: 10,
+    marginBottom: 16,
     marginTop: 6,
   },
   // Flat White Card per design.md
@@ -1233,7 +1229,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     padding: 16,
-    marginBottom: 12,
+    marginBottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -1249,11 +1245,12 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#0D0E15',
   },
   itemSubtitle: {
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: '400',
     color: '#666666',
     marginTop: 2,
   },
@@ -1265,7 +1262,7 @@ const styles = StyleSheet.create({
   negativeAmount: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#0D0E15',
+    color: '#EF4444',
   },
   emptyCard: {
     backgroundColor: '#FFFFFF',
@@ -1282,15 +1279,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   addEmptyBtn: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 27,
   },
   addEmptyBtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
 
   // Calendar Card
@@ -1344,7 +1341,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   dayPillSelected: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   dayText: {
     fontSize: 13,
@@ -1359,7 +1356,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     marginTop: 2,
   },
   dayHeaderRow: {
@@ -1416,15 +1413,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   addChillSmallBtn: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
+    borderRadius: 27,
   },
   addChillSmallText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   chillCard: {
     backgroundColor: '#FFFFFF',
@@ -1580,15 +1577,15 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 29,
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 101,
-    shadowColor: '#fd5ca3',
+    shadowColor: 'transparent',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
-    elevation: 4,
+    elevation: 0,
   },
   modalOverlay: {
     position: 'absolute',
@@ -1654,7 +1651,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   wowBadge: {
-    backgroundColor: '#FFF0F5',
+    backgroundColor: '#F4EDFF',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
@@ -1662,7 +1659,7 @@ const styles = StyleSheet.create({
   wowBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   actionTitle: {
     fontSize: 15,
@@ -1716,7 +1713,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   logCancelText: {
-    color: '#fd5ca3',
+    color: '#9264ff',
     fontSize: 15,
     fontWeight: '600',
   },
@@ -1728,10 +1725,10 @@ const styles = StyleSheet.create({
   logScanHeaderBtn: {
     width: 44,
     height: 44,
-    borderRadius: 16,
+    borderRadius: 22,
     backgroundColor: '#FFFFFF',
-    borderWidth: 0.5,
-    borderColor: '#FCE7F3',
+    borderWidth: 0,
+    borderColor: 'rgba(0, 0, 0, 0.04)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1786,9 +1783,9 @@ const styles = StyleSheet.create({
   scanReceiptPillBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 0.5,
-    borderColor: '#FCE7F3',
+    backgroundColor: '#F4EDFF',
+    borderWidth: 0,
+    borderColor: 'rgba(146, 100, 255, 0.25)',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -1797,7 +1794,7 @@ const styles = StyleSheet.create({
   scanReceiptPillText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fd5ca3',
+    color: '#9264ff',
   },
   logCategoryHeader: {
     fontSize: 16,
@@ -1826,8 +1823,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   logCategoryPillActive: {
-    backgroundColor: '#fd5ca3',
-    borderColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
+    borderColor: '#9264ff',
   },
   logCategoryPillCustom: {
     borderStyle: 'dashed',
@@ -1909,10 +1906,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   logAddButtonActive: {
-    backgroundColor: '#fd5ca3',
+    backgroundColor: '#9264ff',
   },
   logAddButtonDisabled: {
-    backgroundColor: '#FCE4EC',
+    backgroundColor: '#EDE9FE',
   },
   logAddButtonText: {
     fontSize: 16,
@@ -1922,6 +1919,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   logAddButtonTextDisabled: {
-    color: '#F48FB1',
+    color: '#A78BFA',
   },
 });
